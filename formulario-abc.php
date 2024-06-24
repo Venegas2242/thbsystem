@@ -1,7 +1,11 @@
-?php
+<?php
+/*include 'cod-formulario-abc.php';
 error_reporting(E_ALL & ~E_DEPRECATED);
 ini_set("display_errors", 1);
+*/
 ?>
+
+
 <!DOCTYPE html>
 <!--
  * Description of Productos
@@ -108,24 +112,10 @@ ini_set("display_errors", 1);
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-4">
-                                    <label>Ciudad:</label>
-                                    <div class="form-group">
-                                        <input type="text" id="txtCiudad" ng-model="producto.idciudad" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <label>Estado:</label>
-                                    <div class="form-group">
-                                        <input type="text" id="txtEstado" ng-model="producto.idestado" class="form-control" />
-                                    </div>
-                                </div>
-                                <div class="col-sm-4">
-                                    <label>Pais:</label>
-                                    <div class="form-group">
-                                        <input type="text" id="txtPais" ng-model="producto.idpais" class="form-control" />
-                                    </div>
-                                </div>
+                                                               
+                                <!-- Combo box de paises, estados y ciudades -->
+                                <?php include 'combobox.php'; ?>
+                                
                             </div>
                             <div class="row">
                                 <div class="col-sm-4">

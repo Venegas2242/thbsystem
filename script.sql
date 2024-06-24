@@ -237,3 +237,38 @@ begin
 end
 //
 delimiter ;
+
+
+/*procedimientos Diego*/
+DELIMITER //
+
+CREATE PROCEDURE get_Estados()
+BEGIN
+    SELECT idestado, nombre 
+      FROM cat_estado
+      WHERE activo = 1;
+END
+//
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE get_Paises()
+BEGIN
+    SELECT idpais, nombre 
+      FROM cat_pais
+      WHERE activo = 1;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE get_Ciudades()
+BEGIN
+    SELECT idciudad, nombre 
+      FROM cat_ciudad
+      WHERE activo = 1;
+END //
+
+DELIMITER ;

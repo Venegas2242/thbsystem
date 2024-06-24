@@ -1,13 +1,19 @@
 <?php
-
+/*
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+*/
 /**
  * Description of class
  *
  * @author tyrodeveloper
  */
+
 error_reporting(E_ALL & ~E_DEPRECATED);
 ini_set("display_errors", "1");
 date_default_timezone_set("America/Mexico_City");
+
 spl_autoload_register(function( $NombreClase ) {
     require_once $NombreClase . '.php';
 });
@@ -124,11 +130,63 @@ class Productos {
         return $retorno;
     }
 
+
+    function ObtenerEstados() {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("CALL get_Estados()");
+        $query->execute();
+        $query->bind_result($idestado, $nombre);
+        while ($query->fetch()) {
+            $estado = array("idestado" => $idestado, "nombre" => $nombre);
+            array_push($retorno, $estado);
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+
+    function ObtenerPaises() {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("CALL get_Paises()");
+        $query->execute();
+        $query->bind_result($idpais, $nombre);
+        while ($query->fetch()) {
+            $pais = array("idpais" => $idpais, "nombre" => $nombre);
+            array_push($retorno, $pais);
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+
+    function ObtenerCiudad() {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("CALL get_Ciudades()");
+        $query->execute();
+        $query->bind_result($idciudad, $nombre);
+        while ($query->fetch()) {
+            $pais = array("idciudad" => $idciudad, "nombre" => $nombre);
+            array_push($retorno, $pais);
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
 }
 
+/*
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
+*/
 
 if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
     $functionToCall = $_GET["functionToCall"];

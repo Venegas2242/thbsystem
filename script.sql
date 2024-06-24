@@ -242,17 +242,6 @@ delimiter ;
 /*procedimientos Diego*/
 DELIMITER //
 
-CREATE PROCEDURE get_Estados()
-BEGIN
-    SELECT idestado, nombre 
-      FROM cat_estado
-      WHERE activo = 1;
-END
-//
-DELIMITER ;
-
-DELIMITER //
-
 CREATE PROCEDURE get_Paises()
 BEGIN
     SELECT idpais, nombre 
@@ -264,11 +253,26 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE get_Ciudades()
+CREATE PROCEDURE get_Estados(
+  id_pais INT
+)
+BEGIN
+    SELECT idestado, nombre 
+      FROM cat_estado
+      WHERE activo = 1 AND idpais = id_pais;
+END
+//
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE get_Ciudades(
+  id_estado INT
+)
 BEGIN
     SELECT idciudad, nombre 
       FROM cat_ciudad
-      WHERE activo = 1;
+      WHERE activo = 1 and idestado = id_estado;
 END //
 
 DELIMITER ;

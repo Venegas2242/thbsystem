@@ -1,53 +1,42 @@
 <?php
 require_once 'cod-formulario-abc.php';
 
-function generarComboBoxEstados() {
-    $producto = new Productos();
-    $estados = $producto->ObtenerEstados();
+function generarComboBoxPaises() {
     echo '<div class="col-sm-4">';
-    echo '    <label>Estado:</label>';
+    echo '    <label>País:</label>';
     echo '    <div class="form-group">';
-    echo '        <select id="cmbEstado" class="form-control" ng-model="producto.idestado">';
-    echo '            <option value="">Seleccione un estado</option>';
-    foreach ($estados as $estado) {
-        echo '            <option value="' . $estado["idestado"] . '">' . $estado["nombre"] . '</option>';
-    }
+    echo '        <select id="cmbPais" ng-model="producto.idpais" ng-change="cambiarPais()" class="form-control">';
+    echo '            <option value="">Seleccione un país</option>';
+    echo '            <option ng-repeat="pais in listaPaises" value="{{pais.idpais}}">{{pais.nombre}}</option>';
     echo '        </select>';
     echo '    </div>';
     echo '</div>';
 }
 
-function generarComboBoxPaises() {
-    $producto = new Productos();
-    $paises = $producto->ObtenerPaises();
+function generarComboBoxEstados() {
     echo '<div class="col-sm-4">';
-    echo '    <label>Pais:</label>';
+    echo '    <label>Estado:</label>';
     echo '    <div class="form-group">';
-    echo '        <select id="cmbPais" class="form-control" ng-model="producto.idpais">';
-    echo '            <option value="">Seleccione un pais</option>';
-    foreach ($paises as $pais) {
-        echo '            <option value="' . $pais["idpais"] . '">' . $pais["nombre"] . '</option>';
-    }
+    echo '        <select id="cmbEstado" ng-model="producto.idestado" ng-change="cambiarEstado()" class="form-control">';
+    echo '            <option value="">Seleccione un estado</option>';
+    echo '            <option ng-repeat="estado in listaEstados" value="{{estado.idestado}}">{{estado.nombre}}</option>';
     echo '        </select>';
     echo '    </div>';
     echo '</div>';
 }
 
 function generarComboBoxCiudades() {
-    $producto = new Productos();
-    $ciuedades = $producto->ObtenerCiudad();
     echo '<div class="col-sm-4">';
     echo '    <label>Ciudad:</label>';
     echo '    <div class="form-group">';
-    echo '        <select id="cmbCiudad" class="form-control" ng-model="producto.idciudad">';
+    echo '        <select id="cmbCiudad" ng-model="producto.idciudad" class="form-control">';
     echo '            <option value="">Seleccione una ciudad</option>';
-    foreach ($ciuedades as $ciudad) {
-        echo '            <option value="' . $ciudad["idciudad"] . '">' . $ciudad["nombre"] . '</option>';
-    }
+    echo '            <option ng-repeat="ciudad in listaCiudades" value="{{ciudad.idciudad}}">{{ciudad.nombre}}</option>';
     echo '        </select>';
     echo '    </div>';
     echo '</div>';
 }
+
 
 generarComboBoxPaises();
 generarComboBoxEstados();

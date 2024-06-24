@@ -131,23 +131,7 @@ class Productos {
     }
 
 
-    function ObtenerEstados() {
-        $mysql = new Connection();
-        $cnn = $mysql->getConnection();
-        $retorno = array();
-        $query = $cnn->prepare("CALL get_Estados()");
-        $query->execute();
-        $query->bind_result($idestado, $nombre);
-        while ($query->fetch()) {
-            $estado = array("idestado" => $idestado, "nombre" => $nombre);
-            array_push($retorno, $estado);
-        }
-        $query->close();
-        $cnn->close();
-        return $retorno;
-    }
-
-
+    
     function ObtenerPaises() {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
@@ -164,17 +148,34 @@ class Productos {
         return $retorno;
     }
 
-
-    function ObtenerCiudad() {
+    function ObtenerEstados($idpais) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("CALL get_Ciudades()");
+        $query = $cnn->prepare("CALL get_Estados(?)");
+        $query->bind_param("i", $idpais);
+        $query->execute();
+        $query->bind_result($idestado, $nombre);
+        while ($query->fetch()) {
+            $estado = array("idestado" => $idestado, "nombre" => $nombre);
+            array_push($retorno, $estado);
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+    function ObtenerCiudades($idestado) {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("CALL get_Ciudades(?)");
+        $query->bind_param("i", $idestado);
         $query->execute();
         $query->bind_result($idciudad, $nombre);
         while ($query->fetch()) {
-            $pais = array("idciudad" => $idciudad, "nombre" => $nombre);
-            array_push($retorno, $pais);
+            $ciudad = array("idciudad" => $idciudad, "nombre" => $nombre);
+            array_push($retorno, $ciudad);
         }
         $query->close();
         $cnn->close();
@@ -231,6 +232,21 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
         case "eliminar_producto":
             $producto = new Productos();
             echo json_encode($producto->Eliminar($json_data->idproveedor));
+            break;
+
+        case "obtener_estados":
+            $producto = new Productos();
+            echo json_encode($producto->ObtenerEstados($json_data->idpais));
+            break;
+
+        case "obtener_ciudades":
+            $producto = new Productos();
+            echo json_encode($producto->ObtenerCiudades($json_data->idestado));
+            break;
+
+        case "obtener_paises":
+            $producto = new Productos();
+            echo json_encode($producto->ObtenerPaises());
             break;
     }
 }

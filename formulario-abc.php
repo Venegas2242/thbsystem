@@ -5,7 +5,6 @@ ini_set("display_errors", 1);
 */
 ?>
 
-
 <!DOCTYPE html>
 <!--
  * Description of Productos
@@ -20,14 +19,14 @@ ini_set("display_errors", 1);
         <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     </head>
     <body id="ng-producto-lista" ng-app="appCatalogos" ng-controller="cProductos">
-        <!--PONER AQU�? EL CÓDIGO HTML-->
+        <!--PONER AQUÍ EL CÓDIGO HTML-->
         <div class="container-fluid">
             <h1>Proveedores</h1>
             <hr />
             <a href="#" class="btn btn-primary" ng-click="AbrirNuevo();"><i class="glyphicon glyphicon-plus"></i> Agregar nuevo proveedor</a>
             <br /><br />
             <div class ="row">
-                <div class="col-sm-6">
+                <div class="col-xs-12 col-sm-6">
                     <div class="form-group input-group">
                         <input type="text" class="form-control" ng-keyup="$event.keyCode == 13 ? BuscarProducto() : null" id="txtTextoBuscar" placeholder="RFC, Nombre del proveedor" />
                         <span class="input-group-addon"><i class="glyphicon glyphicon-search"></i></span>
@@ -36,32 +35,34 @@ ini_set("display_errors", 1);
             </div>
 
             <div class ="row">
-                <div class="col-sm-12">
-                    <table class="table table-bordered table-striped table-hover">
-                        <thead>
-                            <tr>
-                                <th colspan="6" class="text-center">Listado de Proveedores</th>
-                            </tr>
-                            <tr>
-                                <th class="text-center"><i class="glyphicon glyphicon-pencil"></i></th>
-                                <th class="text-center"><i class="glyphicon glyphicon-trash"></i></th>
-                                <th>RFC</th>
-                                <th>Nombre Comercial</th>
-                                <th class="text-right">Telefono</th>
-                                <th class="text-right">Correo</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="producto in listaProductos">
-                                <td class="text-center"><a href="#" ng-click="AbrirEditar(this.producto);" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-pencil"></i></a></td>
-                                <td class="text-center"><a href="#" ng-click="AbrirEliminar(this.producto);" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a></td>
-                                <td>{{producto.rfc}}</td>
-                                <td>{{producto.nombrecomercial}}</td>
-                                <td class="text-right">{{producto.telefono}}</td>
-                                <td class="text-right">{{producto.correo}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="col-xs-12">
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th colspan="6" class="text-center">Listado de Proveedores</th>
+                                </tr>
+                                <tr>
+                                    <th class="text-center"><i class="glyphicon glyphicon-pencil"></i></th>
+                                    <th class="text-center"><i class="glyphicon glyphicon-trash"></i></th>
+                                    <th>RFC</th>
+                                    <th>Nombre Comercial</th>
+                                    <th class="text-right">Telefono</th>
+                                    <th class="text-right">Correo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="producto in listaProductos">
+                                    <td class="text-center"><a href="#" ng-click="AbrirEditar(this.producto);" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-pencil"></i></a></td>
+                                    <td class="text-center"><a href="#" ng-click="AbrirEliminar(this.producto);" class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-trash"></i></a></td>
+                                    <td>{{producto.rfc}}</td>
+                                    <td>{{producto.nombrecomercial}}</td>
+                                    <td class="text-right">{{producto.telefono}}</td>
+                                    <td class="text-right">{{producto.correo}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
             <div class="row text-center">
@@ -80,7 +81,7 @@ ini_set("display_errors", 1);
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>RFC:</label>
                                     <div class="form-group input-group">
                                         <input type="text" id="txtRFC" ng-model="producto.rfc" class="form-control" />
@@ -88,14 +89,13 @@ ini_set("display_errors", 1);
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-6">
-                                    
+                                <div class="col-xs-12 col-sm-6">
                                     <label>Nombre Comercial:</label>
                                     <div class="form-group">
                                         <input type="text" id="txtNombreFiscal" ng-model="producto.nombrecomercial" class="form-control" />
                                     </div> 
                                 </div>
-                                <div class="col-sm-6">
+                                <div class="col-xs-12 col-sm-6">
                                     <label>Nombre referencia:</label>
                                     <div class="form-group">
                                         <input type="text" id="txtNombreComun" ng-model="producto.nombrecomun" class="form-control" />
@@ -103,8 +103,7 @@ ini_set("display_errors", 1);
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12">
-                                    
+                                <div class="col-xs-12">
                                     <label>Direccion:</label>
                                     <div class="form-group">
                                         <input type="text" id="txtDireccion" ng-model="producto.direccion" class="form-control" />
@@ -113,7 +112,7 @@ ini_set("display_errors", 1);
                             </div>
                             <div class="row">
                                 <!-- Combo box para País -->
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>País:</label>
                                     <div class="form-group">
                                         <select id="cmbPais" ng-model="ubicacion.idpais" ng-change="cambiarPais()" class="form-control">
@@ -123,7 +122,7 @@ ini_set("display_errors", 1);
                                     </div>
                                 </div>
                                 <!-- Combo box para Estado -->
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>Estado:</label>
                                     <div class="form-group">
                                         <select id="cmbEstado" ng-model="ubicacion.idestado" ng-change="cambiarEstado()" class="form-control">
@@ -133,7 +132,7 @@ ini_set("display_errors", 1);
                                     </div>
                                 </div>
                                 <!-- Combo box para Ciudad -->
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>Ciudad:</label>
                                     <div class="form-group">
                                         <select id="cmbCiudad" ng-model="ubicacion.idciudad" class="form-control">
@@ -144,19 +143,19 @@ ini_set("display_errors", 1);
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>Telefono:</label>
                                     <div class="form-group">
                                         <input type="text" id="txtTelefono" ng-model="producto.telefono" class="form-control" />
                                     </div> 
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>Correo:</label>
                                     <div class="form-group">
                                         <input type="text" id="txtCorreo" ng-model="producto.correo" class="form-control" />
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>PaginaWeb:</label>
                                     <div class="form-group">
                                         <input type="text" id="txtWeb" ng-model="producto.web" class="form-control" />
@@ -164,19 +163,19 @@ ini_set("display_errors", 1);
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>Monto crédito:</label>
                                     <div class="form-group input-group">
                                         <input type="text" id="txtCredito" ng-model="producto.credito" class="form-control" />
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>Dias crédito:</label>
                                     <div class="form-group input-group">
                                         <input type="text" id="txtDiasCredito" ng-model="producto.diascredito" class="form-control" />
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>Saldo:</label>
                                     <div class="form-group input-group">
                                         <input type="text" id="txtSaldo" ng-model="producto.saldo" class="form-control" />
@@ -184,19 +183,19 @@ ini_set("display_errors", 1);
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>Banco:</label>
                                     <div class="form-group input-group">
                                         <input type="text" id="txtBanco" ng-model="producto.idbanco" class="form-control" />
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>Cuenta:</label>
                                     <div class="form-group input-group">
                                         <input type="text" id="txtCuenta" ng-model="producto.cuenta" class="form-control" />
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <label>CLABE:</label>
                                     <div class="form-group input-group">
                                         <input type="text" id="txtClabe" ng-model="producto.clabe" class="form-control" />
@@ -216,7 +215,6 @@ ini_set("display_errors", 1);
             <!-- Modal Eliminar-->
             <div id="modalProductoEliminar" class="modal fade" role="dialog">
                 <div class="modal-dialog">
-
                     <!-- Modal content-->
                     <div class="modal-content">
                         <div class="modal-header text-center">
@@ -225,24 +223,22 @@ ini_set("display_errors", 1);
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-sm-6">
+                                <div class="col-xs-12 col-sm-6">
                                     <label>RFC:</label>
                                     <div class="form-group input-group">
-
                                         <input type="text" ng-model="producto.rfc" readonly="true" class="form-control" />
                                         <span class="input-group-addon"><i class="glyphicon glyphicon-barcode"></i></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12">
+                                <div class="col-xs-12">
                                     <div class="form-group">
                                         <label>Nombre comercial:</label>
                                         <input type="text" ng-model="producto.nombrecomercial" readonly="true" class="form-control" />
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div class="modal-footer">
                             <button type="button" ng-click="Eliminar()" class="btn btn-danger" ><i class="glyphicon glyphicon-trash"></i> Eliminar</button>
@@ -252,8 +248,6 @@ ini_set("display_errors", 1);
                 </div>
             </div>
             <!-- Modal Eliminar-->
-
-
         </div>
         <!--Referencias Javascript-->
         <script src="https://code.jquery.com/jquery-3.2.1.min.js" type="text/javascript"></script>

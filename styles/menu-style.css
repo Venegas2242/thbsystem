@@ -14,16 +14,21 @@ body {
     background-color: #111;
     overflow-x: hidden;
     transition: 0.5s;
-    padding-top: 4rem; /* 60px to 4rem */
+    padding-top: 60px;
 }
 
 .sidenav a {
-    padding: 0.5rem 2rem; /* 8px 32px to 0.5rem 2rem */
+    padding: 8px 8px 8px 32px;
     text-decoration: none;
-    font-size: 1.5rem; /* 25px to 1.5rem */
+    font-size: 25px;
     color: #818181;
-    display: block;
+    display: flex; /* Cambiado a flex para alinear el ícono y el texto */
+    align-items: center; /* Centra verticalmente los íconos y el texto */
     transition: 0.3s;
+}
+
+.sidenav a i {
+    margin-right: 10px; /* Espacio entre el ícono y el texto */
 }
 
 .sidenav a:hover {
@@ -31,37 +36,27 @@ body {
 }
 
 .menu-btn {
-    font-size: 2rem; /* 30px to 2rem */
+    font-size: 30px;
     cursor: pointer;
     background-color: #111;
     color: white;
-    padding: 0.5rem 1rem; /* 10px 15px to 0.5rem 1rem */
+    padding: 10px 15px;
     position: fixed;
+    width: 100%;
     top: 0;
     left: 0;
-    z-index: 3;
-    user-select: none; /* Evita que el texto sea seleccionado */
+    z-index: 2;
+    user-select: none;
 }
 
 .menu-bg {
     height: 4rem;
+    position: relative;
     width: 100%;
     background-color: #111;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 2;
-}
-
-.content-wrapper {
-    padding-top: 4rem; /* Ajustar para que el contenido no se oculte detrás de la barra superior */
-    transition: margin-left 0.5s;
-    max-width: 80vw;
-    margin-left: auto;
-    margin-right: auto;
 }
 
 @media screen and (max-height: 450px) {
-    .sidenav {padding-top: 1rem;} /* 15px to 1rem */
-    .sidenav a {font-size: 1.2rem;} /* 18px to 1.2rem */
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
 }

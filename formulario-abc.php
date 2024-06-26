@@ -1,3 +1,11 @@
+<?php
+session_start();
+if (!isset($_SESSION['idusuario'])) {
+    header("Location: login.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,7 +67,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js" type="text/javascript"></script>
 
-    <!-- Script personalizado -->
     <script src="scripts/proveedores-script.js"></script>
 </body>
 </html>

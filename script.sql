@@ -301,3 +301,19 @@ CREATE TABLE `cat_usuario` (
 
 INSERT INTO `cat_usuario` (`usuario`,`contrasenia`) values ('AVENEGAS',SHA2('admin', 256));
 INSERT INTO `cat_usuario` (`usuario`,`contrasenia`) values ('DVENEGAS',SHA2('admin', 256));
+
+DELIMITER //
+
+CREATE PROCEDURE proc_VerificarUsuario(
+    IN p_usuario VARCHAR(15),
+    IN p_contrasenia VARCHAR(100)
+)
+BEGIN
+    SELECT idusuario, 
+           IF(contrasenia = SHA2(p_contrasenia, 256), 1, 0) AS is_valid
+    FROM cat_usuario 
+    WHERE usuario = p_usuario
+      AND Activo = 1;
+END //
+
+DELIMITER ;

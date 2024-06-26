@@ -38,13 +38,13 @@ CREATE TABLE IF NOT EXISTS `cat_proveedor` (
 
 /*insertar datos de prueba*/
 insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
-            values('PROVEEDOR SIN ASIGNARAVR','-','-','1','1','1','-','-','-','','0','0','0','1','-','-');
+            values('PROVEEDOR SIN ASIGNARAVR','NA','NA','1','11','1','XAXX010101000','-','-','','0','0','0','3','129141','9912134012314561');
 insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
-            values('LORENZO GARCIA PICENO','ABASTECEDORA DE GUANTES Y EQUIPOS','HERMANOS FLORES MAGON 240  CP 36550  COL. MIGUEL HIDALGO','1','1','1','GALP730810152','1430868','ELADIA.RAMIREZ@PRODIGY.NET.MX','','0','0','0','1','-','-');
+            values('LORENZO GARCIA PICENO','ABASTECEDORA DE GUANTES Y EQUIPOS','HERMANOS FLORES MAGON 240  CP 36550  COL. MIGUEL HIDALGO','2','11','1','GALP730810152','1430868','ELADIA.RAMIREZ@PRODIGY.NET.MX','','0','0','0','1','234535','1209837890134791');
 insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe) 
-            values('ACEROS Y BARRAS ESPECIALES, SA DE CV','ACEROS Y BARRAS ESPECIALES, SA DE CV','BLVD. MARIANO J. GARCIA 2959  CP 36565  COL. GANADERA','1','1','1','ABE030124G88','6269009','','','20000','0','15','1','-','-');
+            values('ACEROS Y BARRAS ESPECIALES, SA DE CV','ACEROS Y BARRAS ESPECIALES, SA DE CV','BLVD. MARIANO J. GARCIA 2959  CP 36565  COL. GANADERA','1','11','1','ABE030124G88','6269009','','','20000','0','15','2','3456567','23230987345124512');
 insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
-            values('MIGUEL ANGEL MENA ZAMOREZ','ACEROS ANZA','ZARAGOZA 575  CP 36588  BARRIO DE SAN VICENTE','1','1','1','MEZM870321738','6602088','ACEROSALIADOSANZA@HOTMAIL.COM','','0','0','30','1','-','-');
+            values('MIGUEL ANGEL MENA ZAMOREZ','ACEROS ANZA','ZARAGOZA 575  CP 36588  BARRIO DE SAN VICENTE','3','11','1','MEZM870321738','6602088','ACEROSALIADOSANZA@HOTMAIL.COM','','0','0','30','3','3456736','928179412653811');
 
 /*mostrar datos*/
 select * from cat_proveedor;
@@ -145,19 +145,19 @@ CREATE TABLE IF NOT EXISTS `cat_pais` (
   `idpais` int NOT NULL AUTO_INCREMENT COMMENT 'clave del pais',
   `nombre` varchar(200) NOT NULL COMMENT 'Nombre del pais',
   `activo` BOOLEAN NOT NULL DEFAULT 1 COMMENT 'True para paises activos y False para cancelados.',
-  constraint pk_productos primary key(idpais));
+  constraint pk_pais primary key(idpais));
 CREATE TABLE IF NOT EXISTS `cat_estado` (
   `idestado` int NOT NULL AUTO_INCREMENT COMMENT 'clave del estado',
   `idpais` int NOT NULL COMMENT 'clave del pais al que pertenece el estado',
   `nombre` varchar(200) NOT NULL COMMENT 'Nombre del estado',
   `activo` BOOLEAN NOT NULL DEFAULT 1 COMMENT 'True para estados  activos y False para cancelados.',
-  constraint pk_productos primary key(idestado));
+  constraint pk_estado primary key(idestado));
 CREATE TABLE IF NOT EXISTS `cat_ciudad` (
   `idciudad` int NOT NULL AUTO_INCREMENT COMMENT 'clave de la ciudad',
   `idestado` int NOT NULL COMMENT 'clave del estado al que pertenece la ciudad',
   `nombre` varchar(200) NOT NULL COMMENT 'Nombre de la ciudad',
   `activo` BOOLEAN NOT NULL DEFAULT 1 COMMENT 'True para estados  activos y False para cancelados.',
-  constraint pk_productos primary key(idciudad));
+  constraint pk_ciudad primary key(idciudad));
 
 /*insertar datos de prueba*/
 insert into cat_pais(nombre) values('México');
@@ -276,3 +276,28 @@ BEGIN
 END //
 
 DELIMITER ;
+
+CREATE TABLE IF NOT EXISTS `cat_bancos` (
+  `idbanco` int NOT NULL AUTO_INCREMENT COMMENT 'clave del banco',
+  `nombre` varchar(200) NOT NULL COMMENT 'Nombre del banco',
+  `activo` BOOLEAN NOT NULL DEFAULT 1 COMMENT 'True para bancos activos y False para cancelados.',
+  constraint pk_bancos primary key(idbanco));
+
+/*insertar datos de prueba*/
+insert into cat_bancos(nombre) values('Banamex');
+insert into cat_bancos(nombre) values('BBVA Bancomer ');
+insert into cat_bancos(nombre) values('Santander');
+insert into cat_bancos(nombre) values('HSBC');
+insert into cat_bancos(nombre) values('Banco del Bajío');
+insert into cat_bancos(nombre) values('Inbursa');
+insert into cat_bancos(nombre) values('Scotiabank');
+
+CREATE TABLE `cat_usuario` (
+  `idusuario` int NOT NULL AUTO_INCREMENT,
+  `usuario` varchar(15) NOT NULL,
+  `contrasenia` varchar(100) NOT NULL,
+  `Activo` tinyint(1) DEFAULT '1',
+  constraint pk_usuario primary key(idusuario));
+
+INSERT INTO `cat_usuario` (`usuario`,`contrasenia`) values ('AVENEGAS',SHA2('admin', 256));
+INSERT INTO `cat_usuario` (`usuario`,`contrasenia`) values ('DVENEGAS',SHA2('admin', 256));

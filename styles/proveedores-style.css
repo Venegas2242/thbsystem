@@ -64,10 +64,6 @@ body {
 .form-control {
     transition: all 0.3s ease-in-out;
 }
-.form-control:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 0.5rem rgba(0, 123, 255, 0.25); /* 8px to 0.5rem */
-}
 
 .card {
     position: relative;
@@ -90,4 +86,22 @@ body {
 /* Estilos para la scrollbar vertical */
 ::-webkit-scrollbar {
     width: 0px;
+}
+
+.btn-primary-custom {
+    background-color: rgb(253, 97, 17);
+    border-radius: 0.5em;
+    border-color: white;
+    transition: background-color 0.3s ease;
+    color: white;
+}
+
+.btn-primary-custom:hover {
+    background-color: rgb(197, 51, 9);
+    border-color: white;
+    color: white;
+}
+
+.btn-primary-custom:active {
+    background-color: rgb(126, 36, 16);
 }

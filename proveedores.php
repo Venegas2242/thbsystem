@@ -14,7 +14,7 @@ if (!isset($_SESSION['idusuario'])) {
     <!-- Referencias CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="styles/proveedores-style.css">
+    <link rel="stylesheet" href="./styles/proveedores-style.css">
 </head>
 <body id="ng-producto-lista" ng-app="appCatalogos" ng-controller="cProductos">
 
@@ -22,7 +22,7 @@ if (!isset($_SESSION['idusuario'])) {
     
     <div class="container fade-in content-wrapper">
         <h1 class="my-4">Proveedores</h1>
-        <a href="#" class="btn btn-primary mb-4" ng-click="AbrirNuevo();"><i class="fa fa-plus"></i> Agregar nuevo proveedor</a>
+        <a href="#" class="btn btn-primary-custom mb-4" ng-click="AbrirNuevo();"><i class="fa fa-plus"></i> Agregar nuevo proveedor</a>
 
         <div class="row mb-4">
             <div class="col-12">
@@ -48,7 +48,7 @@ if (!isset($_SESSION['idusuario'])) {
                         </p>
                     </div>
                     <div class="mt-3">
-                        <a href="#" ng-click="AbrirEditar(this.producto);" class="btn btn-primary mb-1"><i class="fa fa-pencil-alt"></i> Editar</a>
+                        <a href="#" ng-click="AbrirEditar(this.producto);" class="btn btn-primary-custom"><i class="fa fa-pencil-alt"></i> Editar</a>
                     </div>
                 </div>
             </div>

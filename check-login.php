@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($is_valid == 1) {
             $_SESSION['idusuario'] = $idusuario;
             $_SESSION['usuario'] = $usuario;
-            header("Location: formulario-abc.php");
+            header("Location: proveedores.php");
             exit();
         } else {
             header("Location: login.php?error=Contraseña incorrecta");

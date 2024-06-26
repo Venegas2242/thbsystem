@@ -10,7 +10,7 @@ myApp.controller('cProductos', function ($scope, $http) {
     // Obtener lista de países al cargar la página
     $http({
         method: "GET",
-        url: 'cod-formulario-abc.php?functionToCall=obtener_paises'
+        url: 'cod-proveedores.php?functionToCall=obtener_paises'
     }).then(function (response) {
         $scope.listaPaises = response.data; // Asignar respuesta a listaPaises
     });
@@ -23,7 +23,7 @@ myApp.controller('cProductos', function ($scope, $http) {
             // Obtener estados del país seleccionado
             $http({
                 method: "POST",
-                url: 'cod-formulario-abc.php?functionToCall=obtener_estados',
+                url: 'cod-proveedores.php?functionToCall=obtener_estados',
                 data: {idpais: $scope.ubicacion.idpais}
             }).then(function (response) {
                 $scope.listaEstados = response.data; // Asignar respuesta a listaEstados
@@ -38,7 +38,7 @@ myApp.controller('cProductos', function ($scope, $http) {
             // Obtener ciudades del estado seleccionado
             $http({
                 method: "POST",
-                url: 'cod-formulario-abc.php?functionToCall=obtener_ciudades',
+                url: 'cod-proveedores.php?functionToCall=obtener_ciudades',
                 data: {idestado: $scope.ubicacion.idestado}
             }).then(function (response) {
                 $scope.listaCiudades = response.data; // Asignar respuesta a listaCiudades
@@ -50,7 +50,7 @@ myApp.controller('cProductos', function ($scope, $http) {
     $scope.producto = {id_producto: 0, nombrecomercial: "", rfc: "", telefono: 0, correo: 0};
     $http({
         method: "POST",
-        url: 'cod-formulario-abc.php?functionToCall=buscar_producto',
+        url: 'cod-proveedores.php?functionToCall=buscar_producto',
         data: myData}).then(function (response) {
         $scope.listaProductos = response.data;
     });
@@ -59,7 +59,7 @@ myApp.controller('cProductos', function ($scope, $http) {
         var myData = {textoBuscar: String($("#txtTextoBuscar").val())};
         $http({
             method: "POST",
-            url: 'cod-formulario-abc.php?functionToCall=buscar_producto',
+            url: 'cod-proveedores.php?functionToCall=buscar_producto',
             data: myData}).then(function (response) {
             $scope.listaProductos = response.data;
         });
@@ -76,7 +76,7 @@ myApp.controller('cProductos', function ($scope, $http) {
     $scope.Grabar = function () {
         $http({
             method: "POST",
-            url: 'cod-formulario-abc.php?functionToCall=grabar_producto',
+            url: 'cod-proveedores.php?functionToCall=grabar_producto',
             data: $scope.producto}).then(function (response) {
             if (response.data.status === "1") {
                 alert(response.data.message);
@@ -96,7 +96,7 @@ myApp.controller('cProductos', function ($scope, $http) {
     $scope.Eliminar = function () {
         $http({
             method: "POST",
-            url: 'cod-formulario-abc.php?functionToCall=eliminar_producto',
+            url: 'cod-proveedores.php?functionToCall=eliminar_producto',
             data: $scope.producto}).then(function (response) {
             if (response.data.status === "1") {
                 alert(response.data.message);

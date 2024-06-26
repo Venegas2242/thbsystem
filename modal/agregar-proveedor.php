@@ -94,7 +94,7 @@
                 </div>
             </div>                        
             <div class="modal-footer">
-                <button type="button" ng-click="Grabar()" class="btn btn-primary"><i class="fa fa-save"></i> Grabar</button>
+                <button type="button" ng-click="Grabar()" class="btn btn-primary-custom"><i class="fa fa-save"></i> Guardar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
             </div>
         </div>

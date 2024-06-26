@@ -1,4 +1,7 @@
 <?php
+
+
+
 /*
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
@@ -78,7 +81,7 @@ class Productos {
     function Grabar() {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
-        $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acci�n.");
+        $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
         $query = $cnn->prepare("call proc_ProveedorGrabar (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         //$query->bind_param("issdd", $this->idproveedor, $this->codigo_barras, $this->nombre_producto, $this->stock, $this->precio_venta);
         $query->bind_param("isssiiissssiiisss",$this->idproveedor, $this->nombrecomercial, $this->nombrecomun, $this->direccion,$this->idciudad, $this->idestado, $this->idpais, $this->rfc, $this->telefono, $this->correo,$this->web, $this->credito, $this->saldo, $this->diascredito, $this->idbanco, $this->cuenta, $this->clabe);
@@ -92,9 +95,9 @@ class Productos {
             $query->bind_result($this->idproveedor);
             if ($query->fetch()) {
                 if (is_null($this->idproveedor)) {
-                    $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acci�n. El error se desconoce.");
+                    $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción. El error se desconoce.");
                 } else {
-                    $retorno = $this->ArrayMessage("1", "El producto ha sido grabado correctamente.");
+                    $retorno = $this->ArrayMessage("1", "El proveedor ha sido grabado correctamente.");
                 }
             }
         }
@@ -106,7 +109,7 @@ class Productos {
     function Eliminar($idProveedor) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
-        $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acci�n.");
+        $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
         $query = $cnn->prepare("call proc_ProveedorEliminar (?)");
         $query->bind_param("i", $idProveedor);
         $query->execute();
@@ -119,9 +122,9 @@ class Productos {
             $query->bind_result($this->idproveedor);
             if ($query->fetch()) {
                 if (is_null($this->idproveedor)) {
-                    $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acci�n. El error se desconoce.");
+                    $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción. El error se desconoce.");
                 } else {
-                    $retorno = $this->ArrayMessage("1", "El producto ha sido eliminado.");
+                    $retorno = $this->ArrayMessage("1", "El proveedor ha sido eliminado.");
                 }
             }
         }

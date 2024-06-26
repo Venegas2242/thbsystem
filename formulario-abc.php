@@ -1,116 +1,18 @@
-<?php
-/*include 'cod-formulario-abc.php';
-error_reporting(E_ALL & ~E_DEPRECATED);
-ini_set("display_errors", 1);
-*/
-?>
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Proveedores</title>
-    <!--Referencias CSS-->
+    <!-- Referencias CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css"/>
-    <style>
-        body {
-            font-size: 1rem;
-        }
-        .btn {
-            padding: 0.75rem 1.5rem;
-            font-size: 1.5rem;
-            width: 100%;
-            margin-bottom: 0.5rem;
-        }
-        .form-control {
-            font-size: 1rem;
-        }
-        .modal-title {
-            font-size: 1.5rem;
-            flex-grow: 1;
-            text-align: center;
-        }
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        @media (max-width: 768px) {
-            body {
-                font-size: 0.9rem;
-            }
-            .btn {
-                padding: 0.75rem 1.5rem;
-                font-size: 0.9rem;
-            }
-            .form-control {
-                font-size: 0.9rem;
-            }
-            .modal-title {
-                font-size: 1.25rem;
-            }
-        }
-        @media (max-width: 576px) {
-            body {
-                font-size: 0.8rem;
-            }
-            .btn {
-                padding: 0.5rem 1rem;
-                font-size: 0.8rem;
-            }
-            .form-control {
-                font-size: 0.8rem;
-            }
-            .modal-title {
-                font-size: 1rem;
-            }
-        }
-        .fade-in {
-            animation: fadeIn 1.5s;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 2;
-            }
-        }
-        .form-control {
-            transition: all 0.3s ease-in-out;
-        }
-        .form-control:focus {
-            border-color: #007bff;
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
-        }
-        
-        .card {
-            position: relative;
-            padding: 1.5rem; /* Reducir el padding */
-            border-radius: 2rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 8px 8px rgba(0,0,0,0.1);
-            width: 100%; /* Ajustar la anchura */
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .delete-icon {
-            position: absolute;
-            top: 1rem;
-            right: 1.5rem;
-            color: red;
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-        /* Estilos para la scrollbar vertical */
-        ::-webkit-scrollbar {
-            width: 0px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles/proveedores-style.css">
 </head>
 <body id="ng-producto-lista" ng-app="appCatalogos" ng-controller="cProductos">
-    <div class="container fade-in">
+
+    <?php include 'menu.php'; ?>
+    
+    <div class="container fade-in content-wrapper">
         <h1 class="my-4">Proveedores</h1>
         <a href="#" class="btn btn-primary mb-4" ng-click="AbrirNuevo();"><i class="fa fa-plus"></i> Agregar nuevo proveedor</a>
 
@@ -285,13 +187,13 @@ ini_set("display_errors", 1);
         </div>
         <!-- Modal Eliminar-->
     </div>
-    <!--Referencias Javascript-->
+    <!-- Referencias Javascript -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-        //Código Javascript
+        // Código Javascript
         var myApp = angular.module('appCatalogos', []);
 
         myApp.controller('cProductos', function ($scope, $http) {

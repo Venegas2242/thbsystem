@@ -11,7 +11,7 @@
     <div class="login-container">
         <div class="login-left">
             <div class="login-left-content">
-                <img src="/images/logo.png" alt="TEHIBA">
+                <img src="./images/logo.png" alt="TEHIBA">
             </div>
         </div>
         <div class="login-right">

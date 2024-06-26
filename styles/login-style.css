@@ -6,7 +6,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background: url('/images/background-full.jpg') no-repeat center center fixed;
+    background: url('../images/background-full.jpg') no-repeat center center fixed;
     background-size: cover;
 }
 
@@ -21,7 +21,7 @@ body {
 }
 
 .login-left {
-    background: url('/images/background.jpg') no-repeat center center;
+    background: url('../images/background.jpg') no-repeat center center;
     background-size: cover;
     color: rgb(165, 0, 0);
     display: flex;

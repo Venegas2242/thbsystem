@@ -27,7 +27,7 @@
                         <input type="text" id="txtDireccion" ng-model="producto.direccion" class="form-control" />
                     </div>
                 </div>
-                <div class="form-row">
+                <div class="form-row align-items-end">
                     <div class="form-group col-md-4">
                         <label>País:</label>
                         <select id="cmbPais" ng-model="ubicacion.idpais" ng-change="cambiarPais()" class="form-control">
@@ -42,7 +42,7 @@
                             <option ng-repeat="estado in listaEstados" value="{{estado.idestado}}">{{estado.nombre}}</option>
                         </select>
                     </div>
-                    <div class="form-group col-md4">
+                    <div class="form-group col-md-4">
                         <label>Ciudad:</label>
                         <select id="cmbCiudad" ng-model="ubicacion.idciudad" class="form-control">
                             <option value="">Seleccione una ciudad</option>
@@ -92,7 +92,7 @@
                         <input type="text" id="txtClabe" ng-model="producto.clabe" class="form-control" />
                     </div>
                 </div>
-            </div>                        
+            </div>
             <div class="modal-footer">
                 <button type="button" ng-click="Grabar()" class="btn btn-primary-custom"><i class="fa fa-save"></i> Guardar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>

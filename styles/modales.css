@@ -1,0 +1,84 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.modal-content {
+    border-radius: 1rem;
+    padding: 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header h4 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.form-control {
+    border: none;
+    border-bottom: 2px solid #ccc;
+    border-radius: 0;
+    padding-left: 0.5rem; /* Ajuste del padding */
+}
+
+.form-control:focus {
+    border-bottom-color: #ff0000;
+    box-shadow: none;
+}
+
+.btn-primary-modal {
+    background-color: rgb(253, 97, 17);
+    border: none;
+    border-radius: 0.5rem;
+    color: white;
+    width: 25px; /* Ajuste del tamaño del botón */
+    height: 25px; /* Ajuste del tamaño del botón */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-primary-modal:hover {
+    background-color: rgb(126, 36, 16);
+    color: white;
+}
+
+.btn-primary-modal i {
+    font-size: 1rem; /* Ajuste del tamaño del icono */
+    line-height: 1;
+}
+
+.btn-secondary {
+    border-radius: 0.5rem;
+}
+
+.form-row {
+    display: flex;
+    align-items: center;
+}
+
+.form-group {
+    position: relative;
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-group .btn {
+    margin-top: 0;
+    height: 2.5rem;
+    font-size: 1rem;
+}
+
+.form-group .btn i {
+    vertical-align: middle;
+}
+
+.form-group.col-md-1 {
+    padding-left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

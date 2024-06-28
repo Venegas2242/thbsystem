@@ -1,35 +1,14 @@
 <?php
 
-
-
-/*
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-*/
-/**
- * Description of class
- *
- * @author tyrodeveloper
- */
-
 error_reporting(E_ALL & ~E_DEPRECATED);
 ini_set("display_errors", "1");
 date_default_timezone_set("America/Mexico_City");
 
-spl_autoload_register(function( $NombreClase ) {
+spl_autoload_register(function($NombreClase) {
     require_once $NombreClase . '.php';
 });
 
-class Productos {
-
-    /*
-    public $idproveedor = 0;
-    public $nombrecomercial = "";
-    public $rfc = "";
-    public $telefono = 0;
-    public $correo = 0;*/
-    
+class Proveedores {
     public $idproveedor = 0;
     public $nombrecomercial = "";
     public $nombrecomun = "";
@@ -52,21 +31,18 @@ class Productos {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("call proc_ProveedorBuscar (?)");
+        $query = $cnn->prepare("call proc_ProveedorBuscar(?)");
         $query->bind_param("s", $textoBuscar);
         $query->execute();
-        $producto = new Productos(); //Variable
-        $query->bind_result(
-                $idproveedor, $nombrecomercial, $rfc, $telefono, $correo
-        );
+        $query->bind_result($idproveedor, $nombrecomercial, $rfc, $telefono, $correo);
         while ($query->fetch()) {
-            $producto = new Productos();
-            $producto->idproveedor = $idproveedor;
-            $producto->nombrecomercial = $nombrecomercial;
-            $producto->rfc = $rfc;
-            $producto->telefono = $telefono;
-            $producto->correo = $correo;
-            array_push($retorno, $producto);
+            $proveedor = new Proveedores();
+            $proveedor->idproveedor = $idproveedor;
+            $proveedor->nombrecomercial = $nombrecomercial;
+            $proveedor->rfc = $rfc;
+            $proveedor->telefono = $telefono;
+            $proveedor->correo = $correo;
+            array_push($retorno, $proveedor);
         }
         $query->close();
         $cnn->close();
@@ -74,23 +50,39 @@ class Productos {
     }
 
     function ArrayMessage($status, $message) {
-       $retorno = array("status" => $status, "message" => $message, "date" => date("Y-m-d H:i:s"));
-       return $retorno;
+        $retorno = array("status" => $status, "message" => $message, "date" => date("Y-m-d H:i:s"));
+        return $retorno;
     }
 
     function Grabar() {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
-        $query = $cnn->prepare("call proc_ProveedorGrabar (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        //$query->bind_param("issdd", $this->idproveedor, $this->codigo_barras, $this->nombre_producto, $this->stock, $this->precio_venta);
-        $query->bind_param("isssiiissssiiisss",$this->idproveedor, $this->nombrecomercial, $this->nombrecomun, $this->direccion,$this->idciudad, $this->idestado, $this->idpais, $this->rfc, $this->telefono, $this->correo,$this->web, $this->credito, $this->saldo, $this->diascredito, $this->idbanco, $this->cuenta, $this->clabe);
+        $query = $cnn->prepare("call proc_ProveedorGrabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $query->bind_param("isssiiissssddisss", 
+            $this->idproveedor, 
+            $this->nombrecomercial, 
+            $this->nombrecomun, 
+            $this->direccion, 
+            $this->idciudad, 
+            $this->idestado, 
+            $this->idpais, 
+            $this->rfc, 
+            $this->telefono, 
+            $this->correo, 
+            $this->web, 
+            $this->credito, 
+            $this->saldo, 
+            $this->diascredito, 
+            $this->idbanco, 
+            $this->cuenta, 
+            $this->clabe
+        );
         $query->execute();
         $query->store_result();
         if (mysqli_stmt_error($query) != "") {
             $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
         }
-        //Verificar si se obtubieron resultados
         if ($query->num_rows != 0) {
             $query->bind_result($this->idproveedor);
             if ($query->fetch()) {
@@ -110,14 +102,13 @@ class Productos {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
-        $query = $cnn->prepare("call proc_ProveedorEliminar (?)");
+        $query = $cnn->prepare("call proc_ProveedorEliminar(?)");
         $query->bind_param("i", $idProveedor);
         $query->execute();
         $query->store_result();
         if (mysqli_stmt_error($query) != "") {
             $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
         }
-        //Verificar si se obtubieron resultados
         if ($query->num_rows != 0) {
             $query->bind_result($this->idproveedor);
             if ($query->fetch()) {
@@ -133,8 +124,6 @@ class Productos {
         return $retorno;
     }
 
-
-    
     function ObtenerPaises() {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
@@ -186,70 +175,56 @@ class Productos {
     }
 }
 
-/*
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-*/
-
 if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
     $functionToCall = $_GET["functionToCall"];
     $json_data = json_decode(file_get_contents('php://input'));
     switch ($functionToCall) {
-        case "buscar_producto":
-            $producto = new Productos();
-            echo json_encode($producto->Buscar(utf8_decode($json_data->textoBuscar)));
+        case "buscar_proveedor":
+            $proveedor = new Proveedores();
+            echo json_encode($proveedor->Buscar(utf8_decode($json_data->textoBuscar)));
             break;
 
-        case "grabar_producto":
-            $producto = new Productos();
-            /*
-            $producto->id_producto = $json_data->id_producto;
-            $producto->codigo_barras = $json_data->codigo_barras;
-            $producto->nombre_producto = $json_data->nombre_producto;
-            $producto->stock = $json_data->stock;
-            $producto->precio_venta = $json_data->precio_venta;*/
+        case "grabar_proveedor":
+            $proveedor = new Proveedores();
+            $proveedor->idproveedor  = $json_data->idproveedor;
+            $proveedor->nombrecomercial  = $json_data->nombrecomercial;
+            $proveedor->nombrecomun  = $json_data->nombrecomun;
+            $proveedor->direccion  = $json_data->direccion;
+            $proveedor->idciudad  = $json_data->idciudad;
+            $proveedor->idestado  = $json_data->idestado;
+            $proveedor->idpais  = $json_data->idpais;
+            $proveedor->rfc  = $json_data->rfc;
+            $proveedor->telefono  = $json_data->telefono;
+            $proveedor->correo  = $json_data->correo;
+            $proveedor->web  = $json_data->web;
+            $proveedor->credito  = $json_data->credito;
+            $proveedor->saldo  = $json_data->saldo;
+            $proveedor->diascredito  = $json_data->diascredito;
+            $proveedor->idbanco  = $json_data->idbanco;
+            $proveedor->cuenta  = $json_data->cuenta;
+            $proveedor->clabe  = $json_data->clabe;
 
-            $producto->idproveedor  = $json_data->idproveedor;
-            $producto->nombrecomercial  = $json_data->nombrecomercial;
-            $producto->nombrecomun  = $json_data->nombrecomun;
-            $producto->direccion  = $json_data->direccion;
-            $producto->idciudad  = $json_data->idciudad;
-            $producto->idestado  = $json_data->idestado;
-            $producto->idpais  = $json_data->idpais;
-            $producto->rfc  = $json_data->rfc;
-            $producto->telefono  = $json_data->telefono;
-            $producto->correo  = $json_data->correo;
-            $producto->web  = $json_data->web;
-            $producto->credito  = $json_data->credito;
-            $producto->saldo  = $json_data->saldo;
-            $producto->diascredito  = $json_data->diascredito;
-            $producto->idbanco  = $json_data->idbanco;
-            $producto->cuenta  = $json_data->cuenta;
-            $producto->clabe  = $json_data->clabe;
-
-            
-            echo json_encode($producto->Grabar());
+            echo json_encode($proveedor->Grabar());
             break;
 
-        case "eliminar_producto":
-            $producto = new Productos();
-            echo json_encode($producto->Eliminar($json_data->idproveedor));
+        case "eliminar_proveedor":
+            $proveedor = new Proveedores();
+            echo json_encode($proveedor->Eliminar($json_data->idproveedor));
             break;
 
         case "obtener_estados":
-            $producto = new Productos();
-            echo json_encode($producto->ObtenerEstados($json_data->idpais));
+            $proveedor = new Proveedores();
+            echo json_encode($proveedor->ObtenerEstados($json_data->idpais));
             break;
 
         case "obtener_ciudades":
-            $producto = new Productos();
-            echo json_encode($producto->ObtenerCiudades($json_data->idestado));
+            $proveedor = new Proveedores();
+            echo json_encode($proveedor->ObtenerCiudades($json_data->idestado));
             break;
 
         case "obtener_paises":
-            $producto = new Productos();
-            echo json_encode($producto->ObtenerPaises());
+            $proveedor = new Proveedores();
+            echo json_encode($proveedor->ObtenerPaises());
             break;
     }
 }

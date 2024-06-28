@@ -1,11 +1,30 @@
 var myApp = angular.module('appCatalogos', []);
 
-myApp.controller('cProductos', function ($scope, $http) {
+myApp.controller('cProveedores', function ($scope, $http) {
     $scope.listaPaises = [];
     $scope.listaEstados = [];
     $scope.listaCiudades = [];
 
-    $scope.ubicacion = {idpais: "", idestado: "", idciudad: ""};
+    // Inicializar proveedor
+    $scope.proveedor = {
+        idproveedor: 0,
+        nombrecomercial: "",
+        nombrecomun: "",
+        direccion: "",
+        idciudad: 0,
+        idestado: 0,
+        idpais: 0,
+        rfc: "",
+        telefono: "",
+        correo: "",
+        web: "",
+        credito: 0,
+        saldo: 0,
+        diascredito: 0,
+        idbanco: "",
+        cuenta: "",
+        clabe: ""
+    };
 
     // Obtener lista de países al cargar la página
     $http({
@@ -19,12 +38,12 @@ myApp.controller('cProductos', function ($scope, $http) {
     $scope.cambiarPais = function() {
         $scope.listaEstados = []; // Limpiar lista de estados
         $scope.listaCiudades = []; // Limpiar lista de ciudades
-        if ($scope.ubicacion.idpais) {
+        if ($scope.proveedor.idpais) {
             // Obtener estados del país seleccionado
             $http({
                 method: "POST",
                 url: 'cod-proveedores.php?functionToCall=obtener_estados',
-                data: {idpais: $scope.ubicacion.idpais}
+                data: { idpais: $scope.proveedor.idpais }
             }).then(function (response) {
                 $scope.listaEstados = response.data; // Asignar respuesta a listaEstados
             });
@@ -34,78 +53,113 @@ myApp.controller('cProductos', function ($scope, $http) {
     // Función para manejar el cambio de estado
     $scope.cambiarEstado = function() {
         $scope.listaCiudades = []; // Limpiar lista de ciudades
-        if ($scope.ubicacion.idestado) {
+        if ($scope.proveedor.idestado) {
             // Obtener ciudades del estado seleccionado
             $http({
                 method: "POST",
                 url: 'cod-proveedores.php?functionToCall=obtener_ciudades',
-                data: {idestado: $scope.ubicacion.idestado}
+                data: { idestado: $scope.proveedor.idestado }
             }).then(function (response) {
                 $scope.listaCiudades = response.data; // Asignar respuesta a listaCiudades
             });
         }
     };
 
-    var myData = {textoBuscar: ''};
-    $scope.producto = {id_producto: 0, nombrecomercial: "", rfc: "", telefono: 0, correo: 0};
+    var myData = { textoBuscar: '' };
+
+    // Obtener lista de proveedores al cargar la página
     $http({
         method: "POST",
-        url: 'cod-proveedores.php?functionToCall=buscar_producto',
-        data: myData}).then(function (response) {
-        $scope.listaProductos = response.data;
+        url: 'cod-proveedores.php?functionToCall=buscar_proveedor',
+        data: myData
+    }).then(function (response) {
+        $scope.listaProveedores = response.data;
     });
 
-    $scope.BuscarProducto = function () {
-        var myData = {textoBuscar: String($("#txtTextoBuscar").val())};
+    // Función para buscar proveedor por texto
+    $scope.BuscarProveedor = function () {
+        var myData = { textoBuscar: String($("#txtTextoBuscar").val()) };
         $http({
             method: "POST",
-            url: 'cod-proveedores.php?functionToCall=buscar_producto',
-            data: myData}).then(function (response) {
-            $scope.listaProductos = response.data;
+            url: 'cod-proveedores.php?functionToCall=buscar_proveedor',
+            data: myData
+        }).then(function (response) {
+            $scope.listaProveedores = response.data;
         });
     };
 
+    // Función para abrir el modal de edición de proveedor
     $scope.AbrirEditar = function (item) {
-        $scope.producto = item;
-        $("#modalProducto").modal();
+        console.log('Item:', item); // Imprimir el objeto completo en la consola
+        $scope.proveedor = item;
+        $("#modalProveedor").modal();
     };
+
+    // Función para abrir el modal de nuevo proveedor
     $scope.AbrirNuevo = function () {
-        $scope.producto = {id_producto: 0, codigo_barras: "", nombre_producto: "", stock: 0, precio_venta: 0};
-        $("#modalProducto").modal();
+        $scope.proveedor = {
+            idproveedor: 0,
+            nombrecomercial: "",
+            nombrecomun: "",
+            direccion: "",
+            idciudad: 0,
+            idestado: 0,
+            idpais: 0,
+            rfc: "",
+            telefono: "",
+            correo: "",
+            web: "",
+            credito: 0,
+            saldo: 0,
+            diascredito: 0,
+            idbanco: "",
+            cuenta: "",
+            clabe: ""
+        };
+        $("#modalProveedorNuevo").modal();
     };
+
+    // Función para guardar proveedor
     $scope.Grabar = function () {
+        console.log('Datos del proveedor:', $scope.proveedor);
+
         $http({
             method: "POST",
-            url: 'cod-proveedores.php?functionToCall=grabar_producto',
-            data: $scope.producto}).then(function (response) {
+            url: 'cod-proveedores.php?functionToCall=grabar_proveedor',
+            data: $scope.proveedor
+        }).then(function (response) {
             if (response.data.status === "1") {
                 alert(response.data.message);
-                $scope.BuscarProducto();
-                $("#modalProducto").modal("hide");
+                $scope.BuscarProveedor();
+                $("#modalProveedorNuevo").modal("hide");
             } else {
                 alert(response.data.message);
             }
+        }, function (error) {
+            console.error('Error:', error);
         });
     };
 
+    // Función para abrir el modal de eliminación de proveedor
     $scope.AbrirEliminar = function (item) {
-        $scope.producto = item;
-        $("#modalProductoEliminar").modal();
+        $scope.proveedor = item;
+        $("#modalProveedorEliminar").modal();
     };
 
+    // Función para eliminar proveedor
     $scope.Eliminar = function () {
         $http({
             method: "POST",
-            url: 'cod-proveedores.php?functionToCall=eliminar_producto',
-            data: $scope.producto}).then(function (response) {
+            url: 'cod-proveedores.php?functionToCall=eliminar_proveedor',
+            data: $scope.proveedor
+        }).then(function (response) {
             if (response.data.status === "1") {
                 alert(response.data.message);
-                $scope.BuscarProducto();
-                $("#modalProductoEliminar").modal("hide");
+                $scope.BuscarProveedor();
+                $("#modalProveedorEliminar").modal("hide");
             } else {
                 alert(response.data.message);
             }
         });
     };
-    
 });

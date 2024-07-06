@@ -85,7 +85,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" ng-click="Grabar()" class="btn btn-primary-custom"><i class="fa fa-save"></i> Guardar</button>
+                <button type="button" ng-click="Actualizar_Proveedor(detalles_proveedor)" class="btn btn-primary-custom"><i class="fa fa-save"></i> Guardar</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
             </div>
         </div>

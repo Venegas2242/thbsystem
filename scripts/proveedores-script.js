@@ -172,6 +172,26 @@ myApp.controller('cProveedores', function ($scope, $http) {
         $("#modalProveedorEliminar").modal();
     };
 
+    // Función para actualizar proveedor
+    $scope.Actualizar_Proveedor = function (proveedor) {
+        console.log("Datos del proveedor a actualizar: ", proveedor); // Imprimir en consola
+        $http({
+            method: "POST",
+            url: 'cod-proveedores.php?functionToCall=grabar_proveedor',
+            data: $scope.detalles_proveedor
+        }).then(function (response) {
+            if (response.data.status === "1") {
+                alert(response.data.message);
+                $scope.BuscarProveedor();
+                $("#modalProveedor").modal("hide");
+            } else {
+                alert(response.data.message);
+            }
+        }, function (error) {
+            console.error('Error:', error);
+        });
+    };
+    
     // Función para eliminar proveedor
     $scope.Eliminar = function () {
         $http({

@@ -11,3 +11,12 @@ function toggleNav() {
         document.querySelector('.content-wrapper').style.marginRight = "auto";
     }
 }
+
+function toggleDropdown() {
+    var dropdownContainer = document.querySelector(".dropdown-container");
+    if (dropdownContainer.style.display === "block") {
+        dropdownContainer.style.display = "none";
+    } else {
+        dropdownContainer.style.display = "block";
+    }
+}

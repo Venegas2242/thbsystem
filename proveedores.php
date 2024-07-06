@@ -45,7 +45,6 @@ if (!isset($_SESSION['idusuario'])) {
                             <strong>RFC:</strong> {{proveedor.rfc}}<br>
                             <strong>Teléfono:</strong> {{proveedor.telefono}}<br>
                             <strong>Correo:</strong> {{proveedor.correo}}
-                            <strong>Clabe:</strong> {{proveedor.clabe}}
                         </p>
                     </div>
                     <div class="mt-3">

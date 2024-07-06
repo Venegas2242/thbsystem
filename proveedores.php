@@ -61,6 +61,7 @@ if (!isset($_SESSION['idusuario'])) {
 
         <?php include 'modal/eliminar-proveedor.php'; ?>
         <?php include 'modal/agregar-proveedor.php'; ?>
+        <?php include 'modal/editar-proveedor.php'; ?>
     </div>
 
     <!-- Referencias Javascript -->

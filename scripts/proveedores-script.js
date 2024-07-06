@@ -4,6 +4,7 @@ myApp.controller('cProveedores', function ($scope, $http) {
     $scope.listaPaises = [];
     $scope.listaEstados = [];
     $scope.listaCiudades = [];
+    $scope.listaProveedores = [];
 
     // Inicializar proveedor
     $scope.proveedor = {
@@ -11,9 +12,9 @@ myApp.controller('cProveedores', function ($scope, $http) {
         nombrecomercial: "",
         nombrecomun: "",
         direccion: "",
-        idciudad: 0,
-        idestado: 0,
-        idpais: 0,
+        idciudad: null,
+        idestado: null,
+        idpais: null,
         rfc: "",
         telefono: "",
         correo: "",
@@ -46,6 +47,10 @@ myApp.controller('cProveedores', function ($scope, $http) {
                 data: { idpais: $scope.proveedor.idpais }
             }).then(function (response) {
                 $scope.listaEstados = response.data; // Asignar respuesta a listaEstados
+                // Si ya se tiene un estado seleccionado, mantenerlo
+                if ($scope.proveedor.idestado) {
+                    $scope.cambiarEstado();
+                }
             });
         }
     };
@@ -88,11 +93,31 @@ myApp.controller('cProveedores', function ($scope, $http) {
         });
     };
 
+    // Función para obtener información completa del proveedor
+    $scope.InfoProveedor = function (idproveedor) {
+        //console.log('Id proveedor:', idproveedor);
+        $http({
+            method: "POST",
+            url: 'cod-proveedores.php?functionToCall=info_proveedor',
+            data: { id_proveedor: idproveedor }
+        }).then(function (response) {
+            console.log('Información completa del proveedor:', response.data[0]); // Imprimir la información completa en la consola
+            $scope.detalles_proveedor = response.data[0];
+
+            // Actualizar los estados y ciudades según el país y estado seleccionados
+            // $scope.cambiarPais();
+
+            // Mostrar el modal con la información del proveedor
+            $("#modalProveedor").modal();
+        }, function (error) {
+            console.error('Error:', error);
+        });
+    };
+
     // Función para abrir el modal de edición de proveedor
     $scope.AbrirEditar = function (item) {
-        console.log('Item:', item); // Imprimir el objeto completo en la consola
-        $scope.proveedor = item;
-        $("#modalProveedor").modal();
+        console.log('Info card:', item); // Imprimir el objeto completo en la consola
+        $scope.InfoProveedor(item.idproveedor);
     };
 
     // Función para abrir el modal de nuevo proveedor
@@ -102,9 +127,9 @@ myApp.controller('cProveedores', function ($scope, $http) {
             nombrecomercial: "",
             nombrecomun: "",
             direccion: "",
-            idciudad: 0,
-            idestado: 0,
-            idpais: 0,
+            idciudad: null,
+            idestado: null,
+            idpais: null,
             rfc: "",
             telefono: "",
             correo: "",
@@ -132,6 +157,7 @@ myApp.controller('cProveedores', function ($scope, $http) {
                 alert(response.data.message);
                 $scope.BuscarProveedor();
                 $("#modalProveedorNuevo").modal("hide");
+                
             } else {
                 alert(response.data.message);
             }

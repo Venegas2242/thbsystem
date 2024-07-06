@@ -317,3 +317,16 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE proc_ProveedorInfo(
+    IN id_proveedor INT
+)
+BEGIN
+    select nombrefiscal, nombrecomun, direccion, ci.nombre, es.nombre, pa.nombre, rfc, telefono, correo, web, credito, saldo, diascredito, idbanco, cuenta, clabe 
+      from cat_proveedor p, cat_pais pa, cat_estado es, cat_ciudad ci
+      where p.idproveedor = id_proveedor AND p.idpais = pa.idpais AND p.idestado = es.idestado AND p.idciudad = ci.idciudad;
+END //
+
+DELIMITER ;

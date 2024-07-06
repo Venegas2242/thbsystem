@@ -49,6 +49,40 @@ class Proveedores {
         return $retorno;
     }
 
+    function BuscarInfo($id_proveedor) {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("call proc_ProveedorInfo(?)");
+        $query->bind_param("s", $id_proveedor);
+        $query->execute();
+        $query->bind_result($nombrefiscal, $nombrecomercial, $direccion, $idciudad, $idestado, $idpais, $rfc, $telefono, $correo, $web, $credito, $saldo, $diascredito, $idbanco, $cuenta, $clabe);
+        while ($query->fetch()) {
+            $proveedor = new Proveedores();
+            $proveedor->idproveedor = $id_proveedor;
+            $proveedor->nombrecomercial  = $nombrefiscal;
+            $proveedor->nombrecomun  = $nombrecomercial;
+            $proveedor->direccion  = $direccion;
+            $proveedor->idciudad  = $idciudad;
+            $proveedor->idestado  = $idestado;
+            $proveedor->idpais  = $idpais;
+            $proveedor->rfc  = $rfc;
+            $proveedor->telefono  = $telefono;
+            $proveedor->correo  = $correo;
+            $proveedor->web  = $web;
+            $proveedor->credito  = $credito;
+            $proveedor->saldo  = $saldo;
+            $proveedor->diascredito  = $diascredito;
+            $proveedor->idbanco  = $idbanco;
+            $proveedor->cuenta  = $cuenta;
+            $proveedor->clabe  = $clabe;
+            array_push($retorno, $proveedor);
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
     function ArrayMessage($status, $message) {
         $retorno = array("status" => $status, "message" => $message, "date" => date("Y-m-d H:i:s"));
         return $retorno;
@@ -182,6 +216,11 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
         case "buscar_proveedor":
             $proveedor = new Proveedores();
             echo json_encode($proveedor->Buscar(utf8_decode($json_data->textoBuscar)));
+            break;
+
+        case "info_proveedor":
+            $proveedor = new Proveedores();
+            echo json_encode($proveedor->BuscarInfo($json_data->id_proveedor));
             break;
 
         case "grabar_proveedor":

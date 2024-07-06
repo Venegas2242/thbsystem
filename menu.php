@@ -11,11 +11,17 @@
         <span>&#9776; Menú</span>
     </div>
     
-    <div id="mySidenav" class="sidenav">
-        <a href="proveedores.php"><i class="fas fa-truck me-2"></i>  Proveedores</a>
-        <a href="clientes.php"><i class="fas fa-user me-2"></i> Clientes</a>
-        <a href="productos.php"><i class="fas fa-box me-2"></i>     Productos</a>
-        <a href="logout.php"><i class="fas fa-sign-out-alt me-2"></i>       Salir</a>
+    <div id="mySidenav" class="sidenav">  
+        <a class="dropdown-btn" onclick="toggleDropdown()">
+            <i class="fas fa-bars me-2"></i> Catálogos      <i class="fa fa-caret-down"></i>
+        </a>
+        <div class="dropdown-container">
+            <a class="dropdown-item" href="proveedores.php"><i class="fas fa-truck me-2"></i> Proveedores</a>
+            <a class="dropdown-item" href="clientes.php"><i class="fas fa-user me-2"></i> Clientes</a>
+            <a class="dropdown-item" href="productos.php"><i class="fas fa-box me-2"></i> Productos</a>
+        </div>
+
+        <a href="logout.php"><i class="fas fa-sign-out-alt me-2"></i> Salir</a>
     </div>
 
     <script src="scripts/menu-script.js"></script>

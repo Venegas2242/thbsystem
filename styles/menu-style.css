@@ -22,17 +22,45 @@ body {
     text-decoration: none;
     font-size: 25px;
     color: #818181;
-    display: flex; /* Cambiado a flex para alinear el ícono y el texto */
-    align-items: center; /* Centra verticalmente los íconos y el texto */
+    display: flex;
+    align-items: center;
     transition: 0.3s;
+    user-select: none;
 }
 
 .sidenav a i {
-    margin-right: 10px; /* Espacio entre el ícono y el texto */
+    margin-right: 10px;
 }
 
 .sidenav a:hover {
     color: #f1f1f1;
+    background-color: #575757; /* Cambia el fondo al pasar el mouse */
+}
+
+.dropdown-container {
+    display: none;
+    background-color: #262626;
+    padding-left: 8px;
+}
+
+.dropdown-btn {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.dropdown-btn i.fa-caret-down {
+    margin-left: auto; /* Alinea el ícono a la derecha del texto */
+}
+
+.dropdown-btn:hover {
+    color: #f1f1f1;
+    background-color: #575757; /* Cambia el fondo al pasar el mouse */
 }
 
 .menu-btn {
@@ -42,7 +70,8 @@ body {
     color: white;
     padding: 10px 15px;
     position: fixed;
-    width: 100%;
+    width: 15%;
+    height: 4rem;
     top: 0;
     left: 0;
     z-index: 2;
@@ -51,9 +80,16 @@ body {
 
 .menu-bg {
     height: 4rem;
-    position: relative;
     width: 100%;
     background-color: #111;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.search-bar {
+    z-index: 1;
 }
 
 @media screen and (max-height: 450px) {

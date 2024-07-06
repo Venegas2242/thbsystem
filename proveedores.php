@@ -27,7 +27,7 @@ if (!isset($_SESSION['idusuario'])) {
         <div class="row mb-4">
             <div class="col-12">
                 <div class="input-group">
-                    <input type="text" class="form-control" ng-keyup="$event.keyCode == 13 ? BuscarProveedor() : null" id="txtTextoBuscar" placeholder="RFC, Nombre del proveedor" />
+                    <input type="text" class="search-bar form-control" ng-keyup="$event.keyCode == 13 ? BuscarProveedor() : null" id="txtTextoBuscar" placeholder="RFC, Nombre del proveedor" />
                     <div class="input-group-append">
                         <span class="input-group-text"><i class="fa fa-search"></i></span>
                     </div>
@@ -45,7 +45,6 @@ if (!isset($_SESSION['idusuario'])) {
                             <strong>RFC:</strong> {{proveedor.rfc}}<br>
                             <strong>Teléfono:</strong> {{proveedor.telefono}}<br>
                             <strong>Correo:</strong> {{proveedor.correo}}
-                            <strong>Clabe:</strong> {{proveedor.clabe}}
                         </p>
                     </div>
                     <div class="mt-3">

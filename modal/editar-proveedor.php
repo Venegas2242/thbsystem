@@ -30,15 +30,15 @@
                 <div class="form-row align-items-end">
                     <div class="form-group col-md-4">
                         <label>País:</label>
-                        <input type="text" id="txtPais" ng-model="detalles_proveedor.idpais" class="form-control" disabled/>
+                        <input type="text" id="txtPais" value="detalles_proveedor.idpais" ng-model="detalles_proveedor.nombrepais" class="form-control" disabled/>
                     </div>
                     <div class="form-group col-md-4">
                         <label>Estado:</label>
-                        <input type="text" id="txtEstado" ng-model="detalles_proveedor.idestado" class="form-control" disabled/>
+                        <input type="text" id="txtEstado" value="detalles_proveedor.idestado" ng-value="detalles_proveedor.nombreestado" class="form-control" disabled/>
                     </div>
                     <div class="form-group col-md-4">
                         <label>Ciudad:</label>
-                        <input type="text" id="txtCiudad" ng-model="detalles_proveedor.idciudad" class="form-control" disabled/>
+                        <input type="text" id="txtCiudad" value="detalles_proveedor.idciudad" ng-value="detalles_proveedor.nombreciudad" class="form-control" disabled/>
                     </div>
                 </div>
                 <div class="form-row">

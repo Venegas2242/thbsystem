@@ -46,6 +46,49 @@ insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,i
 insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
             values('MIGUEL ANGEL MENA ZAMOREZ','ACEROS ANZA','ZARAGOZA 575  CP 36588  BARRIO DE SAN VICENTE','3','11','1','MEZM870321738','6602088','ACEROSALIADOSANZA@HOTMAIL.COM','','0','0','30','3','3456736','928179412653811');
 
+DELIMITER //
+
+CREATE PROCEDURE `proc_AgregarContactoProveedor` (
+    IN p_idproveedor INT,
+    IN p_contacto VARCHAR(255),
+    IN p_telefono VARCHAR(255),
+    IN p_celular VARCHAR(255),
+    IN p_comentarios TEXT
+)
+BEGIN
+    INSERT INTO cat_proveedorcontactos (idproveedor, contacto, telefono, celular, comentarios) 
+    VALUES (
+        p_idproveedor,
+        p_contacto,
+        p_telefono,
+        p_celular,
+        p_comentarios
+    );
+END //
+
+DELIMITER ;
+
+
+insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, comentarios) 
+  values (1, 'Contacto 1', '4623080336', '4622080335', 'Contacto 1 de proveedor 1');
+insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, comentarios) 
+  values (1, 'Contacto 2', '4625550989', '4625550983', 'Contacto 2 de proveedor 1');
+insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, comentarios) 
+  values (2, 'Contacto 3', '4625431090', '4625431092', 'Contacto 1 de proveedor 2');
+
+delimiter //
+create procedure proc_ContactosProveedor
+(
+ id_proveedor int
+)
+begin
+  select contacto, telefono, celular, comentarios
+    from cat_proveedorcontactos
+    where idproveedor = id_proveedor and activo = '1';
+end
+//
+delimiter ;
+  
 /*mostrar datos*/
 select * from cat_proveedor;
 /*procedimientos almacenados*/
@@ -324,7 +367,7 @@ CREATE PROCEDURE proc_ProveedorInfo(
     IN id_proveedor INT
 )
 BEGIN
-    select nombrefiscal, nombrecomun, direccion, ci.nombre, es.nombre, pa.nombre, rfc, telefono, correo, web, credito, saldo, diascredito, idbanco, cuenta, clabe 
+    select nombrefiscal, nombrecomun, direccion, ci.idciudad, ci.nombre Ciudad, es.idestado, es.nombre Estado, pa.idpais, pa.nombre Pais, rfc, telefono, correo, web, credito, saldo, diascredito, idbanco, cuenta, clabe 
       from cat_proveedor p, cat_pais pa, cat_estado es, cat_ciudad ci
       where p.idproveedor = id_proveedor AND p.idpais = pa.idpais AND p.idestado = es.idestado AND p.idciudad = ci.idciudad;
 END //

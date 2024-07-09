@@ -166,6 +166,63 @@ myApp.controller('cProveedores', function ($scope, $http) {
         });
     };
 
+    $scope.MostrarContactos = function (item) {
+        $scope.id_proveedor = item.idproveedor;
+        console.log("Id del proveedor: ", $scope.id_proveedor);
+    
+        $http({
+            method: "POST",
+            url: 'cod-proveedores.php?functionToCall=contactos_proveedor',
+            data: {id_proveedor: $scope.id_proveedor}
+        }).then(function (response) {
+            $scope.contactos_proveedor = response.data;
+            console.log('Contactos del proveedor:', $scope.contactos_proveedor); // Imprimir la información completa en la consola
+            $scope.nuevoContacto = {}; // Inicializar el objeto para el nuevo contacto
+            $scope.agregarContactoActivo = false; // Inicializar el estado del renglón editable
+    
+            // Mostrar el modal con la información del proveedor
+            $("#modalContactosProveedor").modal();
+        }, function (error) {
+            console.error('Error:', error);
+        });
+    };
+    
+    $scope.AgregarContacto = function () {
+        // Añadir el id del proveedor al nuevo contacto
+        $scope.nuevoContacto.id_proveedor = $scope.id_proveedor;
+    
+        $http({
+            method: "POST",
+            url: 'cod-proveedores.php?functionToCall=agregar_contacto',
+            data: $scope.nuevoContacto
+        }).then(function (response) {
+            console.log('Contacto agregado:', response.data);
+            if(response.data.status == "1") {
+                $("#modalContactosProveedor").modal("hide");
+                // Limpiar el formulario después de agregar el contacto
+                //$scope.nuevoContacto = {};
+                //$scope.agregarContactoActivo = false; // Ocultar el renglón editable después de agregar el contacto
+            } else {
+                console.error('Error al agregar contacto:', response.data.message);
+            }
+        }, function (error) {
+            console.error('Error al agregar contacto:', error);
+        });
+    };    
+    
+    $scope.toggleAgregarContacto = function () {
+        $scope.agregarContactoActivo = !$scope.agregarContactoActivo;
+    };
+    
+    // Ocultar el renglón editable cuando se cierre el modal
+    $('#modalContactosProveedor').on('hidden.bs.modal', function () {
+        $scope.$apply(function () {
+            $scope.agregarContactoActivo = false;
+        });
+    });
+    
+    
+
     // Función para abrir el modal de eliminación de proveedor
     $scope.AbrirEliminar = function (item) {
         $scope.proveedor = item;
@@ -173,8 +230,8 @@ myApp.controller('cProveedores', function ($scope, $http) {
     };
 
     // Función para actualizar proveedor
-    $scope.Actualizar_Proveedor = function (proveedor) {
-        console.log("Datos del proveedor a actualizar: ", proveedor); // Imprimir en consola
+    $scope.Actualizar_Proveedor = function (detalles_proveedor) {
+        console.log("Datos del proveedor a actualizar: ", detalles_proveedor); // Imprimir en consola
         $http({
             method: "POST",
             url: 'cod-proveedores.php?functionToCall=grabar_proveedor',

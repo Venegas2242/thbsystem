@@ -38,6 +38,7 @@ if (!isset($_SESSION['idusuario'])) {
         <div class="row">
             <div class="col-12" ng-repeat="proveedor in listaProveedores">
                 <div class="card">
+                    <span class="contacts-icon" ng-click="MostrarContactos(this.proveedor);"><i class="fa-solid fa-address-book"></i></span>
                     <span class="delete-icon" ng-click="AbrirEliminar(this.proveedor);"><i class="fa fa-trash-alt"></i></span>
                     <div>
                         <h5 class="mb-1">{{proveedor.nombrecomercial}}</h5>
@@ -61,6 +62,7 @@ if (!isset($_SESSION['idusuario'])) {
         <?php include 'modal/eliminar-proveedor.php'; ?>
         <?php include 'modal/agregar-proveedor.php'; ?>
         <?php include 'modal/editar-proveedor.php'; ?>
+        <?php include 'modal/contactos-proveedor.php'; ?>
     </div>
 
     <!-- Referencias Javascript -->

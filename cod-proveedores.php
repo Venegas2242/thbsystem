@@ -14,8 +14,11 @@ class Proveedores {
     public $nombrecomun = "";
     public $direccion = "";
     public $idciudad = 0;
+    public $nombreciudad = "";
     public $idestado = 0;
+    public $nombreestado = "";
     public $idpais = 0;
+    public $nombrepais = "";
     public $rfc = "";
     public $telefono = "";
     public $correo = "";
@@ -56,7 +59,7 @@ class Proveedores {
         $query = $cnn->prepare("call proc_ProveedorInfo(?)");
         $query->bind_param("s", $id_proveedor);
         $query->execute();
-        $query->bind_result($nombrefiscal, $nombrecomercial, $direccion, $idciudad, $idestado, $idpais, $rfc, $telefono, $correo, $web, $credito, $saldo, $diascredito, $idbanco, $cuenta, $clabe);
+        $query->bind_result($nombrefiscal, $nombrecomercial, $direccion, $idciudad, $nombreciudad, $idestado, $nombreestado, $idpais, $nombrepais, $rfc, $telefono, $correo, $web, $credito, $saldo, $diascredito, $idbanco, $cuenta, $clabe);
         while ($query->fetch()) {
             $proveedor = new Proveedores();
             $proveedor->idproveedor = $id_proveedor;
@@ -64,8 +67,11 @@ class Proveedores {
             $proveedor->nombrecomun  = $nombrecomercial;
             $proveedor->direccion  = $direccion;
             $proveedor->idciudad  = $idciudad;
+            $proveedor->nombreciudad = $nombreciudad;
             $proveedor->idestado  = $idestado;
+            $proveedor->nombreestado = $nombreestado;
             $proveedor->idpais  = $idpais;
+            $proveedor->nombrepais = $nombrepais;
             $proveedor->rfc  = $rfc;
             $proveedor->telefono  = $telefono;
             $proveedor->correo  = $correo;
@@ -209,6 +215,59 @@ class Proveedores {
     }
 }
 
+class Contactos {
+    public $contacto = "";
+    public $telefono = "";
+    public $celular = "";
+    public $comentarios = "";
+
+    function ArrayMessage($status, $message) {
+        $retorno = array("status" => $status, "message" => $message, "date" => date("Y-m-d H:i:s"));
+        return $retorno;
+    }
+
+    function BuscarContactos($id_proveedor) {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
+        $query = $cnn->prepare("CALL proc_ContactosProveedor(?)");
+        $query->bind_param("i", $id_proveedor);
+        $query->execute();
+        $query->bind_result($contacto, $telefono, $celular, $comentarios);
+        while ($query->fetch()) {
+            $contacto = array("contacto" => $contacto, "telefono" => $telefono, "celular" => $celular, "comentarios" => $comentarios);
+            array_push($retorno, $contacto);
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+    function AgregarContacto($id_proveedor) {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("CALL proc_AgregarContactoProveedor(?,?,?,?,?)");
+        $query->bind_param("issss", 
+            $id_proveedor, 
+            $this->contacto,
+            $this->telefono,
+            $this->celular,
+            $this->comentarios);
+
+        $query->execute();
+        $query->store_result();
+        if (mysqli_stmt_error($query) != "") {
+            $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
+        } else {
+            $retorno = $this->ArrayMessage("1", "El contacto ha sido agregado correctamente.");
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+}
+
 if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
     $functionToCall = $_GET["functionToCall"];
     $json_data = json_decode(file_get_contents('php://input'));
@@ -249,6 +308,21 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
         case "eliminar_proveedor":
             $proveedor = new Proveedores();
             echo json_encode($proveedor->Eliminar($json_data->idproveedor));
+            break;
+        
+        case "contactos_proveedor":
+            $contacto = new Contactos();
+            echo json_encode($contacto->BuscarContactos($json_data->id_proveedor));
+            break;
+        
+        case "agregar_contacto":
+            $contacto = new Contactos();
+            $contacto->contacto  = $json_data->contacto;
+            $contacto->telefono  = $json_data->telefono;
+            $contacto->celular  = $json_data->celular;
+            $contacto->comentarios  = $json_data->comentarios;
+
+            echo json_encode($contacto->AgregarContacto($json_data->id_proveedor));
             break;
 
         case "obtener_estados":

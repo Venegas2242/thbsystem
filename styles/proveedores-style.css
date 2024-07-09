@@ -83,6 +83,15 @@ body {
     cursor: pointer;
     font-size: 1.5rem;
 }
+.contacts-icon {
+    position: absolute;
+    top: 1rem;
+    right: 4rem;
+    color: rgb(17, 97, 253);
+    cursor: pointer;
+    font-size: 1.5rem;
+}
+
 /* Estilos para la scrollbar vertical */
 ::-webkit-scrollbar {
     width: 0px;

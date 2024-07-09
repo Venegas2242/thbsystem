@@ -286,18 +286,16 @@ class Contactos {
     }
     
     
-    function EditarContacto($id_proveedor, $idcontacto, $contacto, $telefono, $celular, $email, $comentarios) {
+    function EditarContacto($idcontacto, $contacto, $telefono, $celular, $comentarios) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("CALL proc_EditarContactoProveedor(?, ?, ?, ?, ?, ?, ?)");
-        $query->bind_param("iisssss", 
-            $id_proveedor, 
+        $query = $cnn->prepare("CALL proc_EditarContactoProveedor(?, ?, ?, ?, ?)");
+        $query->bind_param("issss", 
             $idcontacto,
             $contacto,
             $telefono,
             $celular,
-            $email,
             $comentarios);
         $query->execute();
         $query->store_result();
@@ -372,12 +370,10 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
         case "editar_contacto":
             $contacto = new Contactos();
             echo json_encode($contacto->EditarContacto(
-                $json_data->id_proveedor,
                 $json_data->idproveedorcontactos,
                 $json_data->contacto,
                 $json_data->telefono,
                 $json_data->celular,
-                $json_data->email,
                 $json_data->comentarios
             ));
             break;

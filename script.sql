@@ -85,12 +85,10 @@ DELIMITER ;
 DELIMITER //
 
 CREATE PROCEDURE `proc_EditarContactoProveedor` (
-    IN p_idproveedor INT,
     IN p_idcontacto INT,
     IN p_contacto VARCHAR(255),
     IN p_telefono VARCHAR(255),
     IN p_celular VARCHAR(255),
-    IN p_email VARCHAR(255),
     IN p_comentarios TEXT
 )
 BEGIN
@@ -99,9 +97,8 @@ BEGIN
         `contacto` = p_contacto,
         `telefono` = p_telefono,
         `celular` = p_celular,
-        `email` = p_email,
         `comentarios` = p_comentarios
-    WHERE `idproveedorcontactos` = p_idcontacto AND `idproveedor` = p_idproveedor;
+    WHERE `idproveedorcontactos` = p_idcontacto;
 END //
 
 DELIMITER ;

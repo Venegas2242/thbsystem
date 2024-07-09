@@ -5,6 +5,8 @@ myApp.controller('cProveedores', function ($scope, $http) {
     $scope.listaEstados = [];
     $scope.listaCiudades = [];
     $scope.listaProveedores = [];
+    $scope.agregarContactoActivo = false;
+    $scope.editando = false;
 
     // Inicializar proveedor
     $scope.proveedor = {
@@ -179,6 +181,7 @@ myApp.controller('cProveedores', function ($scope, $http) {
             console.log('Contactos del proveedor:', $scope.contactos_proveedor);
             $scope.nuevoContacto = {}; // Inicializar el objeto para el nuevo contacto
             $scope.agregarContactoActivo = false; // Inicializar el estado del renglón editable
+            $scope.editando = false; // Inicializar el estado de edición
     
             // Mostrar el modal con la información del proveedor
             $("#modalContactosProveedor").modal();
@@ -198,17 +201,6 @@ myApp.controller('cProveedores', function ($scope, $http) {
         }).then(function (response) {
             console.log('Contacto agregado:', response.data);
             if(response.data.status == "1") {
-                /*
-                $scope.contactos_proveedor.push({
-                    idproveedorcontactos: response.data.idproveedorcontactos, // Asegúrate de devolver el idproveedorcontactos en la respuesta del servidor
-                    contacto: $scope.nuevoContacto.contacto,
-                    telefono: $scope.nuevoContacto.telefono,
-                    celular: $scope.nuevoContacto.celular,
-                    email: $scope.nuevoContacto.email,
-                    comentarios: $scope.nuevoContacto.comentarios
-                });
-                */
-                // Limpiar el formulario después de agregar el contacto
                 $scope.nuevoContacto = {};
                 $scope.agregarContactoActivo = false; // Ocultar el renglón editable después de agregar el contacto
                 // Recargar los contactos del proveedor
@@ -223,38 +215,44 @@ myApp.controller('cProveedores', function ($scope, $http) {
     
     $scope.toggleAgregarContacto = function () {
         $scope.agregarContactoActivo = !$scope.agregarContactoActivo;
+        $scope.editando = false; // Desactivar la edición si se está agregando un nuevo contacto
     };
     
     $scope.EditarContacto = function (contacto) {
-        // Guardar el contacto original para usarlo en la edición
+        console.log("El contacto a editar es: ",contacto);
+        
         $scope.contactoOriginal = angular.copy(contacto);
         $scope.nuevoContacto = angular.copy(contacto);
-        $scope.agregarContactoActivo = true;
+        $scope.editando = true; // Activar el modo de edición
+        $scope.agregarContactoActivo = false; // Desactivar agregar contacto si se está editando uno
+    };
+
+    $scope.cancelarEdicion = function () {
+        $scope.editando = false;
+        $scope.agregarContactoActivo = false;
+        $scope.nuevoContacto = {};
     };
     
     $scope.GuardarEdicionContacto = function () {
+        console.log("El contacto original es: ", $scope.contactoOriginal.idcontacto);
         $http({
             method: "POST",
             url: 'cod-proveedores.php?functionToCall=editar_contacto',
             data: {
-                id_proveedor: $scope.id_proveedor,
-                idproveedorcontactos: $scope.contactoOriginal.idproveedorcontactos,
+                idproveedorcontactos: $scope.contactoOriginal.idcontacto,
                 contacto: $scope.nuevoContacto.contacto,
                 telefono: $scope.nuevoContacto.telefono,
                 celular: $scope.nuevoContacto.celular,
-                email: $scope.nuevoContacto.email,
                 comentarios: $scope.nuevoContacto.comentarios
             }
         }).then(function (response) {
             console.log('Contacto editado:', response.data);
             if(response.data.status == "1") {
                 // Actualizar el contacto en la lista local
-                var index = $scope.contactos_proveedor.findIndex(c => c.idproveedorcontactos === $scope.contactoOriginal.idproveedorcontactos);
-                if (index > -1) {
-                    $scope.contactos_proveedor[index] = angular.copy($scope.nuevoContacto);
-                }
+                $scope.MostrarContactos({ idproveedor: $scope.id_proveedor });
                 $scope.nuevoContacto = {};
-                $scope.agregarContactoActivo = false; // Ocultar el renglón editable después de editar el contacto
+                $scope.editando = false; // Ocultar el renglón editable después de editar el contacto
+                $scope.agregarContactoActivo = false;
             } else {
                 console.error('Error al editar contacto:', response.data.message);
             }
@@ -275,12 +273,7 @@ myApp.controller('cProveedores', function ($scope, $http) {
             }).then(function (response) {
                 console.log("Esto esta regresando response.data: ", response.data)
                 if(response.data.status == "1") {
-                    // Eliminar el contacto de la lista local
-                    /*const index = $scope.contactos_proveedor.indexOf(contacto);
-                    if (index > -1) {
-                        $scope.contactos_proveedor.splice(index, 1);
-                    }*/
-                   // Recargar los contactos del proveedor
+                    // Recargar los contactos del proveedor
                     $scope.MostrarContactos({ idproveedor: $scope.id_proveedor });
                 } else {
                     console.error('Error al eliminar contacto:', response.data.message);
@@ -295,13 +288,9 @@ myApp.controller('cProveedores', function ($scope, $http) {
     $('#modalContactosProveedor').on('hidden.bs.modal', function () {
         $scope.$apply(function () {
             $scope.agregarContactoActivo = false;
+            $scope.editando = false;
         });
     });
-    
-    
-    
-
-
 
     // Función para abrir el modal de eliminación de proveedor
     $scope.AbrirEliminar = function (item) {

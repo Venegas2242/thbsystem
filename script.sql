@@ -69,6 +69,44 @@ END //
 DELIMITER ;
 
 
+DELIMITER //
+
+CREATE PROCEDURE `proc_EliminarContactoProveedor` (
+    IN p_idproveedorcontactos INT
+)
+BEGIN
+    UPDATE `cat_proveedorcontactos`
+    SET `activo` = 0
+    WHERE `idproveedorcontactos` = p_idproveedorcontactos;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE `proc_EditarContactoProveedor` (
+    IN p_idproveedor INT,
+    IN p_idcontacto INT,
+    IN p_contacto VARCHAR(255),
+    IN p_telefono VARCHAR(255),
+    IN p_celular VARCHAR(255),
+    IN p_email VARCHAR(255),
+    IN p_comentarios TEXT
+)
+BEGIN
+    UPDATE `cat_proveedorcontactos`
+    SET 
+        `contacto` = p_contacto,
+        `telefono` = p_telefono,
+        `celular` = p_celular,
+        `email` = p_email,
+        `comentarios` = p_comentarios
+    WHERE `idproveedorcontactos` = p_idcontacto AND `idproveedor` = p_idproveedor;
+END //
+
+DELIMITER ;
+
+
 insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, comentarios) 
   values (1, 'Contacto 1', '4623080336', '4622080335', 'Contacto 1 de proveedor 1');
 insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, comentarios) 
@@ -82,7 +120,7 @@ create procedure proc_ContactosProveedor
  id_proveedor int
 )
 begin
-  select contacto, telefono, celular, comentarios
+  select idproveedorcontactos, contacto, telefono, celular, comentarios
     from cat_proveedorcontactos
     where idproveedor = id_proveedor and activo = '1';
 end

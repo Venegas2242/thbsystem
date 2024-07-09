@@ -216,6 +216,7 @@ class Proveedores {
 }
 
 class Contactos {
+    public $idcontacto = 0;
     public $contacto = "";
     public $telefono = "";
     public $celular = "";
@@ -232,9 +233,9 @@ class Contactos {
         $query = $cnn->prepare("CALL proc_ContactosProveedor(?)");
         $query->bind_param("i", $id_proveedor);
         $query->execute();
-        $query->bind_result($contacto, $telefono, $celular, $comentarios);
+        $query->bind_result($id_contacto, $contacto, $telefono, $celular, $comentarios);
         while ($query->fetch()) {
-            $contacto = array("contacto" => $contacto, "telefono" => $telefono, "celular" => $celular, "comentarios" => $comentarios);
+            $contacto = array("idcontacto" => $id_contacto, "contacto" => $contacto, "telefono" => $telefono, "celular" => $celular, "comentarios" => $comentarios);
             array_push($retorno, $contacto);
         }
         $query->close();
@@ -265,6 +266,50 @@ class Contactos {
         $cnn->close();
         return $retorno;
     }
+
+    function EliminarContacto($idproveedorcontactos) {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("CALL proc_EliminarContactoProveedor(?)");
+        $query->bind_param("i", $idproveedorcontactos);
+        $query->execute();
+        $query->store_result();
+        if (mysqli_stmt_error($query) != "") {
+            $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
+        } else {
+            $retorno = $this->ArrayMessage("1", "El contacto ha sido marcado como inactivo.");
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+    
+    
+    function EditarContacto($id_proveedor, $idcontacto, $contacto, $telefono, $celular, $email, $comentarios) {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("CALL proc_EditarContactoProveedor(?, ?, ?, ?, ?, ?, ?)");
+        $query->bind_param("iisssss", 
+            $id_proveedor, 
+            $idcontacto,
+            $contacto,
+            $telefono,
+            $celular,
+            $email,
+            $comentarios);
+        $query->execute();
+        $query->store_result();
+        if (mysqli_stmt_error($query) != "") {
+            $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
+        } else {
+            $retorno = $this->ArrayMessage("1", "El contacto ha sido editado correctamente.");
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }    
 }
 
 if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
@@ -313,7 +358,7 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
             $contacto = new Contactos();
             echo json_encode($contacto->BuscarContactos($json_data->id_proveedor));
             break;
-        
+
         case "agregar_contacto":
             $contacto = new Contactos();
             $contacto->contacto  = $json_data->contacto;
@@ -322,6 +367,26 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
             $contacto->comentarios  = $json_data->comentarios;
 
             echo json_encode($contacto->AgregarContacto($json_data->id_proveedor));
+            break;
+
+        case "editar_contacto":
+            $contacto = new Contactos();
+            echo json_encode($contacto->EditarContacto(
+                $json_data->id_proveedor,
+                $json_data->idproveedorcontactos,
+                $json_data->contacto,
+                $json_data->telefono,
+                $json_data->celular,
+                $json_data->email,
+                $json_data->comentarios
+            ));
+            break;
+
+        case "eliminar_contacto":
+            $contacto = new Contactos();
+            echo json_encode($contacto->EliminarContacto(
+                $json_data->idcontacto
+            ));
             break;
 
         case "obtener_estados":

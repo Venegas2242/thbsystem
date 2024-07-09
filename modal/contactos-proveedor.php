@@ -1,5 +1,5 @@
 <div id="modalContactosProveedor" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-xl"> <!-- Agrega una clase para el ancho del modal -->
+    <div class="modal-dialog modal-xl">
         <!-- Modal content-->
         <div class="modal-content">
             <div class="modal-header">
@@ -16,7 +16,7 @@
                                 <th class="col-celular">Celular</th>
                                 <th class="col-email">Email</th>
                                 <th class="col-comentarios">Comentarios</th>
-                                <th class="col-accion"></th> <!-- Columna para el botón de agregar contacto -->
+                                <th class="col-accion">Opciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -26,7 +26,14 @@
                                 <td>{{contacto.celular}}</td>
                                 <td>{{contacto.email}}</td>
                                 <td>{{contacto.comentarios}}</td>
-                                <td></td> <!-- Columna vacía para alinear con el botón de agregar contacto -->
+                                <td>
+                                    <button type="button" class="btn btn-warning btn-xs" ng-click="EditarContacto(contacto)">
+                                        <i class="fa-solid fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger btn-xs" ng-click="EliminarContacto(contacto)">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </button>
+                                </td>
                             </tr>
                             <tr ng-if="contactos_proveedor.length === 0">
                                 <td colspan="6" class="text-center">No hay contactos disponibles para este proveedor.</td>

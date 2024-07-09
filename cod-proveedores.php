@@ -222,14 +222,13 @@ class Contactos {
     public $comentarios = "";
 
     function ArrayMessage($status, $message) {
-        $retorno = array("status" => $status, "message" => $message, "date" => date("Y-m-d H:i:s"));
-        return $retorno;
+        return array("status" => $status, "message" => $message, "date" => date("Y-m-d H:i:s"));
     }
 
     function BuscarContactos($id_proveedor) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
-        $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
+        $retorno = array();
         $query = $cnn->prepare("CALL proc_ContactosProveedor(?)");
         $query->bind_param("i", $id_proveedor);
         $query->execute();

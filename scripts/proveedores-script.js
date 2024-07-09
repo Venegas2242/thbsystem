@@ -175,7 +175,7 @@ myApp.controller('cProveedores', function ($scope, $http) {
             url: 'cod-proveedores.php?functionToCall=contactos_proveedor',
             data: {id_proveedor: $scope.id_proveedor}
         }).then(function (response) {
-            $scope.contactos_proveedor = response.data;
+            $scope.contactos_proveedor = Array.isArray(response.data) ? response.data : [];
             console.log('Contactos del proveedor:', $scope.contactos_proveedor); // Imprimir la información completa en la consola
             $scope.nuevoContacto = {}; // Inicializar el objeto para el nuevo contacto
             $scope.agregarContactoActivo = false; // Inicializar el estado del renglón editable
@@ -198,17 +198,23 @@ myApp.controller('cProveedores', function ($scope, $http) {
         }).then(function (response) {
             console.log('Contacto agregado:', response.data);
             if(response.data.status == "1") {
-                $("#modalContactosProveedor").modal("hide");
+                $scope.contactos_proveedor.push({
+                    contacto: $scope.nuevoContacto.contacto,
+                    telefono: $scope.nuevoContacto.telefono,
+                    celular: $scope.nuevoContacto.celular,
+                    email: $scope.nuevoContacto.email,
+                    comentarios: $scope.nuevoContacto.comentarios
+                });
                 // Limpiar el formulario después de agregar el contacto
-                //$scope.nuevoContacto = {};
-                //$scope.agregarContactoActivo = false; // Ocultar el renglón editable después de agregar el contacto
+                $scope.nuevoContacto = {};
+                $scope.agregarContactoActivo = false; // Ocultar el renglón editable después de agregar el contacto
             } else {
                 console.error('Error al agregar contacto:', response.data.message);
             }
         }, function (error) {
             console.error('Error al agregar contacto:', error);
         });
-    };    
+    };
     
     $scope.toggleAgregarContacto = function () {
         $scope.agregarContactoActivo = !$scope.agregarContactoActivo;
@@ -220,6 +226,7 @@ myApp.controller('cProveedores', function ($scope, $http) {
             $scope.agregarContactoActivo = false;
         });
     });
+    
     
     
 

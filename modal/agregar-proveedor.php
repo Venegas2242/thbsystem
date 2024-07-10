@@ -81,7 +81,10 @@
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label>Banco:</label>
-                        <input type="text" id="txtBanco" ng-model="proveedor.idbanco" class="form-control" />
+                        <select id="cmbBanco" ng-model="proveedor.idbanco" class="form-control">
+                            <option value="">Seleccione un banco</option>
+                            <option ng-repeat="banco in listaBancos" value="{{banco.idbanco}}">{{banco.banco}}</option>
+                        </select>
                     </div>
                     <div class="form-group col-md-4">
                         <label>Cuenta:</label>

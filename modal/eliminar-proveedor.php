@@ -1,4 +1,4 @@
-<div id="modalProductoEliminar" class="modal fade" role="dialog">
+<div id="modalProveedorEliminar" class="modal fade" role="dialog">
     <div class="modal-dialog modal-dialog-centered">
         <!-- Modal content-->
         <div class="modal-content">
@@ -8,15 +8,15 @@
             </div>
             <div class="modal-body">
                 <div class="form-row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-16">
                         <label>RFC:</label>
-                        <input type="text" ng-model="producto.rfc" readonly="true" class="form-control" />
+                        <input type="text" ng-model="proveedor.rfc" readonly="true" class="form-control" />
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-16">
                         <label>Nombre comercial:</label>
-                        <input type="text" ng-model="producto.nombrecomercial" readonly="true" class="form-control" />
+                        <input type="text" ng-model="proveedor.nombrecomercial" readonly="true" class="form-control" />
                     </div>
                 </div>
             </div>

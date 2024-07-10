@@ -14,10 +14,10 @@ class Proveedores {
     public $nombrecomun = "";
     public $direccion = "";
     public $idciudad = 0;
-    public $nombreciudad = "";
     public $idestado = 0;
-    public $nombreestado = "";
     public $idpais = 0;
+    public $nombreciudad = "";
+    public $nombreestado = "";
     public $nombrepais = "";
     public $rfc = "";
     public $telefono = "";
@@ -26,78 +26,15 @@ class Proveedores {
     public $credito = 0.0;
     public $saldo = 0.0;
     public $diascredito = 0;
-    public $idbanco = "";
+    public $idbanco = "";  // Asegúrate de que esté definido como string
     public $cuenta = "";
     public $clabe = "";
-
-    function Buscar($textoBuscar) {
-        $mysql = new Connection();
-        $cnn = $mysql->getConnection();
-        $retorno = array();
-        $query = $cnn->prepare("call proc_ProveedorBuscar(?)");
-        $query->bind_param("s", $textoBuscar);
-        $query->execute();
-        $query->bind_result($idproveedor, $nombrecomercial, $rfc, $telefono, $correo);
-        while ($query->fetch()) {
-            $proveedor = new Proveedores();
-            $proveedor->idproveedor = $idproveedor;
-            $proveedor->nombrecomercial = $nombrecomercial;
-            $proveedor->rfc = $rfc;
-            $proveedor->telefono = $telefono;
-            $proveedor->correo = $correo;
-            array_push($retorno, $proveedor);
-        }
-        $query->close();
-        $cnn->close();
-        return $retorno;
-    }
-
-    function BuscarInfo($id_proveedor) {
-        $mysql = new Connection();
-        $cnn = $mysql->getConnection();
-        $retorno = array();
-        $query = $cnn->prepare("call proc_ProveedorInfo(?)");
-        $query->bind_param("s", $id_proveedor);
-        $query->execute();
-        $query->bind_result($nombrefiscal, $nombrecomercial, $direccion, $idciudad, $nombreciudad, $idestado, $nombreestado, $idpais, $nombrepais, $rfc, $telefono, $correo, $web, $credito, $saldo, $diascredito, $idbanco, $cuenta, $clabe);
-        while ($query->fetch()) {
-            $proveedor = new Proveedores();
-            $proveedor->idproveedor = $id_proveedor;
-            $proveedor->nombrecomercial  = $nombrefiscal;
-            $proveedor->nombrecomun  = $nombrecomercial;
-            $proveedor->direccion  = $direccion;
-            $proveedor->idciudad  = $idciudad;
-            $proveedor->nombreciudad = $nombreciudad;
-            $proveedor->idestado  = $idestado;
-            $proveedor->nombreestado = $nombreestado;
-            $proveedor->idpais  = $idpais;
-            $proveedor->nombrepais = $nombrepais;
-            $proveedor->rfc  = $rfc;
-            $proveedor->telefono  = $telefono;
-            $proveedor->correo  = $correo;
-            $proveedor->web  = $web;
-            $proveedor->credito  = $credito;
-            $proveedor->saldo  = $saldo;
-            $proveedor->diascredito  = $diascredito;
-            $proveedor->idbanco  = $idbanco;
-            $proveedor->cuenta  = $cuenta;
-            $proveedor->clabe  = $clabe;
-            array_push($retorno, $proveedor);
-        }
-        $query->close();
-        $cnn->close();
-        return $retorno;
-    }
-
-    function ArrayMessage($status, $message) {
-        $retorno = array("status" => $status, "message" => $message, "date" => date("Y-m-d H:i:s"));
-        return $retorno;
-    }
 
     function Grabar() {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
+
         $query = $cnn->prepare("call proc_ProveedorGrabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
         $query->bind_param("isssiiissssddisss", 
             $this->idproveedor, 
@@ -137,6 +74,75 @@ class Proveedores {
         $cnn->close();
         return $retorno;
     }
+
+    // Método para generar mensajes de respuesta
+    private function ArrayMessage($status, $message) {
+        return array('status' => $status, 'message' => $message);
+    }
+
+    function Buscar($textoBuscar) {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("call proc_ProveedorBuscar(?)");
+        $query->bind_param("s", $textoBuscar);
+        $query->execute();
+        $query->bind_result($idproveedor, $nombrecomercial, $rfc, $telefono, $correo);
+        while ($query->fetch()) {
+            $proveedor = new Proveedores();
+            $proveedor->idproveedor = $idproveedor;
+            $proveedor->nombrecomercial = $nombrecomercial;
+            $proveedor->rfc = $rfc;
+            $proveedor->telefono = $telefono;
+            $proveedor->correo = $correo;
+            array_push($retorno, $proveedor);
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+    function BuscarInfo($id_proveedor) {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("call proc_ProveedorInfo(?)");
+        $query->bind_param("s", $id_proveedor);
+        $query->execute();
+        $query->bind_result($nombrefiscal, $nombrecomercial, $direccion, $idciudad, $nombreciudad, $idestado, $nombreestado, $idpais, $nombrepais, $rfc, $telefono, $correo, $web, $credito, $saldo, $diascredito, $idbanco, $nombrebanco, $cuenta, $clabe);
+        while ($query->fetch()) {
+            $proveedor = array(
+                "idproveedor" => $id_proveedor,
+                "nombrecomercial" => $nombrefiscal,
+                "nombrecomun" => $nombrecomercial,
+                "direccion" => $direccion,
+                "idciudad" => $idciudad,
+                "nombreciudad" => $nombreciudad,
+                "idestado" => $idestado,
+                "nombreestado" => $nombreestado,
+                "idpais" => $idpais,
+                "nombrepais" => $nombrepais,
+                "rfc" => $rfc,
+                "telefono" => $telefono,
+                "correo" => $correo,
+                "web" => $web,
+                "credito" => $credito,
+                "saldo" => $saldo,
+                "diascredito" => $diascredito,
+                "idbanco" => $idbanco,
+                "nombrebanco" => $nombrebanco,
+                "cuenta" => $cuenta,
+                "clabe" => $clabe
+            );
+            array_push($retorno, $proveedor);
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+    
+
 
     function Eliminar($idProveedor) {
         $mysql = new Connection();
@@ -208,6 +214,23 @@ class Proveedores {
         while ($query->fetch()) {
             $ciudad = array("idciudad" => $idciudad, "nombre" => $nombre);
             array_push($retorno, $ciudad);
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+    function ObtenerBancos() {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("CALL get_Bancos()");
+        $query->execute();
+        $query->bind_result($idbanco, $nombre);
+        while ($query->fetch()) {
+            $bancos = new Proveedores();
+            $bancos = array("idbanco" => $idbanco, "banco" => $nombre);
+            array_push($retorno, $bancos);
         }
         $query->close();
         $cnn->close();
@@ -310,6 +333,13 @@ class Contactos {
     }    
 }
 
+class Bancos {
+    public $idbanco = "";
+    public $banco = "";
+
+    
+}
+
 if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
     $functionToCall = $_GET["functionToCall"];
     $json_data = json_decode(file_get_contents('php://input'));
@@ -369,6 +399,8 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
 
         case "editar_contacto":
             $contacto = new Contactos();
+    
+
             echo json_encode($contacto->EditarContacto(
                 $json_data->idproveedorcontactos,
                 $json_data->contacto,
@@ -399,5 +431,11 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
             $proveedor = new Proveedores();
             echo json_encode($proveedor->ObtenerPaises());
             break;
+
+        case "obtener_bancos":
+            $proveedor = new Proveedores();
+            echo json_encode($proveedor->ObtenerBancos());
+            break;
+
     }
 }

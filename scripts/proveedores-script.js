@@ -5,6 +5,8 @@ myApp.controller('cProveedores', function ($scope, $http) {
     $scope.listaEstados = [];
     $scope.listaCiudades = [];
     $scope.listaProveedores = [];
+    $scope.listaBancos = [];
+
     $scope.agregarContactoActivo = false;
     $scope.editando = false;
 
@@ -28,6 +30,16 @@ myApp.controller('cProveedores', function ($scope, $http) {
         cuenta: "",
         clabe: ""
     };
+
+
+    // Obtener lista de bancos al cargar la página
+    $http({
+        method: "POST",
+        url: 'cod-proveedores.php?functionToCall=obtener_bancos',
+    }).then(function (response) {
+        $scope.listaBancos = response.data;
+        console.log("Lista de bancos: ", $scope.listaBancos);
+    });
 
     // Obtener lista de países al cargar la página
     $http({
@@ -148,7 +160,7 @@ myApp.controller('cProveedores', function ($scope, $http) {
 
     // Función para guardar proveedor
     $scope.Grabar = function () {
-        console.log('Datos del proveedor:', $scope.proveedor);
+        console.log('Datos del proveedor: ', $scope.proveedor);
 
         $http({
             method: "POST",

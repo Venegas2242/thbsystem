@@ -27,10 +27,10 @@
                                 <td>{{contacto.email}}</td>
                                 <td>{{contacto.comentarios}}</td>
                                 <td>
-                                    <button type="button" class="btn btn-warning btn-xs" ng-click="EditarContacto(contacto)" ng-disabled="agregarContactoActivo">
+                                    <button type="button" class="btn-custom btn-edit" ng-click="EditarContacto(contacto)" ng-disabled="agregarContactoActivo">
                                         <i class="fa-solid fa-edit"></i>
                                     </button>
-                                    <button type="button" class="btn btn-danger btn-xs" ng-click="EliminarContacto(contacto)" ng-disabled="agregarContactoActivo || editando">
+                                    <button type="button" class="btn-custom btn-delete" ng-click="EliminarContacto(contacto)" ng-disabled="agregarContactoActivo || editando">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
                                 </td>
@@ -45,10 +45,10 @@
                                 <td><input type="email" class="form-control" ng-model="nuevoContacto.email" placeholder="Email" required></td>
                                 <td><input type="text" class="form-control" ng-model="nuevoContacto.comentarios" placeholder="Comentarios"></td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-xs" ng-click="AgregarContacto()">
+                                    <button type="button" class="btn-custom btn-add" ng-click="AgregarContacto()">
                                         <i class="fa fa-user-plus"></i>
                                     </button>
-                                    <button type="button" class="btn btn-default btn-xs" ng-click="cancelarEdicion()">
+                                    <button type="button" class="btn-custom btn-cancel" ng-click="cancelarEdicion()">
                                         <i class="fa fa-times"></i>
                                     </button>
                                 </td>
@@ -60,10 +60,10 @@
                                 <td><input type="email" class="form-control" ng-model="nuevoContacto.email" placeholder="Email" required></td>
                                 <td><input type="text" class="form-control" ng-model="nuevoContacto.comentarios" placeholder="Comentarios"></td>
                                 <td>
-                                    <button type="button" class="btn btn-success btn-xs" ng-click="GuardarEdicionContacto()">
+                                    <button type="button" class="btn-custom btn-save" ng-click="GuardarEdicionContacto()">
                                         <i class="fa fa-save"></i>
                                     </button>
-                                    <button type="button" class="btn btn-default btn-xs" ng-click="cancelarEdicion()">
+                                    <button type="button" class="btn-custom btn-cancel" ng-click="cancelarEdicion()">
                                         <i class="fa fa-times"></i>
                                     </button>
                                 </td>
@@ -71,7 +71,7 @@
                         </tbody>
                     </table>
                 </div>
-                <button type="button" class="btn btn-primary-modal btn-xs" ng-click="toggleAgregarContacto()" ng-disabled="editando">
+                <button type="button" class="btn-primary-modal" ng-click="toggleAgregarContacto()" ng-disabled="editando">
                     <i class="fa" ng-class="agregarContactoActivo ? 'fa-minus' : 'fa-plus'"></i>
                 </button>
             </div>

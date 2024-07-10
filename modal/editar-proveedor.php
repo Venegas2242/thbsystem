@@ -72,7 +72,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label>Banco:</label>
-                        <input type="text" id="txtBanco" ng-model="detalles_proveedor.idbanco" class="form-control" />
+                        <input type="text" id="txtBanco" value="detalles_proveedor.idbanco" ng-value="detalles_proveedor.nombrebanco" class="form-control" disabled/>
                     </div>
                     <div class="form-group col-md-4">
                         <label>Cuenta:</label>

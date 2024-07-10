@@ -141,69 +141,70 @@ end
 //
 delimiter ;
 
-delimiter //
-create procedure proc_ProveedorGrabar
-(
-  prmidproveedor int,
-  prmnombrefiscal varchar(200),
-  prmnombrecomun varchar(200),
-  prmdireccion varchar(160),
-  prmidciudad int,
-  prmidestado int,
-  prmidpais int,
-  prmrfc varchar(17),
-  prmtelefono varchar(40),
-  prmcorreo varchar(100),
-  prmweb varchar(80),
-  prmcredito double,
-  prmsaldo double,
-  prmdiascredito int,
-  prmidbanco varchar(30),
-  prmcuenta varchar(20),
-  prmclabe varchar(25)
-)
-begin
- if (prmidproveedor = 0) then
-  begin
-   if exists(select 1 from cat_proveedor where rfc = prmrfc) then
-    signal sqlstate '45000' set message_text = 'Ya existe otro proveedor con el mismo RFC';
-   end if;
-   /*Insertar registro*/
-   insert into cat_proveedor(nombrefiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
-            values(prmnombrefiscal,prmnombrecomun,prmdireccion,prmidciudad,prmidestado,prmidpais,prmrfc,prmtelefono,prmcorreo,prmweb,prmcredito,prmsaldo,prmdiascredito,idbanco,prmcuenta,prmclabe);
-            /*Obtener Id generado*/
-            set prmidproveedor = last_insert_id();
+DELIMITER //
 
-  end;
- else
-  begin
-   if exists(select 1 from cat_proveedor where rfc = prmRFC and idproveedor <> prmidproveedor) then
-    signal sqlstate '45000' set message_text = 'Ya existe otro proveedor con el mismo RFC';
-   end if;
-   update cat_proveedor set
-			      nombrefiscal=prmnombrefiscal,
-            nombrecomun=prmnombrecomun,
-            direccion=prmdireccion,
-            idciudad=prmidciudad,
-            idestado=prmidestado,
-            idpais=prmidpais,
-            rfc=prmrfc,
-            telefono=prmtelefono,
-            correo=prmcorreo,
-            web=prmcorreo,
-            credito=prmcredito,
-            saldo=prmsaldo,
-            diascredito=prmdiascredito,
-            idbanco=prmidbanco,
-            cuenta=prmcuenta,
-            clabe=prmclabe
-            where idproveedor = prmidproveedor;
-        end;
-    end if;
-    select prmidproveedor;
-end;
-//
-delimiter ;
+CREATE PROCEDURE proc_ProveedorGrabar(
+    IN prmidproveedor INT,
+    IN prmnombrefiscal VARCHAR(200),
+    IN prmnombrecomun VARCHAR(200),
+    IN prmdireccion VARCHAR(160),
+    IN prmidciudad INT,
+    IN prmidestado INT,
+    IN prmidpais INT,
+    IN prmrfc VARCHAR(17),
+    IN prmtelefono VARCHAR(40),
+    IN prmcorreo VARCHAR(100),
+    IN prmweb VARCHAR(80),
+    IN prmcredito DOUBLE,
+    IN prmsaldo DOUBLE,
+    IN prmdiascredito INT,
+    IN prmidbanco VARCHAR(30),
+    IN prmcuenta VARCHAR(20),
+    IN prmclabe VARCHAR(25)
+)
+BEGIN
+    IF (prmidproveedor = 0) THEN
+        BEGIN
+            IF EXISTS(SELECT 1 FROM cat_proveedor WHERE rfc = prmrfc) THEN
+                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe otro proveedor con el mismo RFC';
+            END IF;
+            /* Insertar registro */
+            INSERT INTO cat_proveedor(nombrefiscal, nombrecomun, direccion, idciudad, idestado, idpais, rfc, telefono, correo, web, credito, saldo, diascredito, idbanco, cuenta, clabe)
+            VALUES(prmnombrefiscal, prmnombrecomun, prmdireccion, prmidciudad, prmidestado, prmidpais, prmrfc, prmtelefono, prmcorreo, prmweb, prmcredito, prmsaldo, prmdiascredito, prmidbanco, prmcuenta, prmclabe);
+            /* Obtener Id generado */
+            SET prmidproveedor = LAST_INSERT_ID();
+        END;
+    ELSE
+        BEGIN
+            IF EXISTS(SELECT 1 FROM cat_proveedor WHERE rfc = prmrfc AND idproveedor <> prmidproveedor) THEN
+                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe otro proveedor con el mismo RFC';
+            END IF;
+            UPDATE cat_proveedor SET
+                nombrefiscal = prmnombrefiscal,
+                nombrecomun = prmnombrecomun,
+                direccion = prmdireccion,
+                idciudad = prmidciudad,
+                idestado = prmidestado,
+                idpais = prmidpais,
+                rfc = prmrfc,
+                telefono = prmtelefono,
+                correo = prmcorreo,
+                web = prmweb,
+                credito = prmcredito,
+                saldo = prmsaldo,
+                diascredito = prmdiascredito,
+                idbanco = prmidbanco,
+                cuenta = prmcuenta,
+                clabe = prmclabe
+            WHERE idproveedor = prmidproveedor;
+        END;
+    END IF;
+    SELECT prmidproveedor;
+END //
+
+DELIMITER ;
+
+
 drop procedure if exists proc_ProveedorEliminar;
 delimiter //
 create procedure proc_ProveedorEliminar
@@ -370,6 +371,17 @@ insert into cat_bancos(nombre) values('Banco del Bajío');
 insert into cat_bancos(nombre) values('Inbursa');
 insert into cat_bancos(nombre) values('Scotiabank');
 
+DELIMITER //
+
+CREATE PROCEDURE get_Bancos()
+BEGIN
+    SELECT idbanco, nombre 
+      FROM cat_bancos
+      WHERE activo = 1;
+END //
+
+DELIMITER ;
+
 CREATE TABLE `cat_usuario` (
   `idusuario` int NOT NULL AUTO_INCREMENT,
   `usuario` varchar(15) NOT NULL,
@@ -402,9 +414,9 @@ CREATE PROCEDURE proc_ProveedorInfo(
     IN id_proveedor INT
 )
 BEGIN
-    select nombrefiscal, nombrecomun, direccion, ci.idciudad, ci.nombre Ciudad, es.idestado, es.nombre Estado, pa.idpais, pa.nombre Pais, rfc, telefono, correo, web, credito, saldo, diascredito, idbanco, cuenta, clabe 
-      from cat_proveedor p, cat_pais pa, cat_estado es, cat_ciudad ci
-      where p.idproveedor = id_proveedor AND p.idpais = pa.idpais AND p.idestado = es.idestado AND p.idciudad = ci.idciudad;
+    select nombrefiscal, nombrecomun, direccion, ci.idciudad, ci.nombre Ciudad, es.idestado, es.nombre Estado, pa.idpais, pa.nombre Pais, rfc, telefono, correo, web, credito, saldo, diascredito, b.idbanco, b.nombre, cuenta, clabe 
+      from cat_proveedor p, cat_pais pa, cat_estado es, cat_ciudad ci, cat_bancos b
+      where p.idproveedor = id_proveedor AND p.idpais = pa.idpais AND p.idestado = es.idestado AND p.idciudad = ci.idciudad AND p.idbanco = b.idbanco;
 END //
 
 DELIMITER ;

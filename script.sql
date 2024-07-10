@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `cat_proveedor` (
   `contacto` varchar(150) DEFAULT NULL COMMENT 'Nombre comercial',
   `telefono` varchar(40) DEFAULT NULL COMMENT 'Telefono 2',
   `celular` varchar(40) DEFAULT NULL COMMENT 'Celular',
+  `email` varchar(255) DEFAULT NULL COMMENT 'Email',
   `comentarios` varchar(250) DEFAULT NULL COMMENT 'Nombre comercial', 
   `activo` BOOLEAN NOT NULL DEFAULT 1,
   PRIMARY KEY (`idproveedorcontactos`)
@@ -53,15 +54,17 @@ CREATE PROCEDURE `proc_AgregarContactoProveedor` (
     IN p_contacto VARCHAR(255),
     IN p_telefono VARCHAR(255),
     IN p_celular VARCHAR(255),
+    IN p_email VARCHAR(255),
     IN p_comentarios TEXT
 )
 BEGIN
-    INSERT INTO cat_proveedorcontactos (idproveedor, contacto, telefono, celular, comentarios) 
+    INSERT INTO cat_proveedorcontactos (idproveedor, contacto, telefono, celular, email, comentarios) 
     VALUES (
         p_idproveedor,
         p_contacto,
         p_telefono,
         p_celular,
+        p_email,
         p_comentarios
     );
 END //
@@ -89,6 +92,7 @@ CREATE PROCEDURE `proc_EditarContactoProveedor` (
     IN p_contacto VARCHAR(255),
     IN p_telefono VARCHAR(255),
     IN p_celular VARCHAR(255),
+    IN p_email VARCHAR(255),
     IN p_comentarios TEXT
 )
 BEGIN
@@ -97,6 +101,7 @@ BEGIN
         `contacto` = p_contacto,
         `telefono` = p_telefono,
         `celular` = p_celular,
+        `email` = p_email,
         `comentarios` = p_comentarios
     WHERE `idproveedorcontactos` = p_idcontacto;
 END //
@@ -104,12 +109,12 @@ END //
 DELIMITER ;
 
 
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, comentarios) 
-  values (1, 'Contacto 1', '4623080336', '4622080335', 'Contacto 1 de proveedor 1');
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, comentarios) 
-  values (1, 'Contacto 2', '4625550989', '4625550983', 'Contacto 2 de proveedor 1');
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, comentarios) 
-  values (2, 'Contacto 3', '4625431090', '4625431092', 'Contacto 1 de proveedor 2');
+insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+  values (1, 'Contacto 1', '4623080336', '4622080335', 'contacto_1@correo.com', 'Contacto 1 de proveedor 1');
+insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+  values (1, 'Contacto 2', '4625550989', '4625550983', 'contacto_2@correo.com', 'Contacto 2 de proveedor 1');
+insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+  values (2, 'Contacto 3', '4625431090', '4625431092', 'contacto_3@correo.com', 'Contacto 1 de proveedor 2');
 
 delimiter //
 create procedure proc_ContactosProveedor

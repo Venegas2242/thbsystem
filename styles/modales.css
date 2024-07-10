@@ -134,11 +134,11 @@ th, td {
 }
 
 .btn-add:hover {
-    background-color: #ffc107; /* azul claro más oscuro */
+    background-color: #218838; /* azul claro más oscuro */
 }
 
 .btn-cancel {
-    background-color: #e0a800; /* gris */
+    background-color: #727b81; /* gris */
 }
 
 .btn-cancel:hover {

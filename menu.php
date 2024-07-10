@@ -6,7 +6,11 @@
     <link rel="stylesheet" href="styles/menu-style.css">
 </head>
 <body>
-    <div class="menu-bg"></div>
+    <div class="menu-bg">
+        <h1 class="section-name">
+            <?php echo isset($section_name) ? $section_name : '' ?>
+        </h1>
+    </div>
     <div class="menu-btn" onclick="toggleNav()">
         <span>&#9776; Menú</span>
     </div>

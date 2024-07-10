@@ -255,6 +255,7 @@ myApp.controller('cProveedores', function ($scope, $http) {
                 contacto: $scope.nuevoContacto.contacto,
                 telefono: $scope.nuevoContacto.telefono,
                 celular: $scope.nuevoContacto.celular,
+                email: $scope.nuevoContacto.email,
                 comentarios: $scope.nuevoContacto.comentarios
             }
         }).then(function (response) {

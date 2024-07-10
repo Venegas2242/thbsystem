@@ -88,6 +88,16 @@ body {
     z-index: 2;
 }
 
+.section-name {
+    margin: 0;
+    position: absolute;
+    color: white;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 1.5em;
+}
+
 .search-bar {
     z-index: 1;
 }

@@ -9,7 +9,8 @@ myApp.controller('cReportes', function ($scope, $http) {
     $scope.ubicacion = {
         idpais: null,
         idestado: null,
-        idciudad: null
+        idciudad: null,
+        activo: null // Añadir activo a la ubicación
     };
 
     // Obtener lista de países al cargar la página
@@ -52,17 +53,18 @@ myApp.controller('cReportes', function ($scope, $http) {
         }
     };
 
-    $scope.InfoProveedor = function (idpais, idestado, idciudad) {
+    $scope.InfoProveedor = function (idpais, idestado, idciudad, activo) {
         idpais = idpais || 0;
         idestado = idestado || 0;
         idciudad = idciudad || 0;
+        activo = activo == null || activo.length == 0 ? 1: activo; // Si activo no está definido, usar 1 por defecto
 
-        console.log("Ids:", idpais, idestado, idciudad);
+        console.log("Ids:", idpais, idestado, idciudad, "->", activo, "<-");
 
         $http({
             method: "POST",
             url: 'cod-reportes.php?functionToCall=info_proveedor',
-            data: { idpais: idpais, idestado: idestado, idciudad: idciudad }
+            data: { idpais: idpais, idestado: idestado, idciudad: idciudad, activo: activo }
         }).then(function (response) {
             console.log('Información completa del proveedor:', response.data);
             $scope.detalles_proveedor = response.data.length ? response.data : [];
@@ -73,20 +75,23 @@ myApp.controller('cReportes', function ($scope, $http) {
     };
 
     $scope.generarReporte = function() {
-        $scope.InfoProveedor($scope.ubicacion.idpais, $scope.ubicacion.idestado, $scope.ubicacion.idciudad);
+        $scope.InfoProveedor($scope.ubicacion.idpais, $scope.ubicacion.idestado, $scope.ubicacion.idciudad, $scope.ubicacion.activo);
     };
 
     $scope.descargarPDF = function() {
         var filtros = {
             pais: $scope.ubicacion.idpais ? ($scope.listaPaises.find(p => p.idpais === $scope.ubicacion.idpais) || {}).nombre || 'Todos' : 'Todos',
             estado: $scope.ubicacion.idestado ? ($scope.listaEstados.find(e => e.idestado === $scope.ubicacion.idestado) || {}).nombre || 'Todos' : 'Todos',
-            ciudad: $scope.ubicacion.idciudad ? ($scope.listaCiudades.find(c => c.idciudad === $scope.ubicacion.idciudad) || {}).nombre || 'Todas' : 'Todas'
+            ciudad: $scope.ubicacion.idciudad ? ($scope.listaCiudades.find(c => c.idciudad === $scope.ubicacion.idciudad) || {}).nombre || 'Todas' : 'Todas',
+            activo: $scope.ubicacion.activo !== null ? ($scope.ubicacion.activo == 1 ? 'Activo' : 'Inactivo') : 'Todos'
         };
 
         var data = {
             filtros: filtros,
             proveedores: $scope.detalles_proveedor
         };
+
+        console.log("Filtros:", filtros);
 
         $http.post('generar_pdf.php', data, { responseType: 'arraybuffer' }).then(function (response) {
             var blob = new Blob([response.data], { type: 'application/pdf' });

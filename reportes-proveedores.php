@@ -50,6 +50,19 @@ $section_name = "Proveedores";
         .table tbody tr:hover {
             background-color: #f1f1f1;
         }
+        .content-wrapper {
+            margin-bottom: 20px;
+        }
+        .filter-label {
+            font-size: 1.25rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .filter-label i {
+            margin-right: 8px;
+        }
     </style>
 </head>
 <body ng-controller="cReportes">
@@ -58,34 +71,46 @@ $section_name = "Proveedores";
 
     <div class="container fade-in content-wrapper">
         <div class="main-content">
-            <form>
-                <label for="tabla">Filtros:</label>
-                <div class="form-row align-items-end">
-                    <div class="form-group col-md-4">
-                        <label>País:</label>
-                        <select id="cmbPais" ng-model="ubicacion.idpais" ng-change="cambiarPais()" class="form-control">
-                            <option value="">Seleccione un país</option>
-                            <option ng-repeat="pais in listaPaises" value="{{pais.idpais}}">{{pais.nombre}}</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label>Estado:</label>
-                        <select id="cmbEstado" ng-model="ubicacion.idestado" ng-change="cambiarEstado()" class="form-control">
-                            <option value="">Seleccione un estado</option>
-                            <option ng-repeat="estado in listaEstados" value="{{estado.idestado}}">{{estado.nombre}}</option>
-                        </select>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label>Ciudad:</label>
-                        <select id="cmbCiudad" ng-model="ubicacion.idciudad" class="form-control">
-                            <option value="">Seleccione una ciudad</option>
-                            <option ng-repeat="ciudad in listaCiudades" value="{{ciudad.idciudad}}">{{ciudad.nombre}}</option>
-                        </select>
-                    </div>
+            <div class="card">
+                <div class="card-body">
+                    <label for="tabla" class="filter-label"><i class="fas fa-filter"></i>Filtros:</label>
+                    <form>
+                        <div class="form-row align-items-end">
+                            <div class="form-group col-md-3">
+                                <label>País:</label>
+                                <select id="cmbPais" ng-model="ubicacion.idpais" ng-change="cambiarPais()" class="form-control">
+                                    <option value="">Todos</option>
+                                    <option ng-repeat="pais in listaPaises" value="{{pais.idpais}}">{{pais.nombre}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Estado:</label>
+                                <select id="cmbEstado" ng-model="ubicacion.idestado" ng-change="cambiarEstado()" class="form-control">
+                                    <option value="">Todos</option>
+                                    <option ng-repeat="estado in listaEstados" value="{{estado.idestado}}">{{estado.nombre}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Ciudad:</label>
+                                <select id="cmbCiudad" ng-model="ubicacion.idciudad" class="form-control">
+                                    <option value="">Todas</option>
+                                    <option ng-repeat="ciudad in listaCiudades" value="{{ciudad.idciudad}}">{{ciudad.nombre}}</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label>Estado:</label>
+                                <select id="cmbActivo" ng-model="ubicacion.activo" class="form-control">
+                                    <option value="">Activo</option>
+                                    <option value="0">Inactivo</option>
+                                    <option value="2">Ambos</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-primary" ng-click="generarReporte()">Generar Reporte</button>
+                        <button type="button" class="btn btn-secondary" ng-click="descargarPDF()" ng-disabled="!detalles_proveedor.length">Descargar PDF</button>
+                    </form>
                 </div>
-                <button type="button" class="btn btn-primary" ng-click="generarReporte()">Generar Reporte</button>
-                <button type="button" class="btn btn-secondary" ng-click="descargarPDF()">Descargar PDF</button>
-            </form>
+            </div>
             <div id="tablaReporte" class="table-responsive" ng-show="true">
                 <table class="table table-bordered">
                     <thead>
@@ -129,7 +154,6 @@ $section_name = "Proveedores";
             </div>
         </div>
     </div>
-
     <div class="footer">
         <div class="container">
             <small><a href="http://www.tehiba.com">www.tehiba.com</a></small>

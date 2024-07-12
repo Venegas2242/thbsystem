@@ -22,12 +22,12 @@ class Proveedores {
     public $cuenta = "";
     public $clabe = "";
 
-    function BuscarInfo($idpais, $idestado, $idciudad) {
+    function BuscarInfo($idpais, $idestado, $idciudad, $activo) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("call GetProveedores(?, ?, ?)");
-        $query->bind_param("iii", $idpais, $idestado, $idciudad);
+        $query = $cnn->prepare("call GetProveedores(?, ?, ?, ?)");
+        $query->bind_param("iiii", $idpais, $idestado, $idciudad, $activo);
         $query->execute();
         $query->bind_result($nombrefiscal, $nombrecomercial, $direccion, $rfc, $telefono, $correo, $web, $credito, $saldo, $diascredito, $nombrebanco, $cuenta, $clabe);
         while ($query->fetch()) {
@@ -138,7 +138,7 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
 
         case "info_proveedor":
             $proveedor = new Proveedores();
-            echo json_encode($proveedor->BuscarInfo($json_data->idpais, $json_data->idestado, $json_data->idciudad));
+            echo json_encode($proveedor->BuscarInfo($json_data->idpais, $json_data->idestado, $json_data->idciudad, $json_data->activo));
             break;
     }
 }

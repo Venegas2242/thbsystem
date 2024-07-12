@@ -534,10 +534,13 @@ END //
 DELIMITER ;
 
 -- Procedimiento para verificar usuario
+DELIMITER //
+
 CREATE PROCEDURE `GetProveedores` (
     IN pidpais INT,
     IN pidestado INT,
-    IN pidciudad INT
+    IN pidciudad INT,
+    IN pactivo INT
 )
 BEGIN
     SELECT 
@@ -562,7 +565,8 @@ BEGIN
         (pidpais = 0 OR p.idpais = pidpais)
         AND (pidestado = 0 OR p.idestado = pidestado)
         AND (pidciudad = 0 OR p.idciudad = pidciudad)
-        AND p.activo = 1;
-END
+        AND (pactivo = 2 OR p.activo = pactivo);
+END //
 
-// DELIMITER ;
+DELIMITER ;
+

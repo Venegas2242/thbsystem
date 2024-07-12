@@ -21,36 +21,52 @@ class Proveedores {
     public $banco = "";
     public $cuenta = "";
     public $clabe = "";
+    public $contactos = []; // Añadir contactos
 
     function BuscarInfo($idpais, $idestado, $idciudad, $activo) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("call GetProveedores(?, ?, ?, ?)");
+        $query = $cnn->prepare("CALL GetProveedores(?, ?, ?, ?)");
         $query->bind_param("iiii", $idpais, $idestado, $idciudad, $activo);
         $query->execute();
-        $query->bind_result($nombrefiscal, $nombrecomercial, $direccion, $rfc, $telefono, $correo, $web, $credito, $saldo, $diascredito, $nombrebanco, $cuenta, $clabe);
+        $query->bind_result($nombrefiscal, $nombrecomercial, $direccion, $rfc, $telefono, $correo, $web, $credito, $saldo, $diascredito, $nombrebanco, $cuenta, $clabe, $idproveedorcontactos, $contacto, $contacto_telefono, $contacto_celular, $contacto_email, $contacto_comentarios);
+
+        $proveedores = [];
         while ($query->fetch()) {
-            $proveedor = array(
-                "nombrecomercial" => $nombrefiscal,
-                "nombrecomun" => $nombrecomercial,
-                "direccion" => $direccion,
-                "rfc" => $rfc,
-                "telefono" => $telefono,
-                "correo" => $correo,
-                "web" => $web,
-                "credito" => $credito,
-                "saldo" => $saldo,
-                "diascredito" => $diascredito,
-                "banco" => $nombrebanco,
-                "cuenta" => $cuenta,
-                "clabe" => $clabe
-            );
-            array_push($retorno, $proveedor);
+            if (!isset($proveedores[$nombrefiscal])) {
+                $proveedores[$nombrefiscal] = array(
+                    "nombrecomercial" => $nombrefiscal,
+                    "nombrecomun" => $nombrecomercial,
+                    "direccion" => $direccion,
+                    "rfc" => $rfc,
+                    "telefono" => $telefono,
+                    "correo" => $correo,
+                    "web" => $web,
+                    "credito" => $credito,
+                    "saldo" => $saldo,
+                    "diascredito" => $diascredito,
+                    "banco" => $nombrebanco,
+                    "cuenta" => $cuenta,
+                    "clabe" => $clabe,
+                    "contactos" => []
+                );
+            }
+            if ($idproveedorcontactos) {
+                $proveedores[$nombrefiscal]['contactos'][] = array(
+                    "idproveedorcontactos" => $idproveedorcontactos,
+                    "contacto" => $contacto,
+                    "contacto_telefono" => $contacto_telefono,
+                    "contacto_celular" => $contacto_celular,
+                    "contacto_email" => $contacto_email,
+                    "contacto_comentarios" => $contacto_comentarios
+                );
+            }
         }
+
         $query->close();
         $cnn->close();
-        return $retorno;
+        return array_values($proveedores); // Convertir a un array indexado
     }
 }
 

@@ -25,7 +25,7 @@
                                 <td>{{contacto.telefono}}</td>
                                 <td>{{contacto.celular}}</td>
                                 <td>{{contacto.email}}</td>
-                                <td>{{contacto.comentarios}}</td>
+                                <td class="col-comentarios">{{contacto.comentarios}}</td>
                                 <td>
                                     <button type="button" class="btn-custom btn-edit" ng-click="EditarContacto(contacto)" ng-disabled="agregarContactoActivo">
                                         <i class="fa-solid fa-edit"></i>
@@ -43,7 +43,7 @@
                                 <td><input type="text" class="form-control" ng-model="nuevoContacto.telefono" placeholder="Teléfono" required></td>
                                 <td><input type="text" class="form-control" ng-model="nuevoContacto.celular" placeholder="Celular"></td>
                                 <td><input type="email" class="form-control" ng-model="nuevoContacto.email" placeholder="Email" required></td>
-                                <td><input type="text" class="form-control" ng-model="nuevoContacto.comentarios" placeholder="Comentarios"></td>
+                                <td><input type="text" class="form-control col-comentarios" ng-model="nuevoContacto.comentarios" placeholder="Comentarios"></td>
                                 <td>
                                     <button type="button" class="btn-custom btn-add" ng-click="AgregarContacto()">
                                         <i class="fa fa-user-plus"></i>
@@ -58,7 +58,7 @@
                                 <td><input type="text" class="form-control" ng-model="nuevoContacto.telefono" placeholder="Teléfono" required></td>
                                 <td><input type="text" class="form-control" ng-model="nuevoContacto.celular" placeholder="Celular"></td>
                                 <td><input type="email" class="form-control" ng-model="nuevoContacto.email" placeholder="Email" required></td>
-                                <td><input type="text" class="form-control" ng-model="nuevoContacto.comentarios" placeholder="Comentarios"></td>
+                                <td><textarea class="form-control" ng-model="nuevoContacto.comentarios" placeholder="Comentarios" style="height: 70px; resize: vertical;"></textarea></td>
                                 <td>
                                     <button type="button" class="btn-custom btn-save" ng-click="GuardarEdicionContacto()">
                                         <i class="fa fa-save"></i>

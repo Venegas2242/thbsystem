@@ -107,7 +107,9 @@ $section_name = "Proveedores";
                             </div>
                         </div>
                         <button type="button" class="btn btn-primary" ng-click="generarReporte()">Generar Reporte</button>
-                        <button type="button" class="btn btn-secondary" ng-click="descargarPDF()" ng-disabled="!detalles_proveedor.length">Descargar PDF</button>
+                        <button type="button" class="btn btn-secondary" ng-click="descargarPDF()" ng-disabled="!detalles_proveedor.length">
+                        <i class="fa-solid fa-file-pdf"></i> Descargar PDF
+                        </button>
                     </form>
                 </div>
             </div>

@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS `cat_proveedor` (
 
 -- Tabla Proveedor Contactos
 CREATE TABLE IF NOT EXISTS `cat_proveedorcontactos` (
-  `idproveedorcontactos` int NOT NULL AUTO_INCREMENT COMMENT 'clave del proveedor',
+  `idproveedorcontactos` int NOT NULL AUTO_INCREMENT COMMENT 'clave del contacto',
   `idproveedor` int NOT NULL COMMENT 'clave del proveedor',
   `contacto` varchar(150) DEFAULT NULL COMMENT 'Nombre del contacto',
   `telefono` varchar(40) DEFAULT NULL COMMENT 'Telefono',
@@ -556,17 +556,25 @@ BEGIN
         p.diascredito, 
         b.nombre AS Banco, 
         p.cuenta, 
-        p.clabe
+        p.clabe,
+        c.idproveedorcontactos,
+        c.contacto,
+        c.telefono AS contacto_telefono,
+        c.celular AS contacto_celular,
+        c.email AS contacto_email,
+        c.comentarios AS contacto_comentarios
     FROM 
         cat_proveedor p
     JOIN 
         cat_bancos b ON p.idbanco = b.idbanco
+    LEFT JOIN 
+        cat_proveedorcontactos c ON p.idproveedor = c.idproveedor
     WHERE 
         (pidpais = 0 OR p.idpais = pidpais)
         AND (pidestado = 0 OR p.idestado = pidestado)
         AND (pidciudad = 0 OR p.idciudad = pidciudad)
-        AND (pactivo = 2 OR p.activo = pactivo);
+        AND (pactivo = 2 OR p.activo = pactivo)
+        AND p.activo = 1;
 END //
 
 DELIMITER ;
-

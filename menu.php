@@ -16,6 +16,7 @@
     </div>
     
     <div id="mySidenav" class="sidenav">  
+        <a class="dropdown-item" href="reportes-proveedores.php"><i class="fa-solid fa-chart-pie"></i> Reportes</a>
         <a class="dropdown-btn" onclick="toggleDropdown()">
             <i class="fas fa-bars me-2"></i> Catálogos      <i class="fa fa-caret-down"></i>
         </a>

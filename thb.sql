@@ -532,3 +532,37 @@ BEGIN
 END //
 
 DELIMITER ;
+
+-- Procedimiento para verificar usuario
+CREATE PROCEDURE `GetProveedores` (
+    IN pidpais INT,
+    IN pidestado INT,
+    IN pidciudad INT
+)
+BEGIN
+    SELECT 
+        p.nombrefiscal, 
+        p.nombrecomun, 
+        p.direccion, 
+        p.rfc, 
+        p.telefono, 
+        p.correo, 
+        p.web, 
+        p.credito, 
+        p.saldo, 
+        p.diascredito, 
+        b.nombre AS Banco, 
+        p.cuenta, 
+        p.clabe
+    FROM 
+        cat_proveedor p
+    JOIN 
+        cat_bancos b ON p.idbanco = b.idbanco
+    WHERE 
+        (pidpais = 0 OR p.idpais = pidpais)
+        AND (pidestado = 0 OR p.idestado = pidestado)
+        AND (pidciudad = 0 OR p.idciudad = pidciudad)
+        AND p.activo = 1;
+END
+
+// DELIMITER ;

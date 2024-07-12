@@ -1,3 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION['idusuario'])) {
+    header("Location: login.php");
+    exit();
+}
+
+$section_name = "Proveedores";
+?>
+
 <!DOCTYPE html>
 <html ng-app="appReportes">
 <head>
@@ -74,8 +84,9 @@
                     </div>
                 </div>
                 <button type="button" class="btn btn-primary" ng-click="generarReporte()">Generar Reporte</button>
+                <button type="button" class="btn btn-secondary" ng-click="descargarPDF()">Descargar PDF</button>
             </form>
-            <div class="table-responsive" ng-show="true">
+            <div id="tablaReporte" class="table-responsive" ng-show="true">
                 <table class="table table-bordered">
                     <thead>
                         <tr>

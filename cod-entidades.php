@@ -8,8 +8,8 @@ spl_autoload_register(function($NombreClase) {
     require_once $NombreClase . '.php';
 });
 
-class Proveedores {
-    public $idproveedor = 0;
+class Entidades {
+    public $identidad = 0;
     public $nombrecomercial = "";
     public $nombrecomun = "";
     public $direccion = "";
@@ -29,15 +29,16 @@ class Proveedores {
     public $idbanco = "";  // Asegúrate de que esté definido como string
     public $cuenta = "";
     public $clabe = "";
+    public $tipo = "";
 
     function Grabar() {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
 
-        $query = $cnn->prepare("call proc_ProveedorGrabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $query->bind_param("isssiiissssddisss", 
-            $this->idproveedor, 
+        $query = $cnn->prepare("call proc_EntidadGrabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $query->bind_param("isssiiissssddissss", 
+            $this->identidad, 
             $this->nombrecomercial, 
             $this->nombrecomun, 
             $this->direccion, 
@@ -53,7 +54,8 @@ class Proveedores {
             $this->diascredito, 
             $this->idbanco, 
             $this->cuenta, 
-            $this->clabe
+            $this->clabe,
+            $this->tipo
         );
         $query->execute();
         $query->store_result();
@@ -61,12 +63,12 @@ class Proveedores {
             $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
         }
         if ($query->num_rows != 0) {
-            $query->bind_result($this->idproveedor);
+            $query->bind_result($this->identidad);
             if ($query->fetch()) {
-                if (is_null($this->idproveedor)) {
+                if (is_null($this->identidad)) {
                     $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción. El error se desconoce.");
                 } else {
-                    $retorno = $this->ArrayMessage("1", "El proveedor ha sido grabado correctamente.");
+                    $retorno = $this->ArrayMessage("1", "El proveedor/cliente ha sido grabado correctamente.");
                 }
             }
         }
@@ -84,35 +86,36 @@ class Proveedores {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("call proc_ProveedorBuscar(?)");
+        $query = $cnn->prepare("call proc_EntidadBuscar(?)");
         $query->bind_param("s", $textoBuscar);
         $query->execute();
-        $query->bind_result($idproveedor, $nombrecomercial, $rfc, $telefono, $correo);
+        $query->bind_result($identidad, $nombrecomercial, $rfc, $telefono, $correo, $tipo);
         while ($query->fetch()) {
-            $proveedor = new Proveedores();
-            $proveedor->idproveedor = $idproveedor;
-            $proveedor->nombrecomercial = $nombrecomercial;
-            $proveedor->rfc = $rfc;
-            $proveedor->telefono = $telefono;
-            $proveedor->correo = $correo;
-            array_push($retorno, $proveedor);
+            $entidad = new Entidades();
+            $entidad->identidad = $identidad;
+            $entidad->nombrecomercial = $nombrecomercial;
+            $entidad->rfc = $rfc;
+            $entidad->telefono = $telefono;
+            $entidad->correo = $correo;
+            $entidad->tipo = $tipo;
+            array_push($retorno, $entidad);
         }
         $query->close();
         $cnn->close();
         return $retorno;
     }
 
-    function BuscarInfo($id_proveedor) {
+    function BuscarInfo($id_entidad) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("call proc_ProveedorInfo(?)");
-        $query->bind_param("s", $id_proveedor);
+        $query = $cnn->prepare("call proc_EntidadInfo(?)");
+        $query->bind_param("s", $id_entidad);
         $query->execute();
         $query->bind_result($nombrefiscal, $nombrecomercial, $direccion, $idciudad, $nombreciudad, $idestado, $nombreestado, $idpais, $nombrepais, $rfc, $telefono, $correo, $web, $credito, $saldo, $diascredito, $idbanco, $nombrebanco, $cuenta, $clabe);
         while ($query->fetch()) {
-            $proveedor = array(
-                "idproveedor" => $id_proveedor,
+            $entidad = array(
+                "identidad" => $id_entidad,
                 "nombrecomercial" => $nombrefiscal,
                 "nombrecomun" => $nombrecomercial,
                 "direccion" => $direccion,
@@ -134,7 +137,7 @@ class Proveedores {
                 "cuenta" => $cuenta,
                 "clabe" => $clabe
             );
-            array_push($retorno, $proveedor);
+            array_push($retorno, $entidad);
         }
         $query->close();
         $cnn->close();
@@ -144,24 +147,24 @@ class Proveedores {
     
 
 
-    function Eliminar($idProveedor) {
+    function Eliminar($idEntidad) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
-        $query = $cnn->prepare("call proc_ProveedorEliminar(?)");
-        $query->bind_param("i", $idProveedor);
+        $query = $cnn->prepare("call proc_EntidadEliminar(?)");
+        $query->bind_param("i", $idEntidad);
         $query->execute();
         $query->store_result();
         if (mysqli_stmt_error($query) != "") {
             $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
         }
         if ($query->num_rows != 0) {
-            $query->bind_result($this->idproveedor);
+            $query->bind_result($this->identidad);
             if ($query->fetch()) {
-                if (is_null($this->idproveedor)) {
+                if (is_null($this->identidad)) {
                     $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción. El error se desconoce.");
                 } else {
-                    $retorno = $this->ArrayMessage("1", "El proveedor ha sido eliminado.");
+                    $retorno = $this->ArrayMessage("1", "El proveedor/cliente ha sido eliminado.");
                 }
             }
         }
@@ -228,7 +231,7 @@ class Proveedores {
         $query->execute();
         $query->bind_result($idbanco, $nombre);
         while ($query->fetch()) {
-            $bancos = new Proveedores();
+            $bancos = new Entidades();
             $bancos = array("idbanco" => $idbanco, "banco" => $nombre);
             array_push($retorno, $bancos);
         }
@@ -250,12 +253,12 @@ class Contactos {
         return array("status" => $status, "message" => $message, "date" => date("Y-m-d H:i:s"));
     }
 
-    function BuscarContactos($id_proveedor) {
+    function BuscarContactos($id_entidad) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("CALL proc_ContactosProveedor(?)");
-        $query->bind_param("i", $id_proveedor);
+        $query = $cnn->prepare("CALL proc_ContactosEntidad(?)");
+        $query->bind_param("i", $id_entidad);
         $query->execute();
         $query->bind_result($id_contacto, $contacto, $telefono, $celular, $email, $comentarios);
         while ($query->fetch()) {
@@ -267,13 +270,13 @@ class Contactos {
         return $retorno;
     }
 
-    function AgregarContacto($id_proveedor) {
+    function AgregarContacto($id_entidad) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("CALL proc_AgregarContactoProveedor(?,?,?,?,?,?)");
+        $query = $cnn->prepare("CALL proc_AgregarContactoEntidad(?,?,?,?,?,?)");
         $query->bind_param("isssss", 
-            $id_proveedor, 
+            $id_entidad, 
             $this->contacto,
             $this->telefono,
             $this->celular,
@@ -292,12 +295,12 @@ class Contactos {
         return $retorno;
     }
 
-    function EliminarContacto($idproveedorcontactos) {
+    function EliminarContacto($identidadcontactos) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("CALL proc_EliminarContactoProveedor(?)");
-        $query->bind_param("i", $idproveedorcontactos);
+        $query = $cnn->prepare("CALL proc_EliminarContactoEntidad(?)");
+        $query->bind_param("i", $identidadcontactos);
         $query->execute();
         $query->store_result();
         if (mysqli_stmt_error($query) != "") {
@@ -315,7 +318,7 @@ class Contactos {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("CALL proc_EditarContactoProveedor(?, ?, ?, ?, ?, ?)");
+        $query = $cnn->prepare("CALL proc_EditarContactoEntidad(?, ?, ?, ?, ?, ?)");
         $query->bind_param("isssss", 
             $idcontacto,
             $contacto,
@@ -347,47 +350,48 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
     $functionToCall = $_GET["functionToCall"];
     $json_data = json_decode(file_get_contents('php://input'));
     switch ($functionToCall) {
-        case "buscar_proveedor":
-            $proveedor = new Proveedores();
-            echo json_encode($proveedor->Buscar(utf8_decode($json_data->textoBuscar)));
+        case "buscar_entidad":
+            $entidad = new Entidades();
+            echo json_encode($entidad->Buscar(utf8_decode($json_data->textoBuscar)));
             break;
 
-        case "info_proveedor":
-            $proveedor = new Proveedores();
-            echo json_encode($proveedor->BuscarInfo($json_data->id_proveedor));
+        case "info_entidad":
+            $entidad = new Entidades();
+            echo json_encode($entidad->BuscarInfo($json_data->id_entidad));
             break;
 
-        case "grabar_proveedor":
-            $proveedor = new Proveedores();
-            $proveedor->idproveedor  = $json_data->idproveedor;
-            $proveedor->nombrecomercial  = $json_data->nombrecomercial;
-            $proveedor->nombrecomun  = $json_data->nombrecomun;
-            $proveedor->direccion  = $json_data->direccion;
-            $proveedor->idciudad  = $json_data->idciudad;
-            $proveedor->idestado  = $json_data->idestado;
-            $proveedor->idpais  = $json_data->idpais;
-            $proveedor->rfc  = $json_data->rfc;
-            $proveedor->telefono  = $json_data->telefono;
-            $proveedor->correo  = $json_data->correo;
-            $proveedor->web  = $json_data->web;
-            $proveedor->credito  = $json_data->credito;
-            $proveedor->saldo  = $json_data->saldo;
-            $proveedor->diascredito  = $json_data->diascredito;
-            $proveedor->idbanco  = $json_data->idbanco;
-            $proveedor->cuenta  = $json_data->cuenta;
-            $proveedor->clabe  = $json_data->clabe;
+        case "grabar_entidad":
+            $entidad = new Entidades();
+            $entidad->identidad  = $json_data->identidad;
+            $entidad->nombrecomercial  = $json_data->nombrecomercial;
+            $entidad->nombrecomun  = $json_data->nombrecomun;
+            $entidad->direccion  = $json_data->direccion;
+            $entidad->idciudad  = $json_data->idciudad;
+            $entidad->idestado  = $json_data->idestado;
+            $entidad->idpais  = $json_data->idpais;
+            $entidad->rfc  = $json_data->rfc;
+            $entidad->telefono  = $json_data->telefono;
+            $entidad->correo  = $json_data->correo;
+            $entidad->web  = $json_data->web;
+            $entidad->credito  = $json_data->credito;
+            $entidad->saldo  = $json_data->saldo;
+            $entidad->diascredito  = $json_data->diascredito;
+            $entidad->idbanco  = $json_data->idbanco;
+            $entidad->cuenta  = $json_data->cuenta;
+            $entidad->clabe  = $json_data->clabe;
+            $entidad->tipo = $json_data->tipo;
 
-            echo json_encode($proveedor->Grabar());
+            echo json_encode($entidad->Grabar());
             break;
 
-        case "eliminar_proveedor":
-            $proveedor = new Proveedores();
-            echo json_encode($proveedor->Eliminar($json_data->idproveedor));
+        case "eliminar_entidad":
+            $entidad = new Entidades();
+            echo json_encode($ntidad->Eliminar($json_data->identidad));
             break;
         
-        case "contactos_proveedor":
+        case "contactos_entidad":
             $contacto = new Contactos();
-            echo json_encode($contacto->BuscarContactos($json_data->id_proveedor));
+            echo json_encode($contacto->BuscarContactos($json_data->id_entidad));
             break;
 
         case "agregar_contacto":
@@ -398,7 +402,7 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
             $contacto->email = $json_data->email;
             $contacto->comentarios  = $json_data->comentarios;
 
-            echo json_encode($contacto->AgregarContacto($json_data->id_proveedor));
+            echo json_encode($contacto->AgregarContacto($json_data->id_entidad));
             break;
 
         case "editar_contacto":
@@ -406,7 +410,7 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
     
 
             echo json_encode($contacto->EditarContacto(
-                $json_data->idproveedorcontactos,
+                $json_data->identidadcontactos,
                 $json_data->contacto,
                 $json_data->telefono,
                 $json_data->celular,
@@ -423,23 +427,23 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
             break;
 
         case "obtener_estados":
-            $proveedor = new Proveedores();
-            echo json_encode($proveedor->ObtenerEstados($json_data->idpais));
+            $entidad = new Entidades();
+            echo json_encode($entidad->ObtenerEstados($json_data->idpais));
             break;
 
         case "obtener_ciudades":
-            $proveedor = new Proveedores();
-            echo json_encode($proveedor->ObtenerCiudades($json_data->idestado));
+            $entidad = new Entidades();
+            echo json_encode($entidad->ObtenerCiudades($json_data->idestado));
             break;
 
         case "obtener_paises":
-            $proveedor = new Proveedores();
-            echo json_encode($proveedor->ObtenerPaises());
+            $entidad = new Entidades();
+            echo json_encode($entidad->ObtenerPaises());
             break;
 
         case "obtener_bancos":
-            $proveedor = new Proveedores();
-            echo json_encode($proveedor->ObtenerBancos());
+            $entidad = new Entidades();
+            echo json_encode($entidad->ObtenerBancos());
             break;
 
     }

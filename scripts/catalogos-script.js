@@ -1,18 +1,18 @@
 var myApp = angular.module('appCatalogos', []);
 
-myApp.controller('cProveedores', function ($scope, $http) {
+myApp.controller('cCatalogos', function ($scope, $http) {
     $scope.listaPaises = [];
     $scope.listaEstados = [];
     $scope.listaCiudades = [];
-    $scope.listaProveedores = [];
+    $scope.listaEntidades = [];
     $scope.listaBancos = [];
 
     $scope.agregarContactoActivo = false;
     $scope.editando = false;
 
-    // Inicializar proveedor
-    $scope.proveedor = {
-        idproveedor: 0,
+    // Inicializar entidad
+    $scope.entidad = {
+        identidad: 0,
         nombrecomercial: "",
         nombrecomun: "",
         direccion: "",
@@ -26,16 +26,17 @@ myApp.controller('cProveedores', function ($scope, $http) {
         credito: 0,
         saldo: 0,
         diascredito: 0,
-        idbanco: "",
+        idbanco: null,
         cuenta: "",
-        clabe: ""
+        clabe: "",
+        tipo: ""
     };
 
 
     // Obtener lista de bancos al cargar la página
     $http({
         method: "POST",
-        url: 'cod-proveedores.php?functionToCall=obtener_bancos',
+        url: 'cod-entidades.php?functionToCall=obtener_bancos',
     }).then(function (response) {
         $scope.listaBancos = response.data;
         console.log("Lista de bancos: ", $scope.listaBancos);
@@ -44,7 +45,7 @@ myApp.controller('cProveedores', function ($scope, $http) {
     // Obtener lista de países al cargar la página
     $http({
         method: "GET",
-        url: 'cod-proveedores.php?functionToCall=obtener_paises'
+        url: 'cod-entidades.php?functionToCall=obtener_paises'
     }).then(function (response) {
         $scope.listaPaises = response.data; // Asignar respuesta a listaPaises
     });
@@ -53,16 +54,16 @@ myApp.controller('cProveedores', function ($scope, $http) {
     $scope.cambiarPais = function() {
         $scope.listaEstados = []; // Limpiar lista de estados
         $scope.listaCiudades = []; // Limpiar lista de ciudades
-        if ($scope.proveedor.idpais) {
+        if ($scope.entidad.idpais) {
             // Obtener estados del país seleccionado
             $http({
                 method: "POST",
-                url: 'cod-proveedores.php?functionToCall=obtener_estados',
-                data: { idpais: $scope.proveedor.idpais }
+                url: 'cod-entidades.php?functionToCall=obtener_estados',
+                data: { idpais: $scope.entidad.idpais }
             }).then(function (response) {
                 $scope.listaEstados = response.data; // Asignar respuesta a listaEstados
                 // Si ya se tiene un estado seleccionado, mantenerlo
-                if ($scope.proveedor.idestado) {
+                if ($scope.entidad.idestado) {
                     $scope.cambiarEstado();
                 }
             });
@@ -72,12 +73,12 @@ myApp.controller('cProveedores', function ($scope, $http) {
     // Función para manejar el cambio de estado
     $scope.cambiarEstado = function() {
         $scope.listaCiudades = []; // Limpiar lista de ciudades
-        if ($scope.proveedor.idestado) {
+        if ($scope.entidad.idestado) {
             // Obtener ciudades del estado seleccionado
             $http({
                 method: "POST",
-                url: 'cod-proveedores.php?functionToCall=obtener_ciudades',
-                data: { idestado: $scope.proveedor.idestado }
+                url: 'cod-entidades.php?functionToCall=obtener_ciudades',
+                data: { idestado: $scope.entidad.idestado }
             }).then(function (response) {
                 $scope.listaCiudades = response.data; // Asignar respuesta a listaCiudades
             });
@@ -86,58 +87,58 @@ myApp.controller('cProveedores', function ($scope, $http) {
 
     var myData = { textoBuscar: '' };
 
-    // Obtener lista de proveedores al cargar la página
+    // Obtener lista de entidades al cargar la página
     $http({
         method: "POST",
-        url: 'cod-proveedores.php?functionToCall=buscar_proveedor',
+        url: 'cod-entidades.php?functionToCall=buscar_entidad',
         data: myData
     }).then(function (response) {
-        $scope.listaProveedores = response.data;
+        $scope.listaEntidades = response.data;
     });
 
-    // Función para buscar proveedor por texto
-    $scope.BuscarProveedor = function () {
+    // Función para buscar entidad por texto
+    $scope.BuscarEntidad = function () {
         var myData = { textoBuscar: String($("#txtTextoBuscar").val()) };
         $http({
             method: "POST",
-            url: 'cod-proveedores.php?functionToCall=buscar_proveedor',
+            url: 'cod-entidades.php?functionToCall=buscar_entidad',
             data: myData
         }).then(function (response) {
-            $scope.listaProveedores = response.data;
+            $scope.listaEntidades = response.data;
         });
     };
 
-    // Función para obtener información completa del proveedor
-    $scope.InfoProveedor = function (idproveedor) {
-        //console.log('Id proveedor:', idproveedor);
+    // Función para obtener información completa del entidad
+    $scope.InfoEntidad = function (identidad) {
+        //console.log('Id entidad:', identidad);
         $http({
             method: "POST",
-            url: 'cod-proveedores.php?functionToCall=info_proveedor',
-            data: { id_proveedor: idproveedor }
+            url: 'cod-entidades.php?functionToCall=info_entidad',
+            data: { id_entidad: identidad }
         }).then(function (response) {
-            console.log('Información completa del proveedor:', response.data[0]); // Imprimir la información completa en la consola
-            $scope.detalles_proveedor = response.data[0];
+            console.log('Información completa de la entidad:', response.data[0]); // Imprimir la información completa en la consola
+            $scope.detalles_entidad = response.data[0];
 
             // Actualizar los estados y ciudades según el país y estado seleccionados
             // $scope.cambiarPais();
 
-            // Mostrar el modal con la información del proveedor
-            $("#modalProveedor").modal();
+            // Mostrar el modal con la información del entidad
+            $("#modalEntidad").modal();
         }, function (error) {
             console.error('Error:', error);
         });
     };
 
-    // Función para abrir el modal de edición de proveedor
+    // Función para abrir el modal de edición de entidad
     $scope.AbrirEditar = function (item) {
         console.log('Info card:', item); // Imprimir el objeto completo en la consola
-        $scope.InfoProveedor(item.idproveedor);
+        $scope.InfoEntidad(item.identidad);
     };
 
-    // Función para abrir el modal de nuevo proveedor
+    // Función para abrir el modal de nuevo entidad
     $scope.AbrirNuevo = function () {
-        $scope.proveedor = {
-            idproveedor: 0,
+        $scope.entidad = {
+            identidad: 0,
             nombrecomercial: "",
             nombrecomun: "",
             direccion: "",
@@ -151,26 +152,28 @@ myApp.controller('cProveedores', function ($scope, $http) {
             credito: 0,
             saldo: 0,
             diascredito: 0,
-            idbanco: "",
+            idbanco: null,
             cuenta: "",
-            clabe: ""
+            clabe: "",
+            tipo: "",
         };
-        $("#modalProveedorNuevo").modal();
+        $("#modalEntidadNuevo").modal();
     };
 
-    // Función para guardar proveedor
+    // Función para guardar entidad
     $scope.Grabar = function () {
-        console.log('Datos del proveedor: ', $scope.proveedor);
+        $scope.entidad.tipo = $scope.entidad.tipo || "Proveedor"
+        console.log('Datos del entidad: ', $scope.entidad);
 
         $http({
             method: "POST",
-            url: 'cod-proveedores.php?functionToCall=grabar_proveedor',
-            data: $scope.proveedor
+            url: 'cod-entidades.php?functionToCall=grabar_entidad',
+            data: $scope.entidad
         }).then(function (response) {
             if (response.data.status === "1") {
                 alert(response.data.message);
-                $scope.BuscarProveedor();
-                $("#modalProveedorNuevo").modal("hide");
+                $scope.BuscarEntidad();
+                $("#modalEntidadNuevo").modal("hide");
                 
             } else {
                 alert(response.data.message);
@@ -181,42 +184,44 @@ myApp.controller('cProveedores', function ($scope, $http) {
     };
 
     $scope.MostrarContactos = function (item) {
-        $scope.id_proveedor = item.idproveedor;
-        console.log("Id del proveedor: ", $scope.id_proveedor);
+        console.log("MostrarContactos:", item.identidad);
+        $scope.id_entidad = item.identidad;
+        console.log("Id del entidad: ", $scope.id_entidad);
     
         $http({
             method: "POST",
-            url: 'cod-proveedores.php?functionToCall=contactos_proveedor',
-            data: {id_proveedor: $scope.id_proveedor}
+            url: 'cod-entidades.php?functionToCall=contactos_entidad',
+            data: {id_entidad: $scope.id_entidad}
         }).then(function (response) {
-            $scope.contactos_proveedor = Array.isArray(response.data) ? response.data : [];
-            console.log('Contactos del proveedor:', $scope.contactos_proveedor);
+
+            $scope.contactos_entidad = Array.isArray(response.data) ? response.data : [];
+            console.log('Contactos del entidad:', $scope.contactos_entidad);
             $scope.nuevoContacto = {}; // Inicializar el objeto para el nuevo contacto
             $scope.agregarContactoActivo = false; // Inicializar el estado del renglón editable
             $scope.editando = false; // Inicializar el estado de edición
     
-            // Mostrar el modal con la información del proveedor
-            $("#modalContactosProveedor").modal();
+            // Mostrar el modal con la información del entidad
+            $("#modalContactosEntidad").modal();
         }, function (error) {
             console.error('Error:', error);
         });
     };
     
     $scope.AgregarContacto = function () {
-        // Añadir el id del proveedor al nuevo contacto
-        $scope.nuevoContacto.id_proveedor = $scope.id_proveedor;
+        // Añadir el id del entidad al nuevo contacto
+        $scope.nuevoContacto.id_entidad = $scope.id_entidad;
     
         $http({
             method: "POST",
-            url: 'cod-proveedores.php?functionToCall=agregar_contacto',
+            url: 'cod-entidades.php?functionToCall=agregar_contacto',
             data: $scope.nuevoContacto
         }).then(function (response) {
             console.log('Contacto agregado:', response.data);
             if(response.data.status == "1") {
                 $scope.nuevoContacto = {};
                 $scope.agregarContactoActivo = false; // Ocultar el renglón editable después de agregar el contacto
-                // Recargar los contactos del proveedor
-                $scope.MostrarContactos({ idproveedor: $scope.id_proveedor});
+                // Recargar los contactos del entidad
+                $scope.MostrarContactos({ identidad: $scope.id_entidad});
             } else {
                 console.error('Error al agregar contacto:', response.data.message);
             }
@@ -249,9 +254,9 @@ myApp.controller('cProveedores', function ($scope, $http) {
         console.log("El contacto original es: ", $scope.contactoOriginal.idcontacto);
         $http({
             method: "POST",
-            url: 'cod-proveedores.php?functionToCall=editar_contacto',
+            url: 'cod-entidades.php?functionToCall=editar_contacto',
             data: {
-                idproveedorcontactos: $scope.contactoOriginal.idcontacto,
+                identidadcontactos: $scope.contactoOriginal.idcontacto,
                 contacto: $scope.nuevoContacto.contacto,
                 telefono: $scope.nuevoContacto.telefono,
                 celular: $scope.nuevoContacto.celular,
@@ -262,7 +267,7 @@ myApp.controller('cProveedores', function ($scope, $http) {
             console.log('Contacto editado:', response.data);
             if(response.data.status == "1") {
                 // Actualizar el contacto en la lista local
-                $scope.MostrarContactos({ idproveedor: $scope.id_proveedor });
+                $scope.MostrarContactos({ identidad: $scope.id_entidad });
                 $scope.nuevoContacto = {};
                 $scope.editando = false; // Ocultar el renglón editable después de editar el contacto
                 $scope.agregarContactoActivo = false;
@@ -281,13 +286,13 @@ myApp.controller('cProveedores', function ($scope, $http) {
         if(confirm('¿Está seguro de que desea eliminar este contacto?')) {
             $http({
                 method: "POST",
-                url: 'cod-proveedores.php?functionToCall=eliminar_contacto',
+                url: 'cod-entidades.php?functionToCall=eliminar_contacto',
                 data: {idcontacto: $scope.id_contacto}
             }).then(function (response) {
                 console.log("Esto esta regresando response.data: ", response.data)
                 if(response.data.status == "1") {
-                    // Recargar los contactos del proveedor
-                    $scope.MostrarContactos({ idproveedor: $scope.id_proveedor });
+                    // Recargar los contactos del entidad
+                    $scope.MostrarContactos({ identidad: $scope.id_entidad });
                 } else {
                     console.error('Error al eliminar contacto:', response.data.message);
                 }
@@ -298,31 +303,31 @@ myApp.controller('cProveedores', function ($scope, $http) {
     };
     
     // Ocultar el renglón editable cuando se cierre el modal
-    $('#modalContactosProveedor').on('hidden.bs.modal', function () {
+    $('#modalContactosEntidad').on('hidden.bs.modal', function () {
         $scope.$apply(function () {
             $scope.agregarContactoActivo = false;
             $scope.editando = false;
         });
     });
 
-    // Función para abrir el modal de eliminación de proveedor
+    // Función para abrir el modal de eliminación de entidad
     $scope.AbrirEliminar = function (item) {
-        $scope.proveedor = item;
-        $("#modalProveedorEliminar").modal();
+        $scope.entidad = item;
+        $("#modalEntidadEliminar").modal();
     };
 
-    // Función para actualizar proveedor
-    $scope.Actualizar_Proveedor = function (detalles_proveedor) {
-        console.log("Datos del proveedor a actualizar: ", detalles_proveedor); // Imprimir en consola
+    // Función para actualizar entidad
+    $scope.Actualizar_Entidad = function (detalles_entidad) {
+        console.log("Datos del entidad a actualizar: ", detalles_entidad); // Imprimir en consola
         $http({
             method: "POST",
-            url: 'cod-proveedores.php?functionToCall=grabar_proveedor',
-            data: $scope.detalles_proveedor
+            url: 'cod-entidades.php?functionToCall=grabar_entidad',
+            data: $scope.detalles_entidad
         }).then(function (response) {
             if (response.data.status === "1") {
                 alert(response.data.message);
-                $scope.BuscarProveedor();
-                $("#modalProveedor").modal("hide");
+                $scope.BuscarEntidad();
+                $("#modalEntidad").modal("hide");
             } else {
                 alert(response.data.message);
             }
@@ -331,17 +336,17 @@ myApp.controller('cProveedores', function ($scope, $http) {
         });
     };
     
-    // Función para eliminar proveedor
+    // Función para eliminar entidad
     $scope.Eliminar = function () {
         $http({
             method: "POST",
-            url: 'cod-proveedores.php?functionToCall=eliminar_proveedor',
-            data: $scope.proveedor
+            url: 'cod-entidades.php?functionToCall=eliminar_entidad',
+            data: $scope.entidad
         }).then(function (response) {
             if (response.data.status === "1") {
                 alert(response.data.message);
-                $scope.BuscarProveedor();
-                $("#modalProveedorEliminar").modal("hide");
+                $scope.BuscarEntidad();
+                $("#modalEntidadEliminar").modal("hide");
             } else {
                 alert(response.data.message);
             }

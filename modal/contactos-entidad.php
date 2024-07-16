@@ -1,4 +1,4 @@
-<div id="modalContactosProveedor" class="modal fade" role="dialog">
+<div id="modalContactosEntidad" class="modal fade" role="dialog">
     <div class="modal-dialog modal-xl">
         <!-- Modal content-->
         <div class="modal-content">
@@ -20,7 +20,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr ng-repeat="contacto in contactos_proveedor">
+                            <tr ng-repeat="contacto in contactos_entidad">
                                 <td>{{contacto.contacto}}</td>
                                 <td>{{contacto.telefono}}</td>
                                 <td>{{contacto.celular}}</td>
@@ -35,8 +35,8 @@
                                     </button>
                                 </td>
                             </tr>
-                            <tr ng-if="contactos_proveedor.length === 0">
-                                <td colspan="6" class="text-center">No hay contactos disponibles para este proveedor.</td>
+                            <tr ng-if="contactos_entidad.length === 0">
+                                <td colspan="6" class="text-center">No hay contactos disponibles.</td>
                             </tr>
                             <tr ng-if="agregarContactoActivo">
                                 <td><input type="text" class="form-control" ng-model="nuevoContacto.contacto" placeholder="Nombre" required></td>

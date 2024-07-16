@@ -4,8 +4,9 @@ require('./fpdf186/fpdf.php');
 
 class PDF extends FPDF
 {
-    // Propiedad para almacenar el total de páginas
+    // Propiedad para almacenar el total de páginas y el tipo de reporte
     public $totalPages;
+    public $reportType;
 
     // Cabecera de página
     function Header()
@@ -13,7 +14,7 @@ class PDF extends FPDF
         // Logo
         $this->Image('./images/logo.png', 10, 6, 30);
         $this->SetFont('Arial', 'B', 14);
-        $this->Cell(0, 10, 'Reporte de Proveedores', 0, 1, 'C');
+        $this->Cell(0, 10, 'Reporte de ' . $this->reportType, 0, 1, 'C');
         $this->Ln(10);
     }
 
@@ -34,11 +35,11 @@ class PDF extends FPDF
         $this->Cell(0, 10, 'Generado: ' . $dateTime, 0, 0, 'R');
     }
 
-    // Información del proveedor
+    // Información del proveedor o cliente
     function ProveedorInfo($data)
     {
         foreach ($data as $row) {
-            // Título del proveedor
+            // Título del proveedor o cliente
             $this->SetFont('Arial', 'B', 14);
             $this->Cell(0, 10, mb_convert_encoding($row['nombrecomercial'], 'ISO-8859-1', 'UTF-8'), 0, 1);
             
@@ -85,14 +86,18 @@ class PDF extends FPDF
                 $this->SetFont('Arial', '', 10);
 
                 foreach ($row['contactos'] as $contacto) {
-                    $this->SetFont('Arial', 'B', 10);
-                    $this->Cell(95, 5, mb_convert_encoding($contacto['contacto'], 'ISO-8859-1', 'UTF-8') . "\n", 0, 1);
-                    $this->SetFont('Arial', '', 10);
-                    $this->Cell(95, 5, mb_convert_encoding('Teléfono: ' . $contacto['contacto_telefono'], 'ISO-8859-1', 'UTF-8'), 0, 0);
-                    $this->Cell(95, 5, mb_convert_encoding('Celular: ' . $contacto['contacto_celular'], 'ISO-8859-1', 'UTF-8'), 0, 1);
-                    $this->Cell(95, 5, mb_convert_encoding('Email: ' . $contacto['contacto_email'], 'ISO-8859-1', 'UTF-8'), 0, 1);
-                    $this->MultiCell(0, 5, mb_convert_encoding('Comentarios: ' . $contacto['contacto_comentarios'], 'ISO-8859-1', 'UTF-8'), 0, 1);
-                    $this->Ln(2);
+                    if ($contacto['contacto'] === 'Sin contactos') {
+                        $this->Cell(0, 5, mb_convert_encoding('Sin contactos', 'ISO-8859-1', 'UTF-8'), 0, 1);
+                    } else {
+                        $this->SetFont('Arial', 'B', 10);
+                        $this->Cell(95, 5, mb_convert_encoding($contacto['contacto'], 'ISO-8859-1', 'UTF-8') . "\n", 0, 1);
+                        $this->SetFont('Arial', '', 10);
+                        $this->Cell(95, 5, mb_convert_encoding('Teléfono: ' . $contacto['contacto_telefono'], 'ISO-8859-1', 'UTF-8'), 0, 0);
+                        $this->Cell(95, 5, mb_convert_encoding('Celular: ' . $contacto['contacto_celular'], 'ISO-8859-1', 'UTF-8'), 0, 1);
+                        $this->Cell(95, 5, mb_convert_encoding('Email: ' . $contacto['contacto_email'], 'ISO-8859-1', 'UTF-8'), 0, 1);
+                        $this->MultiCell(0, 5, mb_convert_encoding('Comentarios: ' . $contacto['contacto_comentarios'], 'ISO-8859-1', 'UTF-8'), 0, 1);
+                        $this->Ln(2);
+                    }
                 }
             }
 
@@ -115,17 +120,22 @@ class PDF extends FPDF
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
 
+    // Determinar el tipo de reporte desde los datos recibidos
+    $reportType = !empty($data['tipo']) ? $data['tipo'] : 'Proveedores';
+
     // Crear el PDF para contar las páginas
     $pdf = new PDF();
+    $pdf->reportType = $reportType;
     $pdf->calculateTotalPages($data['proveedores']);
     $totalPages = $pdf->totalPages;
 
     // Generar el PDF final con el total de páginas
     $pdf = new PDF();
+    $pdf->reportType = $reportType;
     $pdf->totalPages = $totalPages;
     $pdf->AddPage();
     $pdf->ProveedorInfo($data['proveedores']);
     
-    $pdf->Output('D', 'ReporteProveedores.pdf');
+    $pdf->Output('D', 'Reporte' . $reportType . '.pdf');
 }
 ?>

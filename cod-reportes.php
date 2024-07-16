@@ -7,7 +7,7 @@ spl_autoload_register(function($NombreClase) {
     require_once $NombreClase . '.php';
 });
 
-class Proveedores {
+class Entidades {
     public $nombrecomercial = "";
     public $nombrecomun = "";
     public $direccion = "";
@@ -23,19 +23,19 @@ class Proveedores {
     public $clabe = "";
     public $contactos = []; // Añadir contactos
 
-    function BuscarInfo($idpais, $idestado, $idciudad, $activo) {
+    function BuscarInfo($idpais, $idestado, $idciudad, $tipo) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("CALL GetProveedores(?, ?, ?, ?)");
-        $query->bind_param("iiii", $idpais, $idestado, $idciudad, $activo);
+        $query = $cnn->prepare("CALL GetEntidades(?, ?, ?, ?)");
+        $query->bind_param("iiis", $idpais, $idestado, $idciudad, $tipo);
         $query->execute();
-        $query->bind_result($nombrefiscal, $nombrecomercial, $direccion, $rfc, $telefono, $correo, $web, $credito, $saldo, $diascredito, $nombrebanco, $cuenta, $clabe, $idproveedorcontactos, $contacto, $contacto_telefono, $contacto_celular, $contacto_email, $contacto_comentarios);
+        $query->bind_result($nombrefiscal, $nombrecomercial, $direccion, $rfc, $telefono, $correo, $web, $credito, $saldo, $diascredito, $nombrebanco, $cuenta, $clabe, $identidadcontactos, $contacto, $contacto_telefono, $contacto_celular, $contacto_email, $contacto_comentarios);
 
-        $proveedores = [];
+        $entidades = [];
         while ($query->fetch()) {
-            if (!isset($proveedores[$nombrefiscal])) {
-                $proveedores[$nombrefiscal] = array(
+            if (!isset($entidades[$nombrefiscal])) {
+                $entidades[$nombrefiscal] = array(
                     "nombrecomercial" => $nombrefiscal,
                     "nombrecomun" => $nombrecomercial,
                     "direccion" => $direccion,
@@ -52,9 +52,9 @@ class Proveedores {
                     "contactos" => []
                 );
             }
-            if ($idproveedorcontactos) {
-                $proveedores[$nombrefiscal]['contactos'][] = array(
-                    "idproveedorcontactos" => $idproveedorcontactos,
+            if ($identidadcontactos) {
+                $entidades[$nombrefiscal]['contactos'][] = array(
+                    "identidadcontactos" => $identidadcontactos,
                     "contacto" => $contacto,
                     "contacto_telefono" => $contacto_telefono,
                     "contacto_celular" => $contacto_celular,
@@ -64,11 +64,25 @@ class Proveedores {
             }
         }
 
+        // Verificar y asegurar que cada entidad tenga al menos un contacto
+        foreach ($entidades as &$entidad) {
+            if (count($entidad['contactos']) == 0) {
+                $entidad['contactos'][] = array(
+                    "contacto" => "Sin contactos",
+                    "contacto_telefono" => "",
+                    "contacto_celular" => "",
+                    "contacto_email" => "",
+                    "contacto_comentarios" => ""
+                );
+            }
+        }
+
         $query->close();
         $cnn->close();
-        return array_values($proveedores); // Convertir a un array indexado
+        return array_values($entidades); // Convertir a un array indexado
     }
 }
+
 
 class Ubicacion {
     public $idpais = 0;
@@ -152,9 +166,9 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
             echo json_encode($ciudades);
             break;
 
-        case "info_proveedor":
-            $proveedor = new Proveedores();
-            echo json_encode($proveedor->BuscarInfo($json_data->idpais, $json_data->idestado, $json_data->idciudad, $json_data->activo));
+        case "info_entidad":
+            $entidad = new Entidades();
+            echo json_encode($entidad->BuscarInfo($json_data->idpais, $json_data->idestado, $json_data->idciudad, $json_data->tipo));
             break;
     }
 }

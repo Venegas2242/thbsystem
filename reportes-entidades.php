@@ -5,7 +5,7 @@ if (!isset($_SESSION['idusuario'])) {
     exit();
 }
 
-$section_name = "Proveedores";
+$section_name = "Proveedores/Clientes";
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +16,7 @@ $section_name = "Proveedores";
     <!-- Referencias CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css"/>
-    <link rel="stylesheet" href="./styles/proveedores-style.css">
+    <link rel="stylesheet" href="./styles/entidades-style.css">
     <style>
         .table-responsive::-webkit-scrollbar {
             width: 12px;
@@ -98,16 +98,15 @@ $section_name = "Proveedores";
                                 </select>
                             </div>
                             <div class="form-group col-md-3">
-                                <label>Estado:</label>
-                                <select id="cmbActivo" ng-model="ubicacion.activo" class="form-control">
-                                    <option value="">Activo</option>
-                                    <option value="0">Inactivo</option>
-                                    <option value="2">Ambos</option>
+                                <label>Tipo:</label>
+                                <select id="cmbTipo" ng-model="ubicacion.tipo" class="form-control">
+                                    <option value="">Proveedores</option>
+                                    <option value="Cliente">Clientes</option>
                                 </select>
                             </div>
                         </div>
                         <button type="button" class="btn btn-primary" ng-click="generarReporte()">Generar Reporte</button>
-                        <button type="button" class="btn btn-secondary" ng-click="descargarPDF()" ng-disabled="!detalles_proveedor.length">
+                        <button type="button" class="btn btn-secondary" ng-click="descargarPDF(this.ubicacion)" ng-disabled="!detalles_entidad.length">
                         <i class="fa-solid fa-file-pdf"></i> Descargar PDF
                         </button>
                     </form>
@@ -133,23 +132,23 @@ $section_name = "Proveedores";
                         </tr>
                     </thead>
                     <tbody>
-                        <tr ng-if="detalles_proveedor.length == 0">
-                            <td colspan="13" class="text-center">No hay proveedores que coincidan</td>
+                        <tr ng-if="detalles_entidad.length == 0">
+                            <td colspan="13" class="text-center">No hay entidades que coincidan</td>
                         </tr>
-                        <tr ng-repeat="proveedor in detalles_proveedor">
-                            <td>{{proveedor.nombrecomercial}}</td>
-                            <td>{{proveedor.nombrecomun}}</td>
-                            <td>{{proveedor.direccion}}</td>
-                            <td>{{proveedor.rfc}}</td>
-                            <td>{{proveedor.telefono}}</td>
-                            <td>{{proveedor.correo}}</td>
-                            <td>{{proveedor.web}}</td>
-                            <td>{{proveedor.credito}}</td>
-                            <td>{{proveedor.saldo}}</td>
-                            <td>{{proveedor.diascredito}}</td>
-                            <td>{{proveedor.banco}}</td>
-                            <td>{{proveedor.cuenta}}</td>
-                            <td>{{proveedor.clabe}}</td>
+                        <tr ng-repeat="entidad in detalles_entidad">
+                            <td>{{entidad.nombrecomercial}}</td>
+                            <td>{{entidad.nombrecomun}}</td>
+                            <td>{{entidad.direccion}}</td>
+                            <td>{{entidad.rfc}}</td>
+                            <td>{{entidad.telefono}}</td>
+                            <td>{{entidad.correo}}</td>
+                            <td>{{entidad.web}}</td>
+                            <td>{{entidad.credito}}</td>
+                            <td>{{entidad.saldo}}</td>
+                            <td>{{entidad.diascredito}}</td>
+                            <td>{{entidad.banco}}</td>
+                            <td>{{entidad.cuenta}}</td>
+                            <td>{{entidad.clabe}}</td>
                         </tr>
                     </tbody>
                 </table>

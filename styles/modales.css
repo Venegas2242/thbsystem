@@ -1,8 +1,4 @@
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 1rem;
-}
-
+/* Tal vez editar esto en celular */
 .modal-content {
     border-radius: 1rem;
     padding: 2rem;
@@ -191,6 +187,7 @@ th, td {
     vertical-align: middle;
 }
 
+
 .form-group.col-md-1 {
     padding-left: 0;
     display: flex;
@@ -198,11 +195,13 @@ th, td {
     justify-content: center;
 }
 
+/* 
+Esto desborda
 .modal-body {
     display: flex;
     flex-direction: column;
     align-items: center;
-}
+} */
 
 .col-comentarios {
     word-wrap: break-word;

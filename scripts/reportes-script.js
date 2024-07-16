@@ -4,13 +4,13 @@ myApp.controller('cReportes', function ($scope, $http) {
     $scope.listaPaises = [];
     $scope.listaEstados = [];
     $scope.listaCiudades = [];
-    $scope.detalles_proveedor = [];
+    $scope.detalles_entidad = [];
 
     $scope.ubicacion = {
         idpais: null,
         idestado: null,
         idciudad: null,
-        activo: null // Añadir activo a la ubicación
+        tipo: null // Cambiar activo a tipo
     };
 
     // Obtener lista de países al cargar la página
@@ -53,54 +53,50 @@ myApp.controller('cReportes', function ($scope, $http) {
         }
     };
 
-    $scope.InfoProveedor = function (idpais, idestado, idciudad, activo) {
+    $scope.InfoEntidad = function (idpais, idestado, idciudad, tipo) {
         idpais = idpais || 0;
         idestado = idestado || 0;
         idciudad = idciudad || 0;
-        activo = activo == null || activo.length == 0 ? 1: activo; // Si activo no está definido, usar 1 por defecto
+        tipo = tipo || 'Proveedor'; // Si tipo no está definido, usar 'Proveedor' por defecto
 
-        console.log("Ids:", idpais, idestado, idciudad, "->", activo, "<-");
+        console.log("Ids:", idpais, idestado, idciudad, "->", tipo, "<-");
 
         $http({
             method: "POST",
-            url: 'cod-reportes.php?functionToCall=info_proveedor',
-            data: { idpais: idpais, idestado: idestado, idciudad: idciudad, activo: activo }
+            url: 'cod-reportes.php?functionToCall=info_entidad',
+            data: { idpais: idpais, idestado: idestado, idciudad: idciudad, tipo: tipo }
         }).then(function (response) {
-            console.log('Información completa del proveedor:', response.data);
-            $scope.detalles_proveedor = response.data.length ? response.data : [];
+            console.log('Información completa de la entidad:', response.data);
+            $scope.detalles_entidad = response.data.length ? response.data : [];
         }, function (error) {
             console.error('Error:', error);
-            $scope.detalles_proveedor = [];
+            $scope.detalles_entidad = [];
         });
     };
 
     $scope.generarReporte = function() {
-        $scope.InfoProveedor($scope.ubicacion.idpais, $scope.ubicacion.idestado, $scope.ubicacion.idciudad, $scope.ubicacion.activo);
+        $scope.InfoEntidad($scope.ubicacion.idpais, $scope.ubicacion.idestado, $scope.ubicacion.idciudad, $scope.ubicacion.tipo);
     };
 
     $scope.descargarPDF = function() {
-        var filtros = {
-            pais: $scope.ubicacion.idpais ? ($scope.listaPaises.find(p => p.idpais === $scope.ubicacion.idpais) || {}).nombre || 'Todos' : 'Todos',
-            estado: $scope.ubicacion.idestado ? ($scope.listaEstados.find(e => e.idestado === $scope.ubicacion.idestado) || {}).nombre || 'Todos' : 'Todos',
-            ciudad: $scope.ubicacion.idciudad ? ($scope.listaCiudades.find(c => c.idciudad === $scope.ubicacion.idciudad) || {}).nombre || 'Todas' : 'Todas',
-            activo: $scope.ubicacion.activo !== null ? ($scope.ubicacion.activo == 1 ? 'Activo' : 'Inactivo') : 'Todos'
-        };
-
+        var tipo = $scope.ubicacion.tipo || "Proveedor";
+    
         var data = {
-            filtros: filtros,
-            proveedores: $scope.detalles_proveedor
+            proveedores: $scope.detalles_entidad,
+            tipo: tipo
         };
-
-        console.log("Filtros:", filtros);
-
+    
+        console.log("Tipo:", tipo);
+    
         $http.post('generar_pdf.php', data, { responseType: 'arraybuffer' }).then(function (response) {
             var blob = new Blob([response.data], { type: 'application/pdf' });
             var link = document.createElement('a');
             link.href = window.URL.createObjectURL(blob);
-            link.download = 'ReporteProveedores.pdf';
+            link.download = 'Reporte' + tipo + '.pdf';
             link.click();
         }, function (error) {
             console.error('Error al generar el PDF:', error);
         });
     };
+    
 });

@@ -3,41 +3,42 @@
 create schema if not exists thb default character set latin1 collate latin1_general_ci;
 use thb;
 
--- Tabla Proveedor
-CREATE TABLE IF NOT EXISTS `cat_proveedor` (
-  `idproveedor` int NOT NULL AUTO_INCREMENT COMMENT 'clave del proveedor',
-  `nombrefiscal` varchar(200) NOT NULL COMMENT 'Nombre fiscal del proveedor',
-  `nombrecomun` varchar(200) NOT NULL COMMENT 'Nombre comercial del proveedor',
-  `direccion` varchar(160) DEFAULT NULL COMMENT 'Direccion fiscal del proveedor',
-  `idciudad` int NOT NULL COMMENT 'Id de la ciudad del proveedor',
-  `idestado` int NOT NULL COMMENT 'Id del estado del proveedor',
-  `idpais` int NOT NULL COMMENT 'Id del pais del proveedor',
-  `rfc` varchar(17) DEFAULT NULL COMMENT 'RFC del proveedor',
-  `telefono` varchar(40) DEFAULT NULL COMMENT 'Telefono del proveedor',
-  `correo` varchar(100) DEFAULT NULL COMMENT 'Correo electronico del proveedor',
-  `web` varchar(100) DEFAULT NULL COMMENT 'Pagina web del proveedor',
+-- Tabla entidad
+CREATE TABLE IF NOT EXISTS `cat_entidad` (
+  `identidad` int NOT NULL AUTO_INCREMENT COMMENT 'clave del proveedor/cliente',
+  `nombrefiscal` varchar(200) NOT NULL COMMENT 'Nombre fiscal del proveedor/cliente',
+  `nombrecomun` varchar(200) NOT NULL COMMENT 'Nombre comercial del proveedor/cliente',
+  `direccion` varchar(160) DEFAULT NULL COMMENT 'Direccion fiscal del proveedor/cliente',
+  `idciudad` int NOT NULL COMMENT 'Id de la ciudad del proveedor/cliente',
+  `idestado` int NOT NULL COMMENT 'Id del estado del proveedor/cliente',
+  `idpais` int NOT NULL COMMENT 'Id del pais del proveedor/cliente',
+  `rfc` varchar(17) DEFAULT NULL COMMENT 'RFC del proveedor/cliente',
+  `telefono` varchar(40) DEFAULT NULL COMMENT 'Telefono del proveedor/cliente',
+  `correo` varchar(100) DEFAULT NULL COMMENT 'Correo electronico del proveedor/cliente',
+  `web` varchar(100) DEFAULT NULL COMMENT 'Pagina web del proveedor/cliente',
   `credito` double NOT NULL COMMENT 'Credito autorizado',
   `saldo` double NOT NULL COMMENT 'Saldo del cliente',
   `diascredito` int NOT NULL COMMENT 'Dias de credito',
-  `idbanco` varchar(30) DEFAULT NULL COMMENT 'Banco para realizar pagos',
+  `idbanco` varchar(30) NOT NULL COMMENT 'Banco para realizar pagos',
   `cuenta` varchar(20) DEFAULT NULL COMMENT 'Numero de cuenta',
   `clabe` varchar(25) DEFAULT NULL COMMENT 'Cuenta clabe para transferencias',
-  `activo` BOOLEAN NOT NULL DEFAULT 1 COMMENT 'True para proveedores activos y False para cancelados.',
-  CONSTRAINT pk_productos PRIMARY KEY (idproveedor),
+  `activo` BOOLEAN NOT NULL DEFAULT 1 COMMENT 'True para proveedores/clientes activos y False para cancelados.',
+  `tipo` varchar(20) NOT NULL DEFAULT 'Proveedor' COMMENT 'Elegir si es Proveedor o Cliente',
+  CONSTRAINT pk_productos PRIMARY KEY (identidad),
   CONSTRAINT uq_productos_rfc UNIQUE (rfc)
 );
 
--- Tabla Proveedor Contactos
-CREATE TABLE IF NOT EXISTS `cat_proveedorcontactos` (
-  `idproveedorcontactos` int NOT NULL AUTO_INCREMENT COMMENT 'clave del contacto',
-  `idproveedor` int NOT NULL COMMENT 'clave del proveedor',
+-- Tabla entidad Contactos
+CREATE TABLE IF NOT EXISTS `cat_entidadcontactos` (
+  `identidadcontactos` int NOT NULL AUTO_INCREMENT COMMENT 'clave del contacto',
+  `identidad` int NOT NULL COMMENT 'clave del proveedor/contacto',
   `contacto` varchar(150) DEFAULT NULL COMMENT 'Nombre del contacto',
   `telefono` varchar(40) DEFAULT NULL COMMENT 'Telefono',
   `celular` varchar(40) DEFAULT NULL COMMENT 'Celular',
   `email` varchar(255) DEFAULT NULL COMMENT 'Email',
   `comentarios` varchar(250) DEFAULT NULL COMMENT 'Comentarios',
   `activo` BOOLEAN NOT NULL DEFAULT 1,
-  PRIMARY KEY (`idproveedorcontactos`)
+  PRIMARY KEY (`identidadcontactos`)
 );
 
 -- Tabla País
@@ -87,57 +88,57 @@ CREATE TABLE IF NOT EXISTS `cat_usuario` (
 
 -- SECCIÓN 2: Inserción de datos de prueba
 
--- Insertar datos en la tabla Proveedor
--- Insertar más proveedores
-insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
+-- Insertar datos en la tabla entidad
+-- Insertar más entidades
+insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
 values('HERRAMIENTAS Y MATERIALES, S.A. DE C.V.','HERRAMIENTAS Y MATERIALES','AV. REVOLUCIÓN 123, COL. CENTRO','4','4','1','HYM123456789','5551234567','contacto@herramientas.com','www.herramientas.com','50000','10000','30','2','12345678','876543210987654321');
-insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
+insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
 values('PLÁSTICOS DEL NORTE, S.A. DE C.V.','PLÁSTICOS DEL NORTE','CALLE INDUSTRIAL 456, ZONA INDUSTRIAL','15','15','1','PDN987654321','5557654321','ventas@plasticosnorte.com','www.plasticosnorte.com','30000','5000','45','3','87654321','123456789012345678');
-insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
+insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
 values('ALIMENTOS NATURALES, S.A. DE C.V.','ALIMENTOS NATURALES','AV. LA SALUD 789, COL. VERDE','30','30','1','AN123456789','5559876543','info@alimentosnaturales.com','www.alimentosnaturales.com','60000','15000','60','1','23456789','210987654321098765');
-insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
+insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
 values('TECNOLOGÍA AVANZADA, S.A. DE C.V.','TECNOLOGÍA AVANZADA','BLVD. TECNOLÓGICO 321, PARQUE TECNOLÓGICO','22','22','1','TA987654321','5556543210','soporte@tecnologiaavanzada.com','www.tecnologiaavanzada.com','40000','20000','90','4','56789012','432109876543210987');
-insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
+insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
 values('CONSTRUCCIONES MODERNAS, S.A. DE C.V.','CONSTRUCCIONES MODERNAS','CALLE OBRAS 987, COL. CONSTRUCCIÓN','25','25','1','CM123456789','5554321098','contacto@construccionesmodernas.com','www.construccionesmodernas.com','70000','25000','120','5','89012345','678901234567890123');
-insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
+insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
 values('SERVICIOS INTEGRALES, S.A. DE C.V.','SERVICIOS INTEGRALES','AV. PRINCIPAL 111, COL. COMERCIAL','28','28','1','SI987654321','5553210987','contacto@serviciosintegrales.com','www.serviciosintegrales.com','20000','10000','30','6','90123456','987654321098765432');
-insert into cat_proveedor(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
+insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
 values('ELECTRODOMÉSTICOS DE CALIDAD, S.A. DE C.V.','ELECTRODOMÉSTICOS DE CALIDAD','CALLE ELECTRÓNICA 654, PARQUE INDUSTRIAL','31','31','1','EC123456789','5552109876','ventas@electrodomesticoscalidad.com','www.electrodomesticoscalidad.com','80000','50000','60','7','23456789','109876543210987654');
 
 -- Insertar contactos para el proveedor 1
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (1, 'Contacto 4', '4623080337', '4622080336', 'contacto_4@correo.com', 'Contacto 4 de proveedor 1');
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (1, 'Contacto 5', '4625550990', '4625550984', 'contacto_5@correo.com', 'Contacto 5 de proveedor 1');
 -- Insertar contactos para el proveedor 2
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (2, 'Contacto 6', '4625431091', '4625431093', 'contacto_6@correo.com', 'Contacto 2 de proveedor 2');
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (2, 'Contacto 7', '4625431094', '4625431095', 'contacto_7@correo.com', 'Contacto 3 de proveedor 2');
 -- Insertar contactos para el proveedor 3
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (3, 'Contacto 8', '4625431096', '4625431097', 'contacto_8@correo.com', 'Contacto 1 de proveedor 3');
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (3, 'Contacto 9', '4625431098', '4625431099', 'contacto_9@correo.com', 'Contacto 2 de proveedor 3');
 -- Insertar contactos para el proveedor 4
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (4, 'Contacto 10', '4625431100', '4625431101', 'contacto_10@correo.com', 'Contacto 1 de proveedor 4');
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (4, 'Contacto 11', '4625431102', '4625431103', 'contacto_11@correo.com', 'Contacto 2 de proveedor 4');
 -- Insertar contactos para el proveedor 5
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (5, 'Contacto 12', '4625431104', '4625431105', 'contacto_12@correo.com', 'Contacto 1 de proveedor 5');
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (5, 'Contacto 13', '4625431106', '4625431107', 'contacto_13@correo.com', 'Contacto 2 de proveedor 5');
 -- Insertar contactos para el proveedor 6
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (6, 'Contacto 14', '4625431108', '4625431109', 'contacto_14@correo.com', 'Contacto 1 de proveedor 6');
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (6, 'Contacto 15', '4625431110', '4625431111', 'contacto_15@correo.com', 'Contacto 2 de proveedor 6');
 -- Insertar contactos para el proveedor 7
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (7, 'Contacto 16', '4625431112', '4625431113', 'contacto_16@correo.com', 'Contacto 1 de proveedor 7');
-insert into cat_proveedorcontactos(idproveedor, contacto, telefono, celular, email, comentarios) 
+insert into cat_entidadcontactos(identidad, contacto, telefono, celular, email, comentarios) 
 values (7, 'Contacto 17', '4625431114', '4625431115', 'contacto_17@correo.com', 'Contacto 2 de proveedor 7');
 
 -- Insertar datos en la tabla País
@@ -330,8 +331,8 @@ insert into `cat_usuario` (`usuario`, `contrasenia`) values ('DVENEGAS', SHA2('a
 DELIMITER //
 
 -- Procedimiento para agregar contacto
-CREATE PROCEDURE `proc_AgregarContactoProveedor` (
-    IN p_idproveedor INT,
+CREATE PROCEDURE `proc_AgregarContactoEntidad` (
+    IN p_identidad INT,
     IN p_contacto VARCHAR(255),
     IN p_telefono VARCHAR(255),
     IN p_celular VARCHAR(255),
@@ -339,9 +340,9 @@ CREATE PROCEDURE `proc_AgregarContactoProveedor` (
     IN p_comentarios TEXT
 )
 BEGIN
-    INSERT INTO cat_proveedorcontactos (idproveedor, contacto, telefono, celular, email, comentarios)
+    INSERT INTO cat_entidadcontactos (identidad, contacto, telefono, celular, email, comentarios)
     VALUES (
-        p_idproveedor,
+        p_identidad,
         p_contacto,
         p_telefono,
         p_celular,
@@ -351,17 +352,17 @@ BEGIN
 END //
 
 -- Procedimiento para eliminar contacto
-CREATE PROCEDURE `proc_EliminarContactoProveedor` (
-    IN p_idproveedorcontactos INT
+CREATE PROCEDURE `proc_EliminarContactoEntidad` (
+    IN p_identidadcontactos INT
 )
 BEGIN
-    UPDATE `cat_proveedorcontactos`
+    UPDATE `cat_entidadcontactos`
     SET `activo` = 0
-    WHERE `idproveedorcontactos` = p_idproveedorcontactos;
+    WHERE `identidadcontactos` = p_identidadcontactos;
 END //
 
 -- Procedimiento para editar contacto
-CREATE PROCEDURE `proc_EditarContactoProveedor` (
+CREATE PROCEDURE `proc_EditarContactoEntidad` (
     IN p_idcontacto INT,
     IN p_contacto VARCHAR(255),
     IN p_telefono VARCHAR(255),
@@ -370,39 +371,39 @@ CREATE PROCEDURE `proc_EditarContactoProveedor` (
     IN p_comentarios TEXT
 )
 BEGIN
-    UPDATE `cat_proveedorcontactos`
+    UPDATE `cat_entidadcontactos`
     SET
         `contacto` = p_contacto,
         `telefono` = p_telefono,
         `celular` = p_celular,
         `email` = p_email,
         `comentarios` = p_comentarios
-    WHERE `idproveedorcontactos` = p_idcontacto;
+    WHERE `identidadcontactos` = p_idcontacto;
 END //
 
--- Procedimiento para listar contactos de un proveedor
-CREATE PROCEDURE `proc_ContactosProveedor` (
-    IN id_proveedor INT
+-- Procedimiento para listar contactos de un entidad
+CREATE PROCEDURE `proc_ContactosEntidad` (
+    IN id_entidad INT
 )
 BEGIN
-    SELECT idproveedorcontactos, contacto, telefono, celular, email, comentarios
-    FROM cat_proveedorcontactos
-    WHERE idproveedor = id_proveedor AND activo = 1;
+    SELECT identidadcontactos, contacto, telefono, celular, email, comentarios
+    FROM cat_entidadcontactos
+    WHERE identidad = id_entidad AND activo = 1;
 END //
 
--- Procedimiento para buscar proveedor
-CREATE PROCEDURE `proc_ProveedorBuscar` (
+-- Procedimiento para buscar entidad
+CREATE PROCEDURE `proc_EntidadBuscar` (
     IN prmTextoBuscar NVARCHAR(200)
 )
 BEGIN
-    SELECT p.idproveedor, p.nombrefiscal, p.rfc, p.telefono, p.correo
-    FROM cat_proveedor p
+    SELECT p.identidad, p.nombrefiscal, p.rfc, p.telefono, p.correo, p.tipo
+    FROM cat_entidad p
     WHERE CONCAT(p.nombrefiscal, ' ', p.nombrecomun) LIKE CONCAT('%', prmTextoBuscar, '%') AND p.activo = 1;
 END //
 
--- Procedimiento para grabar proveedor
-CREATE PROCEDURE `proc_ProveedorGrabar` (
-    IN prmidproveedor INT,
+-- Procedimiento para grabar entidad
+CREATE PROCEDURE `proc_EntidadGrabar` (
+    IN prmidentidad INT,
     IN prmnombrefiscal VARCHAR(200),
     IN prmnombrecomun VARCHAR(200),
     IN prmdireccion VARCHAR(160),
@@ -418,26 +419,27 @@ CREATE PROCEDURE `proc_ProveedorGrabar` (
     IN prmdiascredito INT,
     IN prmidbanco VARCHAR(30),
     IN prmcuenta VARCHAR(20),
-    IN prmclabe VARCHAR(25)
+    IN prmclabe VARCHAR(25),
+    IN prmtipo VARCHAR(20)
 )
 BEGIN
-    IF (prmidproveedor = 0) THEN
+    IF (prmidentidad = 0) THEN
         BEGIN
-            IF EXISTS (SELECT 1 FROM cat_proveedor WHERE rfc = prmrfc) THEN
-                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe otro proveedor con el mismo RFC';
+            IF EXISTS (SELECT 1 FROM cat_entidad WHERE rfc = prmrfc) THEN
+                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe otro entidad con el mismo RFC';
             END IF;
             /* Insertar registro */
-            INSERT INTO cat_proveedor (nombrefiscal, nombrecomun, direccion, idciudad, idestado, idpais, rfc, telefono, correo, web, credito, saldo, diascredito, idbanco, cuenta, clabe)
-            VALUES (prmnombrefiscal, prmnombrecomun, prmdireccion, prmidciudad, prmidestado, prmidpais, prmrfc, prmtelefono, prmcorreo, prmweb, prmcredito, prmsaldo, prmdiascredito, prmidbanco, prmcuenta, prmclabe);
+            INSERT INTO cat_entidad (nombrefiscal, nombrecomun, direccion, idciudad, idestado, idpais, rfc, telefono, correo, web, credito, saldo, diascredito, idbanco, cuenta, clabe, tipo)
+            VALUES (prmnombrefiscal, prmnombrecomun, prmdireccion, prmidciudad, prmidestado, prmidpais, prmrfc, prmtelefono, prmcorreo, prmweb, prmcredito, prmsaldo, prmdiascredito, prmidbanco, prmcuenta, prmclabe, prmtipo);
             /* Obtener Id generado */
-            SET prmidproveedor = LAST_INSERT_ID();
+            SET prmidentidad = LAST_INSERT_ID();
         END;
     ELSE
         BEGIN
-            IF EXISTS (SELECT 1 FROM cat_proveedor WHERE rfc = prmrfc AND idproveedor <> prmidproveedor) THEN
-                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe otro proveedor con el mismo RFC';
+            IF EXISTS (SELECT 1 FROM cat_entidad WHERE rfc = prmrfc AND identidad <> prmidentidad) THEN
+                SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Ya existe otro entidad con el mismo RFC';
             END IF;
-            UPDATE cat_proveedor SET
+            UPDATE cat_entidad SET
                 nombrefiscal = prmnombrefiscal,
                 nombrecomun = prmnombrecomun,
                 direccion = prmdireccion,
@@ -453,36 +455,37 @@ BEGIN
                 diascredito = prmdiascredito,
                 idbanco = prmidbanco,
                 cuenta = prmcuenta,
-                clabe = prmclabe
-            WHERE idproveedor = prmidproveedor;
+                clabe = prmclabe,
+                tipo = prmtipo
+            WHERE identidad = prmidentidad;
         END;
     END IF;
-    SELECT prmidproveedor;
+    SELECT prmidentidad;
 END //
 
--- Procedimiento para eliminar proveedor
-CREATE PROCEDURE `proc_ProveedorEliminar` (
-    IN prmidproveedor INT
+-- Procedimiento para eliminar entidad
+CREATE PROCEDURE `proc_EntidadEliminar` (
+    IN prmidentidad INT
 )
 BEGIN
-    UPDATE cat_proveedor
+    UPDATE cat_entidad
     SET activo = 0
-    WHERE idproveedor = prmidproveedor;
-    SELECT prmidproveedor;
+    WHERE identidad = prmidentidad;
+    SELECT prmidentidad;
 END //
 
--- Procedimiento para obtener información del proveedor
-CREATE PROCEDURE `proc_ProveedorInfo` (
-    IN id_proveedor INT
+-- Procedimiento para obtener información del entidad
+CREATE PROCEDURE `proc_EntidadInfo` (
+    IN id_entidad INT
 )
 BEGIN
     SELECT nombrefiscal, nombrecomun, direccion, ci.idciudad, ci.nombre Ciudad, es.idestado, es.nombre Estado, pa.idpais, pa.nombre Pais, rfc, telefono, correo, web, credito, saldo, diascredito, b.idbanco, b.nombre, cuenta, clabe
-    FROM cat_proveedor p
+    FROM cat_entidad p
     JOIN cat_pais pa ON p.idpais = pa.idpais
     JOIN cat_estado es ON p.idestado = es.idestado
     JOIN cat_ciudad ci ON p.idciudad = ci.idciudad
     JOIN cat_bancos b ON p.idbanco = b.idbanco
-    WHERE p.idproveedor = id_proveedor;
+    WHERE p.identidad = id_entidad;
 END //
 
 -- Procedimientos para obtener listas de países, estados y ciudades
@@ -533,14 +536,14 @@ END //
 
 DELIMITER ;
 
--- Procedimiento para verificar usuario
+-- Para filtrar al generar reportes
 DELIMITER //
 
-CREATE PROCEDURE `GetProveedores` (
+CREATE PROCEDURE `GetEntidades` (
     IN pidpais INT,
     IN pidestado INT,
     IN pidciudad INT,
-    IN pactivo INT
+    IN ptipo VARCHAR(50) -- Cambiar a VARCHAR para aceptar 'Proveedor' o 'Cliente'
 )
 BEGIN
     SELECT 
@@ -557,24 +560,23 @@ BEGIN
         b.nombre AS Banco, 
         p.cuenta, 
         p.clabe,
-        c.idproveedorcontactos,
-        c.contacto,
-        c.telefono AS contacto_telefono,
-        c.celular AS contacto_celular,
-        c.email AS contacto_email,
-        c.comentarios AS contacto_comentarios
+        COALESCE(c.identidadcontactos, 0) AS identidadcontactos,
+        COALESCE(c.contacto, 'Sin contactos') AS contacto,
+        COALESCE(c.telefono, '') AS contacto_telefono,
+        COALESCE(c.celular, '') AS contacto_celular,
+        COALESCE(c.email, '') AS contacto_email,
+        COALESCE(c.comentarios, '') AS contacto_comentarios
     FROM 
-        cat_proveedor p
+        cat_entidad p
     JOIN 
         cat_bancos b ON p.idbanco = b.idbanco
     LEFT JOIN 
-        cat_proveedorcontactos c ON p.idproveedor = c.idproveedor
+        cat_entidadcontactos c ON p.identidad = c.identidad
     WHERE 
         (pidpais = 0 OR p.idpais = pidpais)
         AND (pidestado = 0 OR p.idestado = pidestado)
         AND (pidciudad = 0 OR p.idciudad = pidciudad)
-        AND (pactivo = 2 OR p.activo = pactivo)
-        AND p.activo = 1;
+        AND p.tipo = ptipo;
 END //
 
 DELIMITER ;

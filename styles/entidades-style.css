@@ -1,3 +1,4 @@
+/* Estilos generales */
 html, body {
     height: 100%;
     margin: 0;
@@ -17,6 +18,8 @@ body {
 
 .main-content {
     flex: 1;
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    padding: 1rem; /* Añade padding para mejor visualización en móvil */
 }
 
 .footer {
@@ -76,44 +79,6 @@ body {
     align-items: center;
 }
 
-@media (max-width: 768px) {
-    body {
-        font-size: 0.9rem;
-    }
-
-    .btn {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.9rem;
-    }
-
-    .form-control {
-        font-size: 0.9rem;
-    }
-
-    .modal-title {
-        font-size: 1.25rem;
-    }
-}
-
-@media (max-width: 576px) {
-    body {
-        font-size: 0.8rem;
-    }
-
-    .btn {
-        padding: 0.5rem 1rem;
-        font-size: 0.8rem;
-    }
-
-    .form-control {
-        font-size: 0.8rem;
-    }
-
-    .modal-title {
-        font-size: 1rem;
-    }
-}
-
 .fade-in {
     animation: fadeIn 1.5s;
 }
@@ -160,6 +125,12 @@ body {
     font-size: 1.5rem;
 }
 
+.card h5 {
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: calc(100% - 4rem); /* Ajusta el ancho máximo para evitar que invada el espacio de los iconos */
+}
+
 /* Estilos para la scrollbar vertical */
 ::-webkit-scrollbar {
     width: 0px;
@@ -181,4 +152,56 @@ body {
 
 .btn-primary-custom:active {
     background-color: rgb(126, 36, 16);
+}
+
+.card-cliente {
+    border-left: 5px solid #007bff; /* Azul para Cliente */
+    padding-left: 10px;
+}
+
+.card-proveedor {
+    border-left: 5px solid #a72828; /* Rojo para Proveedor */
+    padding-left: 10px;
+}
+
+.tipo-entidad {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #007bff; /* Azul para Cliente */
+}
+
+.card-proveedor .tipo-entidad {
+    color: #a72828; /* Rojo para Proveedor */
+}
+
+/* Ajustes para pantallas pequeñas */
+@media screen and (max-width: 450px) {
+    .content-wrapper {
+        padding-top: 3rem; /* Ajuste según el tamaño del menú en móvil */
+    }
+
+    .main-content {
+        padding: 0.5rem; /* Reduce el padding en móvil */
+    }
+
+    .btn {
+        font-size: 1.2rem; /* Tamaño de fuente más pequeño en móvil */
+    }
+
+    .card {
+        padding: 1rem; /* Reduce el padding en las tarjetas */
+        font-size: 0.9rem; /* Reduce el tamaño de fuente en las tarjetas */
+    }
+
+    .delete-icon, .contacts-icon {
+        font-size: 1.2rem; /* Reduce el tamaño de los íconos */
+    }
+
+    .btn-primary-custom {
+        font-size: 1rem; /* Reduce el tamaño de los botones */
+    }
+
+    .footer {
+        padding: 10px 0; /* Reduce el padding del footer */
+    }
 }

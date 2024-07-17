@@ -580,3 +580,42 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+
+-- Procedimiento para obtener todos los usuarios
+CREATE PROCEDURE proc_getUsuarios()
+BEGIN
+    SELECT idusuario, usuario FROM cat_usuario WHERE Activo = 1;
+END //
+
+-- Procedimiento para insertar o actualizar un usuario
+CREATE PROCEDURE proc_UsuarioGrabar(
+    IN p_idusuario INT,
+    IN p_usuario VARCHAR(15),
+    IN p_contrasena VARCHAR(100)
+)
+BEGIN
+    IF p_idusuario = 0 THEN
+        INSERT INTO cat_usuario (usuario, contrasenia) VALUES (p_usuario, SHA2(p_contrasena, 256));
+    ELSE
+        UPDATE cat_usuario SET usuario = p_usuario, contrasenia = SHA2(p_contrasena, 256) WHERE idusuario = p_idusuario;
+    END IF;
+END //
+
+-- Procedimiento para eliminar un usuario
+CREATE PROCEDURE proc_UsuarioEliminar(IN p_idusuario INT)
+BEGIN
+    UPDATE cat_usuario SET Activo = 0 WHERE idusuario = p_idusuario;
+END //
+
+-- Procedimiento para actualizar la contraseña de un usuario
+CREATE PROCEDURE proc_ActualizarContrasena(
+    IN p_idusuario INT,
+    IN p_contrasena VARCHAR(100)
+)
+BEGIN
+    UPDATE cat_usuario SET contrasenia = p_contrasena WHERE idusuario = p_idusuario;
+END //
+
+DELIMITER ;

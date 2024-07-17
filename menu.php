@@ -16,7 +16,7 @@
         </h1>
     </div>
     <div class="menu-btn" onclick="toggleNav()">
-        <span>&#9776;</span>
+        <span>&#9776; sdas</span>
     </div>
 
     <div id="mySidenav" class="sidenav">
@@ -27,7 +27,7 @@
         <div class="dropdown-container">
             <a class="dropdown-item" href="usuarios.php"><i class="fa-solid fa-user-plus"></i> Usuarios</a>
             <a class="dropdown-item" href="#"><i class="fa-solid fa-building"></i> Ciudades</a>
-            <a class="dropdown-item" href="#"><i class="fa-solid fa-money-check-dollar"></i> Bancos</a>
+            <a class="dropdown-item" href="bancos.php"><i class="fa-solid fa-money-check-dollar"></i> Bancos</a>
             <a class="dropdown-item" href="entidades.php"><i class="fas fa-truck me-2"></i> Prov/Clien</a>
             <a class="dropdown-item" href="#"><i class="fas fa-box me-2"></i> Productos</a>
         </div>

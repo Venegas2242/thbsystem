@@ -5,11 +5,11 @@ if (!isset($_SESSION['idusuario'])) {
     exit();
 }
 
-$section_name = "Usuarios";
+$section_name = "Gestión de Bancos";
 ?>
 
 <!DOCTYPE html>
-<html ng-app="appUsuarios">
+<html ng-app="appBancos">
 
 <head>
     <meta charset="UTF-8">
@@ -18,9 +18,15 @@ $section_name = "Usuarios";
     <!-- Referencias CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css" />
-    <!-- <link rel="stylesheet" href="./styles/usuarios-style.css"> -->
-     <link rel="stylesheet" href="./styles/footer.css">
+    <link rel="stylesheet" href="./styles/bancos-style.css">
     <style>
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+        }
+
         .content-wrapper {
             padding-top: 5rem;
             /* Ajusta este valor según la altura de tu menú */
@@ -68,7 +74,7 @@ $section_name = "Usuarios";
             background-color: #f1f1f1;
         }
 
-        .add-user-btn {
+        .add-bank-btn {
             font-size: 1.5rem;
             background-color: rgb(253, 97, 17);
             color: white;
@@ -83,11 +89,11 @@ $section_name = "Usuarios";
             transition: background-color 0.3s ease;
         }
 
-        .add-user-btn:hover {
+        .add-bank-btn:hover {
             background-color: #d5560d;
         }
 
-        .add-user-btn:focus {
+        .add-bank-btn:focus {
             outline: none;
             box-shadow: 0 0 0 0.2rem rgba(253, 97, 17, 0.5);
         }
@@ -129,6 +135,11 @@ $section_name = "Usuarios";
             background-color: #c82333;
         }
 
+        .modal-header,
+        .modal-footer {
+            border: none;
+        }
+
         .modal-content {
             border-radius: 10px;
         }
@@ -136,66 +147,87 @@ $section_name = "Usuarios";
         .form-control {
             border-radius: 5px;
         }
+
+        .footer {
+            background-color: #343a40;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+        }
+
+        .footer a {
+            color: #f8f9fa;
+            text-decoration: none;
+            transition: color 0.3s ease, text-shadow 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: #17a2b8;
+            text-shadow: 0 0 10px #17a2b8;
+        }
+
+        .footer small {
+            font-size: 0.9em;
+        }
     </style>
 </head>
 
-<body ng-controller="cUsuarios">
+<body ng-controller="cBancos">
 
     <?php include 'menu.php'; ?>
 
     <div class="container fade-in content-wrapper">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3>Usuarios Registrados</h3>
-            <button class="add-user-btn" ng-click="abrirRegistroUsuarioModal()">
-                <i class="fas fa-plus"></i>
-            </button>
-        </div>
-        <div class="card">
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>Nombre de Usuario</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr ng-repeat="usuario in usuarios">
-                                <td>{{usuario.nombre}}</td>
-                                <td>
-                                    <button class="btn btn-warning btn-sm" ng-click="editarUsuario(usuario)">Editar Contraseña</button>
-                                    <button class="btn btn-danger btn-sm" ng-click="eliminarUsuario(usuario.id)">Eliminar</button>
-                                </td>
-                            </tr>
-                            <tr ng-if="usuarios.length == 0">
-                                <td colspan="2" class="text-center">No hay usuarios registrados</td>
+        <div class="main-content">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3>Bancos Registrados</h3>
+                <button class="add-bank-btn" ng-click="abrirRegistroBancoModal()">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nombre del Banco</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="banco in bancos">
+                                    <td>{{banco.nombre}}</td>
+                                    <td>
+                                        <button class="btn btn-warning btn-sm" ng-click="editarBanco(banco)">Editar</button>
+                                        <button class="btn btn-danger btn-sm" ng-click="eliminarBanco(banco.id)">Eliminar</button>
+                                    </td>
+                                </tr>
+                                <tr ng-if="bancos.length == 0">
+                                    <td colspan="2" class="text-center">No hay bancos registrados</td>
+                                </tr>
                             </tbody>
-                    </table>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Modal para registrar usuario -->
+    <!-- Modal para registrar banco -->
     <div class="modal fade" id="registroModal" tabindex="-1" role="dialog" aria-labelledby="registroModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="registroModalLabel">Registro de Usuario</h5>
+                    <h5 class="modal-title" id="registroModalLabel">Registro de Banco</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form ng-submit="registrarUsuario()">
+                    <form ng-submit="registrarBanco()">
                         <div class="form-group">
-                            <label for="usuario">Nombre de Usuario:</label>
-                            <input type="text" class="form-control" id="usuario" ng-model="nuevoUsuario.usuario" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="contrasena">Contraseña:</label>
-                            <input type="password" class="form-control" id="contrasena" ng-model="nuevoUsuario.contrasena" required>
+                            <label for="nombre">Nombre del Banco:</label>
+                            <input type="text" class="form-control" id="nombre" ng-model="nuevoBanco.nombre" required>
                         </div>
                         <button type="submit" class="btn btn-primary-custom">Registrar</button>
                     </form>
@@ -204,21 +236,21 @@ $section_name = "Usuarios";
         </div>
     </div>
 
-    <!-- Modal para editar usuario -->
+    <!-- Modal para editar banco -->
     <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editarModalLabel">Editar Contraseña</h5>
+                    <h5 class="modal-title" id="editarModalLabel">Editar Banco</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form ng-submit="actualizarContrasena()">
+                    <form ng-submit="actualizarBanco()">
                         <div class="form-group">
-                            <label for="nuevaContrasena">Nueva Contraseña:</label>
-                            <input type="password" class="form-control" id="nuevaContrasena" ng-model="editarUsuarioData.contrasena" required>
+                            <label for="nombreEditar">Nombre del Banco:</label>
+                            <input type="text" class="form-control" id="nombreEditar" ng-model="editarBancoData.nombre" required>
                         </div>
                         <button type="submit" class="btn btn-primary-custom">Actualizar</button>
                     </form>
@@ -237,7 +269,7 @@ $section_name = "Usuarios";
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" type="text/javascript"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js" type="text/javascript"></script>
-    <script src="scripts/usuarios-script.js"></script>
+    <script src="./scripts/bancos-script.js"></script>
 </body>
 
 </html>

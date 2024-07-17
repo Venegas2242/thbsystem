@@ -22,35 +22,6 @@ body {
     padding: 1rem; /* Añade padding para mejor visualización en móvil */
 }
 
-.footer {
-    background-color: #343a40;
-    color: white;
-    padding: 20px 0;
-    width: 100%;
-    text-align: center;
-}
-
-.footer a {
-    color: #f8f9fa;
-    text-decoration: none;
-    transition: color 0.3s ease, text-shadow 0.3s ease;
-}
-
-.footer a:hover {
-    color: #17a2b8;
-    text-shadow: 0 0 10px #17a2b8;
-}
-
-.footer small {
-    font-size: 0.9em;
-}
-
-.footer .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 /* Otros estilos */
 body {
     font-size: 1rem;
@@ -172,36 +143,4 @@ body {
 
 .card-proveedor .tipo-entidad {
     color: #a72828; /* Rojo para Proveedor */
-}
-
-/* Ajustes para pantallas pequeñas */
-@media screen and (max-width: 450px) {
-    .content-wrapper {
-        padding-top: 3rem; /* Ajuste según el tamaño del menú en móvil */
-    }
-
-    .main-content {
-        padding: 0.5rem; /* Reduce el padding en móvil */
-    }
-
-    .btn {
-        font-size: 1.2rem; /* Tamaño de fuente más pequeño en móvil */
-    }
-
-    .card {
-        padding: 1rem; /* Reduce el padding en las tarjetas */
-        font-size: 0.9rem; /* Reduce el tamaño de fuente en las tarjetas */
-    }
-
-    .delete-icon, .contacts-icon {
-        font-size: 1.2rem; /* Reduce el tamaño de los íconos */
-    }
-
-    .btn-primary-custom {
-        font-size: 1rem; /* Reduce el tamaño de los botones */
-    }
-
-    .footer {
-        padding: 10px 0; /* Reduce el padding del footer */
-    }
 }

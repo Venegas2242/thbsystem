@@ -17,6 +17,7 @@ $section_name = "Proveedores/Clientes";
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css"/>
     <link rel="stylesheet" href="./styles/entidades-style.css">
+    <link rel="stylesheet" href="./styles/footer.css">
     <style>
         .table-responsive::-webkit-scrollbar {
             width: 12px;

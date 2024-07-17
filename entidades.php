@@ -20,6 +20,7 @@ $section_name = "Proveedores/Clientes";
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="./styles/entidades-style.css">
     <link rel="stylesheet" href="./styles/modales.css">
+    <link rel="stylesheet" href="./styles/footer.css">
 </head>
 
 <body id="ng-entidad-lista" ng-app="appCatalogos" ng-controller="cCatalogos">

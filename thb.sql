@@ -619,3 +619,41 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+
+-- Procedimiento para obtener todos los bancos
+CREATE PROCEDURE proc_getBancos()
+BEGIN
+    SELECT idbanco, nombre FROM cat_bancos WHERE activo = 1;
+END //
+
+-- Procedimiento para insertar o actualizar un banco
+CREATE PROCEDURE proc_BancoGrabar(
+    IN p_idbanco INT,
+    IN p_nombre VARCHAR(200)
+)
+BEGIN
+    IF p_idbanco = 0 THEN
+        INSERT INTO cat_bancos (nombre) VALUES (p_nombre);
+    ELSE
+        UPDATE cat_bancos SET nombre = p_nombre WHERE idbanco = p_idbanco;
+    END IF;
+END //
+
+-- Procedimiento para eliminar un banco
+CREATE PROCEDURE proc_BancoEliminar(IN p_idbanco INT)
+BEGIN
+    UPDATE cat_bancos SET activo = 0 WHERE idbanco = p_idbanco;
+END //
+
+-- Procedimiento para actualizar un banco
+CREATE PROCEDURE proc_BancoActualizar(
+    IN p_idbanco INT,
+    IN p_nombre VARCHAR(200)
+)
+BEGIN
+    UPDATE cat_bancos SET nombre = p_nombre WHERE idbanco = p_idbanco;
+END //
+
+DELIMITER ;

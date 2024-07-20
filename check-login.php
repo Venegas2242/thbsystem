@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($is_valid == 1) {
             $_SESSION['idusuario'] = $idusuario;
             $_SESSION['usuario'] = $usuario;
-            header("Location: ./catalogos/entidades.php");
+            header("Location: ./inicio/inicio.php");
             exit();
         } else {
             header("Location: login.php?error=Contraseña incorrecta");

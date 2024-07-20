@@ -64,14 +64,14 @@ body {
 }
 
 .menu-btn {
-    font-size: 30px;
+    font-size: 25px;
     cursor: pointer;
     background-color: #111;
     color: white;
     padding: 10px 15px;
     position: fixed;
     width: 15%;
-    height: 4rem;
+    height: 3rem;
     top: 0;
     left: 0;
     z-index: 3;

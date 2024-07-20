@@ -14,12 +14,21 @@ function toggleNav() {
     }
 }
 
-function toggleDropdown() {
-    const dropdownContainer = document.querySelector(".dropdown-container");
-    if (dropdownContainer.style.display === "block") {
-        dropdownContainer.style.display = "none";
+function toggleCatalogosDropdown() {
+    const catalogosDropdown = document.getElementById("catalogosDropdown");
+    if (catalogosDropdown.style.display === "block") {
+        catalogosDropdown.style.display = "none";
     } else {
-        dropdownContainer.style.display = "block";
+        catalogosDropdown.style.display = "block";
+    }
+}
+
+function toggleReportesDropdown() {
+    const reportesDropdown = document.getElementById("reportesDropdown");
+    if (reportesDropdown.style.display === "block") {
+        reportesDropdown.style.display = "none";
+    } else {
+        reportesDropdown.style.display = "block";
     }
 }
 

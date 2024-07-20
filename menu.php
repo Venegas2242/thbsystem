@@ -20,11 +20,22 @@
     </div>
 
     <div id="mySidenav" class="sidenav">
-        <a class="dropdown-item" href="../reportes/reportes-entidades.php"><i class="fa-solid fa-chart-pie"></i> Reportes</a>
-        <a class="dropdown-btn" onclick="toggleDropdown()">
+        <a href="../inicio/inicio.php"><i class="fa-solid fa-house"></i> Inicio</a>
+        
+        
+        <a class="dropdown-btn" onclick="toggleReportesDropdown()">
+            <i class="fa-solid fa-chart-pie"></i> Reportes <i class="fa fa-caret-down"></i>
+        </a>
+        <div class="dropdown-container" id="reportesDropdown">
+            <a class="dropdown-item" href="../reportes/reportes-entidades.php"><i class="fas fa-truck me-2"></i> Prov/Clien</a>
+            <!-- Puedes agregar más opciones aquí -->
+        </div>
+
+
+        <a class="dropdown-btn" onclick="toggleCatalogosDropdown()">
             <i class="fas fa-bars me-2"></i> Catálogos <i class="fa fa-caret-down"></i>
         </a>
-        <div class="dropdown-container">
+        <div class="dropdown-container" id="catalogosDropdown">
             <a class="dropdown-item" href="../catalogos/usuarios.php"><i class="fa-solid fa-user-plus"></i> Usuarios</a>
             <a class="dropdown-item" href="#"><i class="fa-solid fa-building"></i> Ciudades</a>
             <a class="dropdown-item" href="../catalogos/bancos.php"><i class="fa-solid fa-money-check-dollar"></i> Bancos</a>

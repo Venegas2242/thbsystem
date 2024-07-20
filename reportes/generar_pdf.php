@@ -1,6 +1,6 @@
 <?php
 date_default_timezone_set("America/Mexico_City");
-require('./fpdf186/fpdf.php');
+require('../libraries/fpdf186/fpdf.php');
 
 class PDF extends FPDF
 {
@@ -12,7 +12,7 @@ class PDF extends FPDF
     function Header()
     {
         // Logo
-        $this->Image('./images/logo.png', 10, 6, 30);
+        $this->Image('../assets/images/logo.png', 10, 6, 30);
         $this->SetFont('Arial', 'B', 14);
         $this->Cell(0, 10, 'Reporte de ' . $this->reportType, 0, 1, 'C');
         $this->Ln(10);

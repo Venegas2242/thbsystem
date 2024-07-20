@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['idusuario'])) {
-    header("Location: login.php");
+    header("Location: ../login.php");
     exit();
 }
 
@@ -18,14 +18,14 @@ $section_name = "Proveedores/Clientes";
     <!-- Referencias CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="./styles/entidades-style.css">
-    <link rel="stylesheet" href="./styles/modales.css">
-    <link rel="stylesheet" href="./styles/footer.css">
+    <link rel="stylesheet" href="../assets/styles/entidades-style.css">
+    <link rel="stylesheet" href="../assets/styles/modales.css">
+    <link rel="stylesheet" href="../assets/styles/footer.css">
 </head>
 
 <body id="ng-entidad-lista" ng-app="appCatalogos" ng-controller="cCatalogos">
 
-    <?php include 'menu.php'; ?>
+    <?php include '../menu.php'; ?>
 
     <div class="container fade-in content-wrapper">
         <div class="main-content">
@@ -65,10 +65,10 @@ $section_name = "Proveedores/Clientes";
             </div>
         </div>
 
-        <?php include 'modal/eliminar-entidad.php'; ?>
-        <?php include 'modal/agregar-entidad.php'; ?>
-        <?php include 'modal/editar-entidad.php'; ?>
-        <?php include 'modal/contactos-entidad.php'; ?>
+        <?php include './modal/eliminar-entidad.php'; ?>
+        <?php include './modal/agregar-entidad.php'; ?>
+        <?php include './modal/editar-entidad.php'; ?>
+        <?php include './modal/contactos-entidad.php'; ?>
     </div>
 
     <div class="footer">
@@ -82,7 +82,7 @@ $section_name = "Proveedores/Clientes";
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js" type="text/javascript"></script>
 
-    <script src="scripts/catalogos-script.js"></script>
+    <script src="./scripts/catalogos-script.js"></script>
 </body>
 
 </html>

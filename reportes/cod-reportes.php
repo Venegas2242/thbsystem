@@ -4,7 +4,7 @@ ini_set("display_errors", "1");
 date_default_timezone_set("America/Mexico_City");
 
 spl_autoload_register(function($NombreClase) {
-    require_once $NombreClase . '.php';
+    require_once '../' . $NombreClase . '.php';
 });
 
 class Entidades {

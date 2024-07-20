@@ -5,28 +5,30 @@ ini_set("display_errors", "1");
 date_default_timezone_set("America/Mexico_City");
 
 spl_autoload_register(function($NombreClase) {
-    require_once $NombreClase . '.php';
+    require_once '../' . $NombreClase . '.php';
 });
 
-class Bancos {
-    public $idbanco = 0;
+class Usuarios {
+    public $idusuario = 0;
     public $nombre = "";
+    public $contrasena = "";
 
     function Grabar() {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
 
-        $query = $cnn->prepare("CALL proc_BancoGrabar(?, ?)");
-        $query->bind_param("is", 
-            $this->idbanco, 
-            $this->nombre
+        $query = $cnn->prepare("CALL proc_UsuarioGrabar(?, ?, ?)");
+        $query->bind_param("iss", 
+            $this->idusuario, 
+            $this->nombre, 
+            $this->contrasena
         );
         $query->execute();
         if ($query->errno) {
             $retorno = $this->ArrayMessage("0", $query->error);
         } else {
-            $retorno = $this->ArrayMessage("1", "El banco ha sido grabado correctamente.");
+            $retorno = $this->ArrayMessage("1", "El usuario ha sido grabado correctamente.");
         }
         $query->close();
         $cnn->close();
@@ -37,54 +39,54 @@ class Bancos {
         return array('status' => $status, 'message' => $message);
     }
 
-    function getBancos() {
+    function getUsuarios() {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
-        $query = $cnn->prepare("CALL proc_getBancos()");
+        $query = $cnn->prepare("CALL proc_getUsuarios()");
         $query->execute();
-        $query->bind_result($idbanco, $nombre);
+        $query->bind_result($idusuario, $nombre);
         while ($query->fetch()) {
-            $banco = array(
-                "id" => $idbanco,
+            $usuario = array(
+                "id" => $idusuario,
                 "nombre" => $nombre
             );
-            array_push($retorno, $banco);
+            array_push($retorno, $usuario);
         }
         $query->close();
         $cnn->close();
         return $retorno;
     }
 
-    function Eliminar($idBanco) {
+    function Eliminar($idUsuario) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
-        $query = $cnn->prepare("CALL proc_BancoEliminar(?)");
-        $query->bind_param("i", $idBanco);
+        $query = $cnn->prepare("CALL proc_UsuarioEliminar(?)");
+        $query->bind_param("i", $idUsuario);
         $query->execute();
         if ($query->errno) {
             $retorno = $this->ArrayMessage("0", $query->error);
         } else {
-            $retorno = $this->ArrayMessage("1", "El banco ha sido eliminado.");
+            $retorno = $this->ArrayMessage("1", "El usuario ha sido eliminado.");
         }
         $query->close();
         $cnn->close();
         return $retorno;
     }
 
-    function Actualizar($idBanco, $nombre) {
+    function ActualizarContrasena($idUsuario, $contrasena) {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
 
-        $query = $cnn->prepare("CALL proc_BancoActualizar(?, ?)");
-        $query->bind_param("is", $idBanco, $nombre);
+        $query = $cnn->prepare("CALL proc_ActualizarContrasena(?, SHA2(?, 256))");
+        $query->bind_param("is", $idUsuario, $contrasena);
         $query->execute();
         if ($query->errno) {
             $retorno = $this->ArrayMessage("0", $query->error);
         } else {
-            $retorno = $this->ArrayMessage("1", "El banco ha sido actualizado.");
+            $retorno = $this->ArrayMessage("1", "La contraseña ha sido actualizada.");
         }
         $query->close();
         $cnn->close();
@@ -95,25 +97,26 @@ class Bancos {
 if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
     $functionToCall = $_GET["functionToCall"];
     $json_data = json_decode(file_get_contents('php://input'), true);
-    $banco = new Bancos();
+    $usuario = new Usuarios();
     
     switch ($functionToCall) {
-        case "getBancos":
-            echo json_encode($banco->getBancos());
+        case "getUsuarios":
+            echo json_encode($usuario->getUsuarios());
             break;
 
-        case "registrarBanco":
-            $banco->idbanco = $json_data['idbanco'] ?? 0;
-            $banco->nombre = $json_data['nombre'];
-            echo json_encode($banco->Grabar());
+        case "registrarUsuario":
+            $usuario->idusuario = $json_data['idusuario'] ?? 0;
+            $usuario->nombre = $json_data['usuario'];
+            $usuario->contrasena = $json_data['contrasena'];
+            echo json_encode($usuario->Grabar());
             break;
 
-        case "eliminarBanco":
-            echo json_encode($banco->Eliminar($json_data['id']));
+        case "eliminarUsuario":
+            echo json_encode($usuario->Eliminar($json_data['id']));
             break;
 
-        case "actualizarBanco":
-            echo json_encode($banco->Actualizar($json_data['id'], $json_data['nombre']));
+        case "actualizarContrasena":
+            echo json_encode($usuario->ActualizarContrasena($json_data['id'], $json_data['contrasena']));
             break;
     }
 }

@@ -90,12 +90,12 @@ CREATE TABLE IF NOT EXISTS `cat_usuario` (
 
 -- Insertar datos en la tabla entidad
 -- Insertar más entidades
-insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
-values('HERRAMIENTAS Y MATERIALES, S.A. DE C.V.','HERRAMIENTAS Y MATERIALES','AV. REVOLUCIÓN 123, COL. CENTRO','4','4','1','HYM123456789','5551234567','contacto@herramientas.com','www.herramientas.com','50000','10000','30','2','12345678','876543210987654321');
+insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe,tipo)
+values('HERRAMIENTAS Y MATERIALES, S.A. DE C.V.','HERRAMIENTAS Y MATERIALES','AV. REVOLUCIÓN 123, COL. CENTRO','4','4','1','HYM123456789','5551234567','contacto@herramientas.com','www.herramientas.com','50000','10000','30','2','12345678','876543210987654321','Cliente');
 insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
 values('PLÁSTICOS DEL NORTE, S.A. DE C.V.','PLÁSTICOS DEL NORTE','CALLE INDUSTRIAL 456, ZONA INDUSTRIAL','15','15','1','PDN987654321','5557654321','ventas@plasticosnorte.com','www.plasticosnorte.com','30000','5000','45','3','87654321','123456789012345678');
-insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
-values('ALIMENTOS NATURALES, S.A. DE C.V.','ALIMENTOS NATURALES','AV. LA SALUD 789, COL. VERDE','30','30','1','AN123456789','5559876543','info@alimentosnaturales.com','www.alimentosnaturales.com','60000','15000','60','1','23456789','210987654321098765');
+insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe,tipo)
+values('ALIMENTOS NATURALES, S.A. DE C.V.','ALIMENTOS NATURALES','AV. LA SALUD 789, COL. VERDE','30','30','1','AN123456789','5559876543','info@alimentosnaturales.com','www.alimentosnaturales.com','60000','15000','60','1','23456789','210987654321098765','Cliente');
 insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
 values('TECNOLOGÍA AVANZADA, S.A. DE C.V.','TECNOLOGÍA AVANZADA','BLVD. TECNOLÓGICO 321, PARQUE TECNOLÓGICO','22','22','1','TA987654321','5556543210','soporte@tecnologiaavanzada.com','www.tecnologiaavanzada.com','40000','20000','90','4','56789012','432109876543210987');
 insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)

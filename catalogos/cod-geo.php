@@ -222,6 +222,63 @@ class Ubicaciones
         $cnn->close();
         return $retorno;
     }
+
+    function ActualizarPais($idpais, $nombre)
+    {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
+
+        $query = $cnn->prepare("CALL proc_PaisActualizar(?, ?)");
+        $query->bind_param("is", $idpais, $nombre);
+        $query->execute();
+        if ($query->errno) {
+            $retorno = $this->ArrayMessage("0", $query->error);
+        } else {
+            $retorno = $this->ArrayMessage("1", "El pais ha sido actualizado.");
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+    function ActualizarEstado($idestado, $nombre)
+    {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
+
+        $query = $cnn->prepare("CALL proc_EstadoActualizar(?, ?)");
+        $query->bind_param("is", $idestado, $nombre);
+        $query->execute();
+        if ($query->errno) {
+            $retorno = $this->ArrayMessage("0", $query->error);
+        } else {
+            $retorno = $this->ArrayMessage("1", "El estado ha sido actualizado.");
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+    function ActualizarCiudad($idciudad, $nombre)
+    {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
+
+        $query = $cnn->prepare("CALL proc_CiudadActualizar(?, ?)");
+        $query->bind_param("is", $idciudad, $nombre);
+        $query->execute();
+        if ($query->errno) {
+            $retorno = $this->ArrayMessage("0", $query->error);
+        } else {
+            $retorno = $this->ArrayMessage("1", "La ciudad ha sido actualizada.");
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
 }
 
 if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
@@ -263,15 +320,30 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
             $ubicacion = new Ubicaciones();
             echo json_encode($ubicacion->EliminarPais($json_data->idpais));
             break;
-            
+
         case "eliminar_estado":
             $ubicacion = new Ubicaciones();
             echo json_encode($ubicacion->EliminarEstado($json_data->idestado));
             break;
-            
+
         case "eliminar_ciudad":
             $ubicacion = new Ubicaciones();
             echo json_encode($ubicacion->EliminarCiudad($json_data->idciudad));
+            break;
+
+        case "actualizar_pais":
+            $ubicacion = new Ubicaciones();
+            echo json_encode($ubicacion->ActualizarPais($json_data->idpais, $json_data->nombre));
+            break;
+
+        case "actualizar_estado":
+            $ubicacion = new Ubicaciones();
+            echo json_encode($ubicacion->ActualizarEstado($json_data->idestado, $json_data->nombre));
+            break;
+
+        case "actualizar_ciudad":
+            $ubicacion = new Ubicaciones();
+            echo json_encode($ubicacion->ActualizarCiudad($json_data->idciudad, $json_data->nombre));
             break;
     }
 }

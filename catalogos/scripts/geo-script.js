@@ -7,6 +7,8 @@ angular
 
     $scope.entidad = { idpais: null, idestado: null };
 
+    $scope.editar = {};
+
     $scope.estado_nuevo = "";
     $scope.pais_nuevo = "";
     $scope.ciudad_nueva = "";
@@ -185,10 +187,36 @@ angular
       }
     };
 
-    // Funciones de edición y eliminación
+    // Controlador de actualización
+    $scope.actualizarUbicacion = function () {
+      if ($scope.editar.tipo == 0) {
+        $scope.actualizarPais();
+      } else if ($scope.editar.tipo == 1) {
+        $scope.actualizarEstado();
+      } else {
+        $scope.actualizarCiudad();
+      }
+    };
+
+    // Editar Pais
     $scope.editPais = function (pais) {
-      // Aquí agregas la lógica para editar el país
-      alert("Editando país: " + pais.nombre);
+      pais.tipo = 0;
+      $scope.editar = angular.copy(pais);
+      $("#editarUbicacionModal").modal("show");
+    };
+
+    $scope.actualizarPais = function () {
+      $http
+        .post("cod-geo.php?functionToCall=actualizar_pais", $scope.editar)
+        .then(
+          function (response) {
+            $("#editarUbicacionModal").modal("hide");
+            $scope.cargarPaises();
+          },
+          function (error) {
+            console.error("Error:", error);
+          }
+        );
     };
 
     $scope.deletePais = function (pais) {
@@ -216,8 +244,25 @@ angular
     };
 
     $scope.editEstado = function (estado) {
-      // Aquí agregas la lógica para editar el estado
-      alert("Editando estado: " + estado.nombre);
+      estado.tipo = 1;
+      $scope.editar = angular.copy(estado);
+      console.log("Modal estado:", $scope.editar);
+      $("#editarUbicacionModal").modal("show");
+    };
+
+    $scope.actualizarEstado = function () {
+      console.log("Editando estado:", $scope.editar);
+      $http
+        .post("cod-geo.php?functionToCall=actualizar_estado", $scope.editar)
+        .then(
+          function (response) {
+            $("#editarUbicacionModal").modal("hide");
+            $scope.cambiarPais();
+          },
+          function (error) {
+            console.error("Error:", error);
+          }
+        );
     };
 
     $scope.deleteEstado = function (estado) {
@@ -247,8 +292,24 @@ angular
     };
 
     $scope.editCiudad = function (ciudad) {
-      // Aquí agregas la lógica para editar la ciudad
-      alert("Editando ciudad: " + ciudad.nombre);
+      ciudad.tipo = 2;
+      $scope.editar = angular.copy(ciudad);
+      console.log("Modal estado:", $scope.editar);
+      $("#editarUbicacionModal").modal("show");
+    };
+
+    $scope.actualizarCiudad = function () {
+      $http
+        .post("cod-geo.php?functionToCall=actualizar_ciudad", $scope.editar)
+        .then(
+          function (response) {
+            $("#editarUbicacionModal").modal("hide");
+            $scope.cambiarEstado();
+          },
+          function (error) {
+            console.error("Error:", error);
+          }
+        );
     };
 
     $scope.deleteCiudad = function (ciudad) {

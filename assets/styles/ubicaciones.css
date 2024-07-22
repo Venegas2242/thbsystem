@@ -50,6 +50,30 @@ button:hover {
   color: #fff;
 }
 
+.no-style-button {
+  all: unset;
+  cursor: pointer;
+  padding: 1rem; /* Puedes ajustar el padding según necesites */
+  margin: -1rem -1rem -1rem auto; /* Para alinearlo a la derecha */
+  font-size: 1.5rem; /* Ajusta el tamaño de la fuente según necesites */
+  line-height: 1;
+}
+
+/* Asegurarse de que el hover no aplique estilos no deseados */
+.no-style-button:hover {
+  background: none;
+  color: initial;
+}
+
+/* Opcional: Estilos adicionales para la clase .close dentro del modal */
+.modal .close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1rem;
+  margin: 0;
+}
+
 .content {
   display: none;
 }

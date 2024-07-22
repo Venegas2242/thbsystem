@@ -133,6 +133,8 @@ $section_name = "Ubicaciones";
             </div>
         </div>
     </div>
+
+    <?php include './modal/editar-ubicacion.php'; ?>
 </body>
 
 </html>

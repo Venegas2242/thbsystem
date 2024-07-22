@@ -721,7 +721,7 @@ END //
 DELIMITER ;
 
 DELIMITER //
--- Procedimiento para eliminar pais
+-- Procedimiento para eliminar estado
 CREATE PROCEDURE `proc_EliminarEstado` (
     IN p_idestado INT
 )
@@ -733,7 +733,7 @@ END //
 DELIMITER ;
 
 DELIMITER //
--- Procedimiento para eliminar pais
+-- Procedimiento para eliminar ciudad
 CREATE PROCEDURE `proc_EliminarCiudad` (
     IN p_idciudad INT
 )
@@ -741,5 +741,38 @@ BEGIN
     UPDATE `cat_ciudad`
     SET `activo` = 0
     WHERE `idciudad` = p_idciudad;
+END //
+DELIMITER ;
+
+DELIMITER //
+-- Procedimiento para actualizar un pais
+CREATE PROCEDURE proc_PaisActualizar(
+    IN p_idpais INT,
+    IN p_nombre VARCHAR(200)
+)
+BEGIN
+    UPDATE cat_pais SET nombre = p_nombre WHERE idpais = p_idpais;
+END //
+DELIMITER ;
+
+DELIMITER //
+-- Procedimiento para actualizar un estado
+CREATE PROCEDURE proc_EstadoActualizar(
+    IN p_idestado INT,
+    IN p_nombre VARCHAR(200)
+)
+BEGIN
+    UPDATE cat_estado SET nombre = p_nombre WHERE idestado = p_idestado;
+END //
+DELIMITER ;
+
+DELIMITER //
+-- Procedimiento para actualizar una ciudad
+CREATE PROCEDURE proc_CiudadActualizar(
+    IN p_idciudad INT,
+    IN p_nombre VARCHAR(200)
+)
+BEGIN
+    UPDATE cat_ciudad SET nombre = p_nombre WHERE idciudad = p_idciudad;
 END //
 DELIMITER ;

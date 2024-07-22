@@ -112,7 +112,7 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
             echo json_encode($banco->Eliminar($json_data['id']));
             break;
 
-        case "actualizarBanco":
+        case "actualizar_pais":
             echo json_encode($banco->Actualizar($json_data['id'], $json_data['nombre']));
             break;
     }

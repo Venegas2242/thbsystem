@@ -10,23 +10,19 @@ angular
     $scope.estado_nuevo = "";
     $scope.pais_nuevo = "";
     $scope.ciudad_nueva = "";
+    $scope.errorMessage = "";
 
     $scope.showPage = function (pageId) {
-      const pages = document.querySelectorAll(".content");
-      pages.forEach((page) => {
-        page.classList.remove("active");
-      });
-
-      document.getElementById(pageId).classList.add("active");
-
+      $scope.activePage = pageId; // Establece la página activa
+      $scope.resetSelections(); // Resetea las selecciones al cambiar de página
       $scope.cargarPaises();
+      $scope.errorMessage = ""; // Limpiar el mensaje de error al cambiar de página
     };
 
-    // Cargar paises inicialmente
     $scope.cargarPaises = function () {
-      $scope.listaPaises = []; // Limpiar lista de paises
-      $scope.listaEstados = []; // Limpiar lista de estados
-      $scope.listaCiudades = []; // Limpiar lista de ciudades
+      $scope.listaPaises = [];
+      $scope.listaEstados = [];
+      $scope.listaCiudades = [];
 
       $http({
         method: "POST",
@@ -34,7 +30,6 @@ angular
       }).then(
         function (response) {
           $scope.listaPaises = response.data;
-          console.log("Paises cargados: ", $scope.listaPaises); // Ver datos cargados
         },
         function (error) {
           console.error("Error al cargar los países:", error);
@@ -42,9 +37,7 @@ angular
       );
     };
 
-    // Función para manejar el cambio de país y cargar estados
     $scope.cambiarPais = function () {
-      console.log("entidad:", $scope.entidad.idpais);
       if ($scope.entidad.idpais == "") {
         $scope.listaEstados = [];
       } else {
@@ -54,15 +47,11 @@ angular
           data: { idpais: $scope.entidad.idpais },
         }).then(
           function (response) {
-            console.log("Respuesta: ", response);
-            // Verificar si la respuesta está vacía y ajustar la lista de estados
             if (response.data.length === 0) {
-              // Si no hay estados, añadir un elemento que indica "Sin estados"
               $scope.listaEstados = [{ nombre: "Sin estados" }];
             } else {
               $scope.listaEstados = response.data;
             }
-            console.log("Estados cargados:", $scope.listaEstados);
           },
           function (error) {
             console.error("Error al cargar los estados:", error);
@@ -71,97 +60,153 @@ angular
       }
     };
 
-    // Función para manejar el cambio de estados y cargar ciudades
     $scope.cambiarEstado = function () {
-      console.log("entidad:", $scope.entidad);
-      if ($scope.entidad.idpais == "" || $scope.entidad.idestado == "") {
+      if ($scope.entidad.idpais == "" || $scope.entidad.idestado == "" || $scope.entidad.idestado == null) {
         $scope.listaCiudades = [];
       } else {
-      $http({
-        method: "POST",
-        url: "cod-geo.php?functionToCall=obtener_ciudades",
-        data: {
-          idestado: $scope.entidad.idestado,
-        },
-      }).then(
-        function (response) {
-          // Verificar si la respuesta está vacía y ajustar la lista de estados
-          if (response.data.length === 0) {
-            // Si no hay ciudades, añadir un elemento que indica "Sin estados"
-            $scope.listaCiudades = [{ nombre: "Sin ciudades" }];
-          } else {
-            $scope.listaCiudades = response.data;
+        $http({
+          method: "POST",
+          url: "cod-geo.php?functionToCall=obtener_ciudades",
+          data: {
+            idestado: $scope.entidad.idestado,
+          },
+        }).then(
+          function (response) {
+            if (response.data.length === 0) {
+              $scope.listaCiudades = [{ nombre: "Sin ciudades" }];
+            } else {
+              $scope.listaCiudades = response.data;
+            }
+          },
+          function (error) {
+            console.error("Error al cargar las ciudades:", error);
           }
-          console.log("Ciudades cargadas:", $scope.listaCiudades);
-        },
-        function (error) {
-          console.error("Error al cargar las ciudades:", error);
-        }
-      );
-    }
+        );
+      }
     };
+
+    $scope.selectPais = function(pais) {
+      $scope.entidad.idpais = pais.idpais;
+      $scope.cambiarPais();
+    };
+
+    $scope.selectEstado = function(estado) {
+      $scope.entidad.idestado = estado.idestado;
+      $scope.cambiarEstado();
+    };
+
+    $scope.resetSelections = function() {
+      $scope.entidad.idpais = null;
+      $scope.entidad.idestado = null;
+    };
+
+    function isValidName(name) {
+      const regex = /^[A-Za-z][A-Za-z\s]*$/;
+      return regex.test(name);
+    }
 
     $scope.registrarPais = function () {
-      console.log("Pais a registrar:", $scope.pais_nuevo);
-
-      $http({
-        method: "POST",
-        url: "cod-geo.php?functionToCall=registrar_pais",
-        data: { pais_nuevo: $scope.pais_nuevo },
-      }).then(
-        function () {
-          $scope.cargarPaises();
-          $scope.pais_nuevo = "";
-        },
-        function (error) {
-          console.error("Error:", error);
-        }
-      );
+      if (isValidName($scope.pais_nuevo)) {
+        $http({
+          method: "POST",
+          url: "cod-geo.php?functionToCall=registrar_pais",
+          data: { pais_nuevo: $scope.pais_nuevo },
+        }).then(
+          function () {
+            $scope.cargarPaises();
+            $scope.pais_nuevo = "";
+            $scope.errorMessage = "";
+          },
+          function (error) {
+            $scope.errorMessage = "Error al registrar el país.";
+            console.error("Error:", error);
+          }
+        );
+      } else {
+        $scope.errorMessage = "El nombre del país no es válido.";
+      }
     };
 
-    // Función para registrar un nuevo estado
     $scope.registrarEstado = function () {
-      console.log("Pais seleccionado:", $scope.entidad.idpais);
-      console.log("Estado nuevo:", $scope.estado_nuevo);
-
-      $http({
-        method: "POST",
-        url: "cod-geo.php?functionToCall=registrar_estado",
-        data: {
-          idpais: $scope.entidad.idpais,
-          estado_nuevo: $scope.estado_nuevo,
-        },
-      }).then(
-        function (response) {
-          $scope.cambiarPais(); // Recargar estados después de registrar uno nuevo
-          $scope.estado_nuevo = "";
-        },
-        function (error) {
-          console.error("Error al registrar el estado:", error);
-        }
-      );
+      if (isValidName($scope.estado_nuevo)) {
+        $http({
+          method: "POST",
+          url: "cod-geo.php?functionToCall=registrar_estado",
+          data: {
+            idpais: $scope.entidad.idpais,
+            estado_nuevo: $scope.estado_nuevo,
+          },
+        }).then(
+          function (response) {
+            $scope.cambiarPais();
+            $scope.estado_nuevo = "";
+            $scope.errorMessage = "";
+          },
+          function (error) {
+            $scope.errorMessage = "Error al registrar el estado.";
+            console.error("Error al registrar el estado:", error);
+          }
+        );
+      } else {
+        $scope.errorMessage = "El nombre del estado no es válido.";
+      }
     };
 
-    // Función para registrar un nuevo estado
     $scope.registrarCiudad = function () {
-      console.log("Estado seleccionado:", $scope.entidad.idestado);
-      console.log("Ciudad nueva:", $scope.ciudad_nueva);
-
-      $http({
-        method: "POST",
-        url: "cod-geo.php?functionToCall=registrar_ciudad",
-        data: {
-          idestado: $scope.entidad.idestado,
-          ciudad_nueva: $scope.ciudad_nueva,
-        },
-      }).then(
-        function (response) {
-          $scope.cambiarEstado(); // Recargar estados después de registrar uno nuevo
-          $scope.ciudad_nueva = "";
-        },
-        function (error) {
-          console.error("Error al registrar el estado:", error);
-        }
-      );
+      if (isValidName($scope.ciudad_nueva)) {
+        $http({
+          method: "POST",
+          url: "cod-geo.php?functionToCall=registrar_ciudad",
+          data: {
+            idestado: $scope.entidad.idestado,
+            ciudad_nueva: $scope.ciudad_nueva,
+          },
+        }).then(
+          function (response) {
+            $scope.cambiarEstado();
+            $scope.ciudad_nueva = "";
+            $scope.errorMessage = "";
+          },
+          function (error) {
+            $scope.errorMessage = "Error al registrar la ciudad.";
+            console.error("Error al registrar la ciudad:", error);
+          }
+        );
+      } else {
+        $scope.errorMessage = "El nombre de la ciudad no es válido.";
+      }
     };
+
+    // Funciones de edición y eliminación
+    $scope.editPais = function(pais) {
+      // Aquí agregas la lógica para editar el país
+      alert("Editando país: " + pais.nombre);
+    };
+
+    $scope.deletePais = function(pais) {
+      // Aquí agregas la lógica para eliminar el país
+      alert("Eliminando país: " + pais.nombre);
+    };
+
+    $scope.editEstado = function(estado) {
+      // Aquí agregas la lógica para editar el estado
+      alert("Editando estado: " + estado.nombre);
+    };
+
+    $scope.deleteEstado = function(estado) {
+      // Aquí agregas la lógica para eliminar el estado
+      alert("Eliminando estado: " + estado.nombre);
+    };
+
+    $scope.editCiudad = function(ciudad) {
+      // Aquí agregas la lógica para editar la ciudad
+      alert("Editando ciudad: " + ciudad.nombre);
+    };
+
+    $scope.deleteCiudad = function(ciudad) {
+      // Aquí agregas la lógica para eliminar la ciudad
+      alert("Eliminando ciudad: " + ciudad.nombre);
+    };
+
+    $scope.showPage('Paises');
   });

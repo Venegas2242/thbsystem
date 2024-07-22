@@ -9,6 +9,11 @@ date_default_timezone_set("America/Mexico_City");
 require_once '../Connection.php';
 //});
 
+function validarNombre($nombre)
+{
+    return preg_match("/^[A-Za-z][A-Za-z\s]*$/", $nombre);
+}
+
 class Ubicaciones
 {
     public $idciudad = 0;
@@ -79,6 +84,11 @@ class Ubicaciones
 
     function AgregarPais($pais_nuevo)
     {
+        if (!validarNombre($pais_nuevo)) {
+            header("Location: geo.php?error=" . urlencode("Nombre de país no válido"));
+            exit();
+        }
+
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
@@ -100,13 +110,18 @@ class Ubicaciones
         return $retorno;
     }
 
-    function AgregarEstado($idpais, $pais_nuevo)
+    function AgregarEstado($idpais, $estado_nuevo)
     {
+        if (!validarNombre($estado_nuevo)) {
+            header("Location: geo.php?error=" . urlencode("Nombre de estado no válido"));
+            exit();
+        }
+
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
         $query = $cnn->prepare("CALL proc_AgregarEstado(?,?)");
-        $query->bind_param("is", $idpais, $pais_nuevo);
+        $query->bind_param("is", $idpais, $estado_nuevo);
         $query->execute();
         $query->store_result();
         if ($query->affected_rows == 0) {
@@ -125,6 +140,11 @@ class Ubicaciones
 
     function AgregarCiudad($idestado, $ciudad_nueva)
     {
+        if (!validarNombre($ciudad_nueva)) {
+            header("Location: geo.php?error=" . urlencode("Nombre de ciudad no válido"));
+            exit();
+        }
+
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();

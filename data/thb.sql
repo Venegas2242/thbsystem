@@ -493,7 +493,8 @@ CREATE PROCEDURE `get_Paises` ()
 BEGIN
     SELECT idpais, nombre
     FROM cat_pais
-    WHERE activo = 1;
+    WHERE activo = 1
+    ORDER BY nombre;
 END //
 
 CREATE PROCEDURE `get_Estados` (
@@ -502,7 +503,8 @@ CREATE PROCEDURE `get_Estados` (
 BEGIN
     SELECT idestado, nombre
     FROM cat_estado
-    WHERE activo = 1 AND idpais = id_pais;
+    WHERE activo = 1 AND idpais = id_pais
+    ORDER BY nombre;
 END //
 
 CREATE PROCEDURE `get_Ciudades` (
@@ -511,7 +513,8 @@ CREATE PROCEDURE `get_Ciudades` (
 BEGIN
     SELECT idciudad, nombre
     FROM cat_ciudad
-    WHERE activo = 1 AND idestado = id_estado;
+    WHERE activo = 1 AND idestado = id_estado
+    ORDER BY nombre;
 END //
 
 -- Procedimiento para obtener lista de bancos
@@ -656,4 +659,51 @@ BEGIN
     UPDATE cat_bancos SET nombre = p_nombre WHERE idbanco = p_idbanco;
 END //
 
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE proc_AgregarPais(
+    IN p_nombre VARCHAR(200)
+)
+BEGIN
+    DECLARE existe INT DEFAULT 0;
+    SELECT COUNT(*) INTO existe FROM cat_pais WHERE nombre = p_nombre;
+    IF existe = 0 THEN
+        INSERT INTO cat_pais (nombre) VALUES (p_nombre);
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El país ya está registrado';
+    END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE proc_AgregarEstado(
+    IN p_idpais INT,
+    IN p_nombre VARCHAR(200)
+)
+BEGIN
+    DECLARE existe INT DEFAULT 0;
+    SELECT COUNT(*) INTO existe FROM cat_estado WHERE nombre = p_nombre AND idpais = p_idpais;
+    IF existe = 0 THEN
+        INSERT INTO cat_estado (idpais, nombre) VALUES (p_idpais, p_nombre);
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'El estado ya está registrado en este país';
+    END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE PROCEDURE proc_AgregarCiudad(
+    IN p_idestado INT,
+    IN p_nombre VARCHAR(200)
+)
+BEGIN
+    DECLARE existe INT DEFAULT 0;
+    SELECT COUNT(*) INTO existe FROM cat_ciudad WHERE nombre = p_nombre AND idestado = p_idestado;
+    IF existe = 0 THEN
+        INSERT INTO cat_ciudad (idestado, nombre) VALUES (p_idestado, p_nombre);
+    ELSE
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'La ciudad ya está registrada en este estado';
+    END IF;
+END //
 DELIMITER ;

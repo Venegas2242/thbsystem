@@ -19,12 +19,26 @@ $section_name = "Usuarios";
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css" />
     <!-- <link rel="stylesheet" href="./styles/usuarios-style.css"> -->
-     <link rel="stylesheet" href="../assets/styles/footer.css">
+    <link rel="stylesheet" href="../assets/styles/footer.css">
     <style>
         .content-wrapper {
             padding-top: 5rem;
             /* Ajusta este valor según la altura de tu menú */
             padding-bottom: 2rem;
+        }
+
+        .fade-in {
+            animation: fadeIn 1.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .card {
@@ -170,7 +184,7 @@ $section_name = "Usuarios";
                             </tr>
                             <tr ng-if="usuarios.length == 0">
                                 <td colspan="2" class="text-center">No hay usuarios registrados</td>
-                            </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>

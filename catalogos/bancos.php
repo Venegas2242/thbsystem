@@ -19,12 +19,27 @@ $section_name = "Gestión de Bancos";
     <!-- Referencias CSS -->
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css" />
+
     <style>
         body {
             font-family: 'Lato', sans-serif;
             background-color: #f4f7f6;
             margin: 0;
             padding: 0;
+        }
+
+        .fade-in {
+            animation: fadeIn 1.5s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .content-wrapper {

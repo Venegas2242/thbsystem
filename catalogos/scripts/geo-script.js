@@ -38,36 +38,38 @@ angular
     };
 
     $scope.cambiarPais = function () {
-      
       // if ($scope.entidad.idpais == "") {
-        
+
       // } else {
-        $http({
-          method: "POST",
-          url: "cod-geo.php?functionToCall=obtener_estados",
-          data: { idpais: $scope.entidad.idpais },
-        }).then(
-          function (response) {
-            if (response.data.length === 0) {
-              $scope.listaEstados = [{ nombre: "Sin estados" }];
-            } else {
-              
-              $scope.listaEstados = response.data;
-              $scope.entidad.idestado = null;
-              $scope.cambiarEstado();
-              console.log("Cambio de pais:", $scope.entidad);
-            }
-          },
-          function (error) {
-            console.error("Error al cargar los estados:", error);
+      $http({
+        method: "POST",
+        url: "cod-geo.php?functionToCall=obtener_estados",
+        data: { idpais: $scope.entidad.idpais },
+      }).then(
+        function (response) {
+          if (response.data.length === 0) {
+            $scope.listaEstados = [{ nombre: "Sin estados" }];
+          } else {
+            $scope.listaEstados = response.data;
+            $scope.entidad.idestado = null;
+            $scope.cambiarEstado();
+            console.log("Cambio de pais:", $scope.entidad);
           }
-        );
+        },
+        function (error) {
+          console.error("Error al cargar los estados:", error);
+        }
+      );
       // }
     };
 
     $scope.cambiarEstado = function () {
       console.log("Cambio de estado:", $scope.entidad);
-      if ($scope.entidad.idpais == "" || $scope.entidad.idestado == "" || $scope.entidad.idestado == null) {
+      if (
+        $scope.entidad.idpais == "" ||
+        $scope.entidad.idestado == "" ||
+        $scope.entidad.idestado == null
+      ) {
         $scope.listaCiudades = [];
       } else {
         $http({
@@ -91,17 +93,17 @@ angular
       }
     };
 
-    $scope.selectPais = function(pais) {
+    $scope.selectPais = function (pais) {
       $scope.entidad.idpais = pais.idpais;
       $scope.cambiarPais();
     };
 
-    $scope.selectEstado = function(estado) {
+    $scope.selectEstado = function (estado) {
       $scope.entidad.idestado = estado.idestado;
       $scope.cambiarEstado();
     };
 
-    $scope.resetSelections = function() {
+    $scope.resetSelections = function () {
       $scope.entidad.idpais = null;
       $scope.entidad.idestado = null;
     };
@@ -184,35 +186,96 @@ angular
     };
 
     // Funciones de edición y eliminación
-    $scope.editPais = function(pais) {
+    $scope.editPais = function (pais) {
       // Aquí agregas la lógica para editar el país
       alert("Editando país: " + pais.nombre);
     };
 
-    $scope.deletePais = function(pais) {
-      // Aquí agregas la lógica para eliminar el país
-      alert("Eliminando país: " + pais.nombre);
+    $scope.deletePais = function (pais) {
+      console.log("Id: " + pais.idpais + ". Pais: " + pais.nombre);
+
+      if (confirm("¿Está seguro de que desea eliminar " + pais.nombre + "?")) {
+        $http({
+          method: "POST",
+          url: "cod-geo.php?functionToCall=eliminar_pais",
+          data: { idpais: pais.idpais },
+        }).then(
+          function (response) {
+            if (response.data.status == "1") {
+              // Recargar los contactos del entidad
+              $scope.cargarPaises();
+            } else {
+              console.error("Error al eliminar país:", response.data.message);
+            }
+          },
+          function (error) {
+            console.error("Error al eliminar país:", error);
+          }
+        );
+      }
     };
 
-    $scope.editEstado = function(estado) {
+    $scope.editEstado = function (estado) {
       // Aquí agregas la lógica para editar el estado
       alert("Editando estado: " + estado.nombre);
     };
 
-    $scope.deleteEstado = function(estado) {
-      // Aquí agregas la lógica para eliminar el estado
-      alert("Eliminando estado: " + estado.nombre);
+    $scope.deleteEstado = function (estado) {
+      console.log("Id: " + estado.idestado + ". Estado: " + estado.nombre);
+
+      if (
+        confirm("¿Está seguro de que desea eliminar " + estado.nombre + "?")
+      ) {
+        $http({
+          method: "POST",
+          url: "cod-geo.php?functionToCall=eliminar_estado",
+          data: { idestado: estado.idestado },
+        }).then(
+          function (response) {
+            if (response.data.status == "1") {
+              // Recargar los contactos del entidad
+              $scope.cambiarPais();
+            } else {
+              console.error("Error al eliminar estado:", response.data.message);
+            }
+          },
+          function (error) {
+            console.error("Error al eliminar estado:", error);
+          }
+        );
+      }
     };
 
-    $scope.editCiudad = function(ciudad) {
+    $scope.editCiudad = function (ciudad) {
       // Aquí agregas la lógica para editar la ciudad
       alert("Editando ciudad: " + ciudad.nombre);
     };
 
-    $scope.deleteCiudad = function(ciudad) {
-      // Aquí agregas la lógica para eliminar la ciudad
-      alert("Eliminando ciudad: " + ciudad.nombre);
+    $scope.deleteCiudad = function (ciudad) {
+      console.log("Id: " + ciudad.idciudad + ". Ciudad: " + ciudad.nombre);
+
+      if (
+        confirm("¿Está seguro de que desea eliminar " + ciudad.nombre + "?")
+      ) {
+        $http({
+          method: "POST",
+          url: "cod-geo.php?functionToCall=eliminar_ciudad",
+          data: { idciudad: ciudad.idciudad },
+        }).then(
+          function (response) {
+            if (response.data.status == "1") {
+              // Recargar los contactos del entidad
+              $scope.cambiarEstado();
+            } else {
+              console.error("Error al eliminar ciudad:", response.data.message);
+            }
+          },
+          function (error) {
+            console.error("Error al eliminar ciudad:", error);
+          }
+        );
+      }
     };
 
-    $scope.showPage('Paises');
+    $scope.showPage("Paises");
   });

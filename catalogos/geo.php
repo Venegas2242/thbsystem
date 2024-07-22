@@ -40,7 +40,7 @@ $section_name = "Ubicaciones";
             <div>
                 <label for="lsPaises">Paises</label>
                 <ul id="lsPaises" class="list-group fixed-height">
-                    <li class="list-group-item d-flex justify-content-between align-items-center" ng-repeat="pais in listaPaises">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" ng-repeat="pais in listaPaises" value="{{pais.idpais}}">
                         {{pais.nombre}}
                         <span>
                             <i class="fas fa-edit mr-2" ng-click="editPais(pais)"></i>

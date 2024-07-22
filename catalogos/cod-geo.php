@@ -165,6 +165,63 @@ class Ubicaciones
         $cnn->close();
         return $retorno;
     }
+
+    function EliminarPais($idpais)
+    {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("CALL proc_EliminarPais(?)");
+        $query->bind_param("i", $idpais);
+        $query->execute();
+        $query->store_result();
+        if (mysqli_stmt_error($query) != "") {
+            $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
+        } else {
+            $retorno = $this->ArrayMessage("1", "El país ha sido marcado como inactivo.");
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+    function EliminarEstado($idestado)
+    {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("CALL proc_EliminarEstado(?)");
+        $query->bind_param("i", $idestado);
+        $query->execute();
+        $query->store_result();
+        if (mysqli_stmt_error($query) != "") {
+            $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
+        } else {
+            $retorno = $this->ArrayMessage("1", "El estado ha sido marcado como inactivo.");
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+    function EliminarCiudad($idciudad)
+    {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("CALL proc_EliminarCiudad(?)");
+        $query->bind_param("i", $idciudad);
+        $query->execute();
+        $query->store_result();
+        if (mysqli_stmt_error($query) != "") {
+            $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
+        } else {
+            $retorno = $this->ArrayMessage("1", "La ciudad ha sido marcada como inactiva.");
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
 }
 
 if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
@@ -200,6 +257,21 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
         case "registrar_ciudad":
             $ubicacion = new Ubicaciones();
             echo json_encode($ubicacion->AgregarCiudad($json_data->idestado, $json_data->ciudad_nueva)); // Accede como array asociativo
+            break;
+
+        case "eliminar_pais":
+            $ubicacion = new Ubicaciones();
+            echo json_encode($ubicacion->EliminarPais($json_data->idpais));
+            break;
+            
+        case "eliminar_estado":
+            $ubicacion = new Ubicaciones();
+            echo json_encode($ubicacion->EliminarEstado($json_data->idestado));
+            break;
+            
+        case "eliminar_ciudad":
+            $ubicacion = new Ubicaciones();
+            echo json_encode($ubicacion->EliminarCiudad($json_data->idciudad));
             break;
     }
 }

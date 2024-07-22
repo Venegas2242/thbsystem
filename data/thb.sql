@@ -707,3 +707,39 @@ BEGIN
     END IF;
 END //
 DELIMITER ;
+
+DELIMITER //
+-- Procedimiento para eliminar pais
+CREATE PROCEDURE `proc_EliminarPais` (
+    IN p_idpais INT
+)
+BEGIN
+    UPDATE `cat_pais`
+    SET `activo` = 0
+    WHERE `idpais` = p_idpais;
+END //
+DELIMITER ;
+
+DELIMITER //
+-- Procedimiento para eliminar pais
+CREATE PROCEDURE `proc_EliminarEstado` (
+    IN p_idestado INT
+)
+BEGIN
+    UPDATE `cat_estado`
+    SET `activo` = 0
+    WHERE `idestado` = p_idestado;
+END //
+DELIMITER ;
+
+DELIMITER //
+-- Procedimiento para eliminar pais
+CREATE PROCEDURE `proc_EliminarCiudad` (
+    IN p_idciudad INT
+)
+BEGIN
+    UPDATE `cat_ciudad`
+    SET `activo` = 0
+    WHERE `idciudad` = p_idciudad;
+END //
+DELIMITER ;

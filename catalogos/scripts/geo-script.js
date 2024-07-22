@@ -38,9 +38,10 @@ angular
     };
 
     $scope.cambiarPais = function () {
-      if ($scope.entidad.idpais == "") {
-        $scope.listaEstados = [];
-      } else {
+      
+      // if ($scope.entidad.idpais == "") {
+        
+      // } else {
         $http({
           method: "POST",
           url: "cod-geo.php?functionToCall=obtener_estados",
@@ -50,17 +51,22 @@ angular
             if (response.data.length === 0) {
               $scope.listaEstados = [{ nombre: "Sin estados" }];
             } else {
+              
               $scope.listaEstados = response.data;
+              $scope.entidad.idestado = null;
+              $scope.cambiarEstado();
+              console.log("Cambio de pais:", $scope.entidad);
             }
           },
           function (error) {
             console.error("Error al cargar los estados:", error);
           }
         );
-      }
+      // }
     };
 
     $scope.cambiarEstado = function () {
+      console.log("Cambio de estado:", $scope.entidad);
       if ($scope.entidad.idpais == "" || $scope.entidad.idestado == "" || $scope.entidad.idestado == null) {
         $scope.listaCiudades = [];
       } else {

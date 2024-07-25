@@ -43,7 +43,7 @@
             <a class="dropdown-item" href="../catalogos/geo.php"><i class="fa-solid fa-building"></i> Ubicaciones</a>
             <a class="dropdown-item" href="../catalogos/bancos.php"><i class="fa-solid fa-money-check-dollar"></i> Bancos</a>
             <a class="dropdown-item" href="../catalogos/entidades.php"><i class="fas fa-truck me-2"></i> Prov/Clien</a>
-            <a class="dropdown-item" href="#"><i class="fas fa-box me-2"></i> Productos</a>
+            <a class="dropdown-item" href="../catalogos/productos.php"><i class="fas fa-box me-2"></i> Productos</a>
         </div>
         <a href="../logout.php"><i class="fas fa-sign-out-alt me-2"></i> Salir</a>
     </div>

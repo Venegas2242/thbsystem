@@ -84,6 +84,59 @@ CREATE TABLE IF NOT EXISTS `cat_usuario` (
   CONSTRAINT pk_usuario PRIMARY KEY (idusuario)
 );
 
+-- Definición de la tabla cat_producto
+CREATE TABLE cat_producto (
+  idproducto int NOT NULL AUTO_INCREMENT COMMENT 'Clave del producto.',
+  codigo varchar(20) DEFAULT NULL,
+  descripcion varchar(150) DEFAULT NULL COMMENT 'Descripcion del producto.',
+  ubicacion varchar(20) DEFAULT NULL COMMENT 'Ubicacion del producto en almacen.',
+  costo double DEFAULT '0' COMMENT 'Costo del producto.',
+  codigobarras varchar(25) DEFAULT NULL COMMENT 'Codigo de barras del producto.',
+  idunidad int DEFAULT NULL COMMENT 'Unidad del producto.',
+  idgrupoproducto int DEFAULT NULL COMMENT 'Grupo del producto.',
+  idproveedor int DEFAULT NULL COMMENT 'Proveedor principal que surte el producto.',
+  idtipoproducto int DEFAULT '1' COMMENT '1 producto, 2 servicio, 3 ensamble',
+  activo BOOLEAN DEFAULT 1 COMMENT 'True para productos activos.',
+  inventariado BOOLEAN DEFAULT 0,
+  PRIMARY KEY (idproducto)
+);
+
+-- Definición de la tabla cat_tipoproducto
+CREATE TABLE cat_tipoproducto (
+    idtipoproducto int NOT NULL AUTO_INCREMENT COMMENT 'Clave del tipo de producto',
+    descripcion varchar(150) DEFAULT NULL COMMENT 'Descripcion del tipo de producto.',
+    activo BOOLEAN DEFAULT 1 COMMENT 'True para tipos activos.',
+    PRIMARY KEY (idtipoproducto)
+);
+
+-- Definición de la tabla cat_grupoproducto
+CREATE TABLE cat_grupoproducto (
+  idgrupoproducto int NOT NULL AUTO_INCREMENT COMMENT 'Clave del grupo de producto.',
+  descripcion varchar(150) DEFAULT NULL COMMENT 'Descripcion del grupo de producto.',
+  activo BOOLEAN DEFAULT 1 COMMENT 'True para grupos activos.',
+  PRIMARY KEY (idgrupoproducto)
+);
+
+-- Definición de la tabla cat_unidades
+CREATE TABLE cat_unidades (
+  idunidad int NOT NULL AUTO_INCREMENT COMMENT 'Clave de unidad.',
+  descripcion varchar(150) DEFAULT NULL COMMENT 'Nombre de la unidad.',
+  activo BOOLEAN DEFAULT 1 COMMENT 'True para unidades activas.',
+  PRIMARY KEY (idunidad)
+);
+
+-- Definición de la tabla invinventario
+CREATE TABLE invinventario (
+  idinventario int NOT NULL AUTO_INCREMENT COMMENT 'Clave del inventario.',
+  idproducto int DEFAULT NULL COMMENT 'Producto.',
+  existencia double DEFAULT '0' COMMENT 'Cantidad existente.',
+  solicitado double DEFAULT '0' COMMENT 'Cantidad solicitada.',
+  comprometido double DEFAULT '0' COMMENT 'Cantidad comprometida.',
+  stockminimo double DEFAULT '0' COMMENT 'Stock mínimo.',
+  stockmaximo double DEFAULT '0' COMMENT 'Stock máximo.',
+  disponible double DEFAULT '0' COMMENT 'Cantidad disponible.',
+  PRIMARY KEY (idinventario)
+);
 
 
 -- SECCIÓN 2: Inserción de datos de prueba
@@ -324,6 +377,40 @@ insert into cat_bancos (nombre) values ('Scotiabank');
 insert into `cat_usuario` (`usuario`, `contrasenia`) values ('AVENEGAS', SHA2('admin', 256));
 insert into `cat_usuario` (`usuario`, `contrasenia`) values ('DVENEGAS', SHA2('admin', 256));
 
+-- Datos de prueba para cat_grupoproducto
+INSERT INTO cat_grupoproducto (descripcion, activo) VALUES ('Grupo 1', 1);
+INSERT INTO cat_grupoproducto (descripcion, activo) VALUES ('Grupo 2', 1);
+INSERT INTO cat_grupoproducto (descripcion, activo) VALUES ('Grupo 3', 1);
+
+-- Datos de prueba para cat_unidades
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('Unidad 1', 1);
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('Unidad 2', 1);
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('Unidad 3', 1);
+
+-- Datos de prueba para cat_tipoproducto
+INSERT INTO cat_tipoproducto (descripcion) VALUES ('Producto');
+INSERT INTO cat_tipoproducto (descripcion) VALUES ('Servicio');
+INSERT INTO cat_tipoproducto (descripcion) VALUES ('Ensamble');
+
+-- Datos de prueba para cat_producto
+INSERT INTO cat_producto (codigo, descripcion, ubicacion, costo, codigobarras, idunidad, idgrupoproducto, idproveedor, idtipoproducto, activo, inventariado)
+VALUES ('P001', 'Producto 1', 'A1', 10.0, '123456789012', 1, 1, 2, 1, 1, 1);
+
+INSERT INTO cat_producto (codigo, descripcion, ubicacion, costo, codigobarras, idunidad, idgrupoproducto, idproveedor, idtipoproducto, activo, inventariado)
+VALUES ('P002', 'Producto 2', 'A2', 15.0, '123456789013', 2, 2, 4, 1, 1, 1);
+
+INSERT INTO cat_producto (codigo, descripcion, ubicacion, costo, codigobarras, idunidad, idgrupoproducto, idproveedor, idtipoproducto, activo, inventariado)
+VALUES ('P003', 'Producto 3', 'A3', 20.0, '123456789014', 3, 3, 6, 1, 1, 1);
+
+-- Datos de prueba para invinventario
+INSERT INTO invinventario (idproducto, existencia, solicitado, comprometido, stockminimo, stockmaximo, disponible)
+VALUES (1, 100, 10, 5, 20, 200, 85);
+
+INSERT INTO invinventario (idproducto, existencia, solicitado, comprometido, stockminimo, stockmaximo, disponible)
+VALUES (2, 150, 15, 10, 25, 250, 125);
+
+INSERT INTO invinventario (idproducto, existencia, solicitado, comprometido, stockminimo, stockmaximo, disponible)
+VALUES (3, 200, 20, 15, 30, 300, 165);
 
 
 -- SECCIÓN 3: Procedimientos almacenados
@@ -618,7 +705,7 @@ CREATE PROCEDURE proc_ActualizarContrasena(
     IN p_contrasena VARCHAR(100)
 )
 BEGIN
-    UPDATE cat_usuario SET contrasenia = p_contrasena WHERE idusuario = p_idusuario;
+    UPDATE cat_usuario SET contrasenia = SHA2(p_contrasena, 256) WHERE idusuario = p_idusuario;
 END //
 
 DELIMITER ;
@@ -774,5 +861,127 @@ CREATE PROCEDURE proc_CiudadActualizar(
 )
 BEGIN
     UPDATE cat_ciudad SET nombre = p_nombre WHERE idciudad = p_idciudad;
+END //
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE obtener_productos()
+BEGIN
+    SELECT p.idproducto, p.codigo, p.descripcion, p.ubicacion, p.costo, p.codigobarras,
+           p.idunidad, u.descripcion AS unidad, p.idgrupoproducto, g.descripcion AS grupo,
+           p.idproveedor, e.nombrecomun AS proveedor, p.idtipoproducto, t.descripcion
+    FROM cat_producto p
+    LEFT JOIN cat_unidades u ON p.idunidad = u.idunidad
+    LEFT JOIN cat_grupoproducto g ON p.idgrupoproducto = g.idgrupoproducto
+    LEFT JOIN cat_entidad e ON p.idproveedor = e.identidad
+    LEFT JOIN cat_tipoproducto t ON p.idtipoproducto = t.idtipoproducto
+    WHERE e.tipo = 'Proveedor' AND p.activo = 1;
+END //
+
+CREATE PROCEDURE agregar_producto(
+    IN codigo VARCHAR(20),
+    IN descripcion VARCHAR(150),
+    IN ubicacion VARCHAR(20),
+    IN costo DOUBLE,
+    IN codigobarras VARCHAR(25),
+    IN idunidad INT,
+    IN idgrupoproducto INT,
+    IN idproveedor INT,
+    IN idtipoproducto INT,
+    IN activo BOOLEAN,
+    IN inventariado BOOLEAN
+)
+BEGIN
+    INSERT INTO cat_producto (codigo, descripcion, ubicacion, costo, codigobarras, idunidad, idgrupoproducto, idproveedor, idtipoproducto, activo, inventariado)
+    VALUES (codigo, descripcion, ubicacion, costo, codigobarras, idunidad, idgrupoproducto, idproveedor, idtipoproducto, activo, inventariado);
+END //
+
+CREATE PROCEDURE eliminar_producto(
+    IN p_idproducto INT
+)
+BEGIN
+    UPDATE cat_producto
+    SET activo = 0
+    WHERE idproducto = p_idproducto;
+END //
+
+CREATE PROCEDURE actualizar_producto(
+    IN p_idproducto INT,
+    IN p_codigo VARCHAR(20),
+    IN p_descripcion VARCHAR(150),
+    IN p_ubicacion VARCHAR(20),
+    IN p_costo DOUBLE,
+    IN p_codigobarras VARCHAR(25),
+    IN p_idunidad INT,
+    IN p_idgrupoproducto INT,
+    IN p_idproveedor INT,
+    IN p_idtipoproducto INT
+)
+BEGIN
+    UPDATE cat_producto
+    SET
+        codigo = p_codigo,
+        descripcion = p_descripcion,
+        ubicacion = p_ubicacion,
+        costo = p_costo,
+        codigobarras = p_codigobarras,
+        idunidad = p_idunidad,
+        idgrupoproducto = p_idgrupoproducto,
+        idproveedor = p_idproveedor,
+        idtipoproducto = p_idtipoproducto
+    WHERE idproducto = p_idproducto;
+END //
+
+CREATE PROCEDURE obtener_unidades(IN p_idunidad INT)
+BEGIN
+    SELECT idunidad, descripcion 
+    FROM cat_unidades 
+    WHERE activo = 1
+    ORDER BY 
+        CASE 
+            WHEN idunidad = p_idunidad THEN 0 
+            ELSE 1 
+        END, 
+        idunidad;
+END //
+
+CREATE PROCEDURE obtener_grupos(IN p_idgrupoproducto INT)
+BEGIN
+    SELECT idgrupoproducto, descripcion 
+    FROM cat_grupoproducto 
+    WHERE activo = 1
+    ORDER BY 
+        CASE 
+            WHEN idgrupoproducto = p_idgrupoproducto THEN 0 
+            ELSE 1 
+        END, 
+        idgrupoproducto;
+END //
+
+CREATE PROCEDURE obtener_tipos(IN p_idtipoproducto INT)
+BEGIN
+    SELECT idtipoproducto, descripcion
+    FROM cat_tipoproducto 
+    WHERE activo = 1
+    ORDER BY 
+        CASE 
+            WHEN idtipoproducto = p_idtipoproducto THEN 0 
+            ELSE 1 
+        END, 
+        idtipoproducto;
+END //
+
+CREATE PROCEDURE obtener_proveedores(IN p_identidad INT)
+BEGIN
+    SELECT identidad, nombrecomun AS nombre
+    FROM cat_entidad
+    WHERE tipo = 'Proveedor' AND activo = 1
+    ORDER BY 
+        CASE 
+            WHEN identidad = p_identidad THEN 0 
+            ELSE 1 
+        END, 
+        identidad;
 END //
 DELIMITER ;

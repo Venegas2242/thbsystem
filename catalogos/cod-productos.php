@@ -158,9 +158,9 @@ class Productos
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
 
-        $query = $cnn->prepare("CALL agregar_producto(?,?,?,?,?,?,?,?,?,?,?,?)");
+        $query = $cnn->prepare("CALL agregar_producto(?,?,?,?,?,?,?,?,?)");
         $query->bind_param(
-            "sssdsiiiiiii",
+            "sssdsiiii",
             $producto->codigo,
             $producto->descripcion,
             $producto->ubicacion,
@@ -169,9 +169,7 @@ class Productos
             $producto->idunidad,
             $producto->idgrupoproducto,
             $producto->idproveedor,
-            $producto->idtipoproducto,
-            $producto->activo,
-            $producto->inventariado
+            $producto->idtipoproducto
         );
         $query->execute();
         $query->store_result();
@@ -235,6 +233,30 @@ class Productos
         $cnn->close();
         return $retorno;
     }
+
+    public function Buscar($textoBuscar)
+    {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = array();
+        $query = $cnn->prepare("CALL proc_ProductoBuscar(?)");
+        $query->bind_param("s", $textoBuscar);
+        $query->execute();
+        $query->bind_result($idproducto, $descripcion, $codigo, $ubicacion, $costo);
+        while ($query->fetch()) {
+            $producto = array(
+                "idproducto" => $idproducto,
+                "codigo" => $codigo,
+                "descripcion" => $descripcion,
+                "ubicacion" => $ubicacion,
+                "costo" => $costo
+            );
+            array_push($retorno, $producto);
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
 }
 
 
@@ -273,6 +295,7 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
             echo json_encode($productos->ActualizarProducto($json_data));
             break;
         case "buscar_producto":
+            echo json_encode($productos->Buscar($json_data->textoBuscar));
             break;
     }
 }

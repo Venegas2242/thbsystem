@@ -18,9 +18,7 @@ appProductos.controller("cProductos", function ($scope, $http) {
     idunidad: null,
     idgrupoproducto: null,
     idproveedor: null,
-    idtipoproducto: 1,
-    activo: true,
-    inventariado: true,
+    idtipoproducto: null,
   };
 
   // Obtener lista de productos al cargar la página
@@ -94,15 +92,16 @@ appProductos.controller("cProductos", function ($scope, $http) {
   $scope.obtenerTipos(null);
   $scope.obtenerProveedores(null);
 
-  // Función para buscar producto por texto
   $scope.BuscarProducto = function () {
-    var myData = { textoBuscar: String($("#txtTextoBuscar").val()) };
+    var textoBuscar = $("#txtTextoBuscar").val();
+    var myData = { textoBuscar: textoBuscar };
     $http({
       method: "POST",
       url: "cod-productos.php?functionToCall=buscar_producto",
       data: myData,
     }).then(function (response) {
       $scope.listaProductos = response.data;
+      console.log("Respuesta:", $scope.listaProductos);
     });
   };
 
@@ -128,9 +127,7 @@ appProductos.controller("cProductos", function ($scope, $http) {
       idunidad: null,
       idgrupoproducto: null,
       idproveedor: null,
-      idtipoproducto: 1,
-      activo: true,
-      inventariado: true,
+      idtipoproducto: null,
     };
     $scope.obtenerProveedores(null); // Obtener la lista inicial de proveedores
     $scope.obtenerUnidades(null); // Obtener la lista inicial de unidades
@@ -141,22 +138,26 @@ appProductos.controller("cProductos", function ($scope, $http) {
 
   // Función para guardar producto
   $scope.Grabar = function () {
+    console.log("Se grabará:", $scope.producto);
     $http({
       method: "POST",
       url: "cod-productos.php?functionToCall=grabar_producto",
       data: $scope.producto,
     }).then(
       function (response) {
+        console.log("Respuesta:", response);
         if (response.data.status === "1") {
           alert(response.data.message);
-          $scope.BuscarProducto();
+          $scope.iniciarSeccion();
           $("#modalProductoNuevo").modal("hide");
           $("#modalProductoEditar").modal("hide");
         } else {
+          console.log("Error 1");
           alert(response.data.message);
         }
       },
       function (error) {
+        console.log("Error 2");
         console.error("Error:", error);
       }
     );

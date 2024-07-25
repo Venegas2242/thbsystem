@@ -1,5 +1,5 @@
 -- SECCIÓN 1: Creación de tablas
-
+DROP DATABASE `thb`;
 create schema if not exists thb default character set latin1 collate latin1_general_ci;
 use thb;
 
@@ -90,14 +90,14 @@ CREATE TABLE cat_producto (
   codigo varchar(20) DEFAULT NULL,
   descripcion varchar(150) DEFAULT NULL COMMENT 'Descripcion del producto.',
   ubicacion varchar(20) DEFAULT NULL COMMENT 'Ubicacion del producto en almacen.',
-  costo double DEFAULT '0' COMMENT 'Costo del producto.',
+  costo double DEFAULT 0 COMMENT 'Costo del producto.',
   codigobarras varchar(25) DEFAULT NULL COMMENT 'Codigo de barras del producto.',
-  idunidad int DEFAULT NULL COMMENT 'Unidad del producto.',
-  idgrupoproducto int DEFAULT NULL COMMENT 'Grupo del producto.',
-  idproveedor int DEFAULT NULL COMMENT 'Proveedor principal que surte el producto.',
-  idtipoproducto int DEFAULT '1' COMMENT '1 producto, 2 servicio, 3 ensamble',
-  activo BOOLEAN DEFAULT 1 COMMENT 'True para productos activos.',
-  inventariado BOOLEAN DEFAULT 0,
+  idunidad int NOT NULL COMMENT 'Unidad del producto.',
+  idgrupoproducto int NOT NULL COMMENT 'Grupo del producto.',
+  idproveedor int NOT NULL COMMENT 'Proveedor principal que surte el producto.',
+  idtipoproducto int NOT NULL DEFAULT 1 COMMENT '1 producto, 2 servicio, 3 ensamble',
+  activo TINYINT(1) DEFAULT 1 COMMENT 'True para productos activos.',
+  inventariado TINYINT(1) DEFAULT 0,
   PRIMARY KEY (idproducto)
 );
 
@@ -866,6 +866,15 @@ DELIMITER ;
 
 DELIMITER //
 
+CREATE PROCEDURE `proc_ProductoBuscar` (
+    IN prmTextoBuscar NVARCHAR(200)
+)
+BEGIN
+    SELECT p.idproducto, p.descripcion, p.codigo, p.ubicacion, p.costo
+    FROM cat_producto p
+    WHERE CONCAT(p.descripcion, ' ', p.codigo) LIKE CONCAT('%', prmTextoBuscar, '%') AND p.activo = 1;
+END //
+
 CREATE PROCEDURE obtener_productos()
 BEGIN
     SELECT p.idproducto, p.codigo, p.descripcion, p.ubicacion, p.costo, p.codigobarras,
@@ -880,21 +889,19 @@ BEGIN
 END //
 
 CREATE PROCEDURE agregar_producto(
-    IN codigo VARCHAR(20),
-    IN descripcion VARCHAR(150),
-    IN ubicacion VARCHAR(20),
-    IN costo DOUBLE,
-    IN codigobarras VARCHAR(25),
-    IN idunidad INT,
-    IN idgrupoproducto INT,
-    IN idproveedor INT,
-    IN idtipoproducto INT,
-    IN activo BOOLEAN,
-    IN inventariado BOOLEAN
+    IN p_codigo VARCHAR(20),
+    IN p_descripcion VARCHAR(150),
+    IN p_ubicacion VARCHAR(20),
+    IN p_costo DOUBLE,
+    IN p_codigobarras VARCHAR(25),
+    IN p_idunidad INT,
+    IN p_idgrupoproducto INT,
+    IN p_idproveedor INT,
+    IN p_idtipoproducto INT
 )
 BEGIN
-    INSERT INTO cat_producto (codigo, descripcion, ubicacion, costo, codigobarras, idunidad, idgrupoproducto, idproveedor, idtipoproducto, activo, inventariado)
-    VALUES (codigo, descripcion, ubicacion, costo, codigobarras, idunidad, idgrupoproducto, idproveedor, idtipoproducto, activo, inventariado);
+    INSERT INTO cat_producto (codigo, descripcion, ubicacion, costo, codigobarras, idunidad, idgrupoproducto, idproveedor, idtipoproducto)
+    VALUES (p_codigo, p_descripcion, p_ubicacion, p_costo, p_codigobarras, p_idunidad, p_idgrupoproducto, p_idproveedor, p_idtipoproducto);
 END //
 
 CREATE PROCEDURE eliminar_producto(

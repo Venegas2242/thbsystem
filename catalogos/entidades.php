@@ -37,7 +37,7 @@ $section_name = "Proveedores/Clientes";
                     <div class="input-group">
                         <input type="text" class="search-bar form-control" ng-keyup="$event.keyCode == 13 ? BuscarEntidad() : null" id="txtTextoBuscar" placeholder="RFC, Nombre del proveedor o cliente" />
                         <div class="input-group-append">
-                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                            <span class="input-group-text" ng-click="BuscarEntidad()"><i class="fa fa-search"></i></span>
                         </div>
                     </div>
                 </div>

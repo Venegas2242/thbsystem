@@ -35,13 +35,14 @@ $section_name = "Productos";
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="input-group">
-                        <input type="text" class="search-bar form-control" ng-keyup="$event.keyCode == 13 ? BuscarProducto() : null" id="txtTextoBuscar" placeholder="Código, Descripción del producto" />
+                        <input type="text" class="search-bar form-control" ng-keyup="$event.keyCode == 13 ? BuscarProducto() : null" id="txtTextoBuscar" placeholder="Descripción del producto o código" />
                         <div class="input-group-append">
-                            <span class="input-group-text"><i class="fa fa-search"></i></span>
+                            <span class="input-group-text" ng-click="BuscarProducto()"><i class="fa fa-search"></i></span>
                         </div>
                     </div>
                 </div>
             </div>
+
 
             <div class="row">
                 <div class="col-lg-4 col-md-6 col-sm-12 mb-4" ng-repeat="producto in listaProductos track by producto.idproducto">
@@ -63,6 +64,7 @@ $section_name = "Productos";
                     </div>
                 </div>
             </div>
+
         </div>
 
         <?php include './modal/agregar-producto.php'; ?>

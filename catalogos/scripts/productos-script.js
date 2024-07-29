@@ -7,6 +7,10 @@ appProductos.controller("cProductos", function ($scope, $http) {
   $scope.listaProveedores = [];
   $scope.listaTipos = [];
 
+  $scope.nuevaUnidad = {};
+  $scope.nuevoGrupo = {};
+  $scope.nuevoTipo = {};
+
   // Inicializar producto
   $scope.producto = {
     idproducto: 0,
@@ -147,17 +151,19 @@ appProductos.controller("cProductos", function ($scope, $http) {
       function (response) {
         console.log("Respuesta:", response);
         if (response.data.status === "1") {
-          alert(response.data.message);
+          $scope.MostrarNotificacion(response.data.message);
           $scope.iniciarSeccion();
           $("#modalProductoNuevo").modal("hide");
           $("#modalProductoEditar").modal("hide");
         } else {
-          console.log("Error 1");
-          alert(response.data.message);
+          $scope.MostrarNotificacion(response.data.message);
         }
       },
       function (error) {
         console.log("Error 2");
+        $scope.MostrarNotificacion(
+          "Ha ocurrido un error al grabar el producto."
+        );
         console.error("Error:", error);
       }
     );
@@ -177,11 +183,11 @@ appProductos.controller("cProductos", function ($scope, $http) {
       data: { idproducto: $scope.producto.idproducto },
     }).then(function (response) {
       if (response.data.status === "1") {
-        alert(response.data.message);
+        $scope.MostrarNotificacion(response.data.message);
         $scope.iniciarSeccion();
         $("#modalProductoEliminar").modal("hide");
       } else {
-        alert(response.data.message);
+        $scope.MostrarNotificacion(response.data.message);
       }
     });
   };
@@ -207,5 +213,77 @@ appProductos.controller("cProductos", function ($scope, $http) {
         console.error("Error:", error);
       }
     );
+  };
+
+  // Funciones para abrir los modales
+  $scope.AbrirAgregarUnidad = function () {
+    $scope.nuevaUnidad = {};
+    $("#modalAgregarUnidad").modal();
+  };
+
+  $scope.AbrirAgregarGrupo = function () {
+    $scope.nuevoGrupo = {};
+    $("#modalAgregarGrupo").modal();
+  };
+
+  $scope.AbrirAgregarTipo = function () {
+    $scope.nuevoTipo = {};
+    $("#modalAgregarTipo").modal();
+  };
+
+  // Función para agregar unidad
+  $scope.AgregarUnidad = function () {
+    $http({
+      method: "POST",
+      url: "cod-productos.php?functionToCall=agregar_unidad",
+      data: $scope.nuevaUnidad,
+    }).then(function (response) {
+      if (response.data.status === "1") {
+        $scope.MostrarNotificacion(response.data.message);
+        $scope.obtenerUnidades(null); // Actualizar la lista de unidades
+        $("#modalAgregarUnidad").modal("hide");
+      } else {
+        $scope.MostrarNotificacion(response.data.message);
+      }
+    });
+  };
+
+  // Función para agregar grupo
+  $scope.AgregarGrupo = function () {
+    $http({
+      method: "POST",
+      url: "cod-productos.php?functionToCall=agregar_grupo",
+      data: $scope.nuevoGrupo,
+    }).then(function (response) {
+      if (response.data.status === "1") {
+        $scope.MostrarNotificacion(response.data.message);
+        $scope.obtenerGrupos(null); // Actualizar la lista de grupos
+        $("#modalAgregarGrupo").modal("hide");
+      } else {
+        $scope.MostrarNotificacion(response.data.message);
+      }
+    });
+  };
+
+  // Función para agregar tipo
+  $scope.AgregarTipo = function () {
+    $http({
+      method: "POST",
+      url: "cod-productos.php?functionToCall=agregar_tipo",
+      data: $scope.nuevoTipo,
+    }).then(function (response) {
+      if (response.data.status === "1") {
+        $scope.MostrarNotificacion(response.data.message);
+        $scope.obtenerTipos(null); // Actualizar la lista de tipos
+        $("#modalAgregarTipo").modal("hide");
+      } else {
+        $scope.MostrarNotificacion(response.data.message);
+      }
+    });
+  };
+
+  $scope.MostrarNotificacion = function (mensaje) {
+    document.getElementById("mensajeNotificacion").innerText = mensaje;
+    $("#modalNotificacion").modal();
   };
 });

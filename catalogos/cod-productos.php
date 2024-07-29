@@ -257,6 +257,66 @@ class Productos
         $cnn->close();
         return $retorno;
     }
+
+    public function AgregarUnidad($unidad)
+    {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
+
+        $query = $cnn->prepare("CALL agregar_unidad(?)");
+        $query->bind_param("s", $unidad->descripcion);
+        $query->execute();
+        $query->store_result();
+        if (mysqli_stmt_error($query) != "") {
+            $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
+        } else {
+            $retorno = $this->ArrayMessage("1", "La unidad ha sido agregada correctamente.");
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+    public function AgregarGrupo($grupo)
+    {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
+
+        $query = $cnn->prepare("CALL agregar_grupo(?)");
+        $query->bind_param("s", $grupo->descripcion);
+        $query->execute();
+        $query->store_result();
+        if (mysqli_stmt_error($query) != "") {
+            $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
+        } else {
+            $retorno = $this->ArrayMessage("1", "El grupo ha sido agregado correctamente.");
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
+
+    public function AgregarTipo($tipo)
+    {
+        $mysql = new Connection();
+        $cnn = $mysql->getConnection();
+        $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
+
+        $query = $cnn->prepare("CALL agregar_tipo(?)");
+        $query->bind_param("s", $tipo->descripcion);
+        $query->execute();
+        $query->store_result();
+        if (mysqli_stmt_error($query) != "") {
+            $retorno = $this->ArrayMessage("0", mysqli_stmt_error($query));
+        } else {
+            $retorno = $this->ArrayMessage("1", "El tipo ha sido agregado correctamente.");
+        }
+        $query->close();
+        $cnn->close();
+        return $retorno;
+    }
 }
 
 
@@ -296,6 +356,15 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
             break;
         case "buscar_producto":
             echo json_encode($productos->Buscar($json_data->textoBuscar));
+            break;
+        case "agregar_unidad":
+            echo json_encode($productos->AgregarUnidad($json_data));
+            break;
+        case "agregar_grupo":
+            echo json_encode($productos->AgregarGrupo($json_data));
+            break;
+        case "agregar_tipo":
+            echo json_encode($productos->AgregarTipo($json_data));
             break;
     }
 }

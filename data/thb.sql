@@ -991,4 +991,29 @@ BEGIN
         END, 
         identidad;
 END //
+
+CREATE PROCEDURE agregar_unidad(
+    IN descripcion VARCHAR(150)
+)
+BEGIN
+    INSERT INTO cat_unidades (descripcion, activo)
+    VALUES (descripcion, 1);
+END //
+
+CREATE PROCEDURE agregar_grupo(
+    IN descripcion VARCHAR(150)
+)
+BEGIN
+    INSERT INTO cat_grupoproducto (descripcion, activo)
+    VALUES (descripcion, 1);
+END //
+
+CREATE PROCEDURE agregar_tipo(
+    IN descripcion VARCHAR(150)
+)
+BEGIN
+    INSERT INTO cat_tipoproducto (descripcion, activo)
+    VALUES (descripcion, 1);
+END //
+
 DELIMITER ;

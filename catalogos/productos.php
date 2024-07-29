@@ -32,6 +32,19 @@ $section_name = "Productos";
 
             <a href="#" class="btn btn-primary-custom mb-4" ng-click="AbrirNuevo();" style="font-size: 1.5rem; padding: 1rem 2rem;"><i class="fa fa-plus"></i> Agregar producto</a>
 
+            <!-- Botones para agregar Unidades, Grupos y Tipos -->
+            <div class="row mb-4">
+                <div class="col-md-4">
+                    <button class="btn btn-secondary btn-block" ng-click="AbrirAgregarUnidad()"><i class="fa fa-plus"></i> Agregar Unidad</button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-secondary btn-block" ng-click="AbrirAgregarGrupo()"><i class="fa fa-plus"></i> Agregar Grupo</button>
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-secondary btn-block" ng-click="AbrirAgregarTipo()"><i class="fa fa-plus"></i> Agregar Tipo</button>
+                </div>
+            </div>
+
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="input-group">
@@ -42,7 +55,6 @@ $section_name = "Productos";
                     </div>
                 </div>
             </div>
-
 
             <div class="row">
                 <div class="col-lg-4 col-md-6 col-sm-12 mb-4" ng-repeat="producto in listaProductos track by producto.idproducto">
@@ -75,6 +87,90 @@ $section_name = "Productos";
     <div class="footer">
         <div class="container">
             <small><a href="http://www.tehiba.com">www.tehiba.com</a></small>
+        </div>
+    </div>
+
+    <!-- Modal para agregar Unidad -->
+    <div id="modalAgregarUnidad" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Agregar Unidad</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nuevaUnidadDescripcion">Descripción:</label>
+                        <input type="text" id="nuevaUnidadDescripcion" ng-model="nuevaUnidad.descripcion" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="AgregarUnidad()" class="btn btn-primary-custom"><i class="fa fa-save"></i> Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para agregar Grupo -->
+    <div id="modalAgregarGrupo" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Agregar Grupo</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nuevoGrupoDescripcion">Descripción:</label>
+                        <input type="text" id="nuevoGrupoDescripcion" ng-model="nuevoGrupo.descripcion" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="AgregarGrupo()" class="btn btn-primary-custom"><i class="fa fa-save"></i> Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para agregar Tipo -->
+    <div id="modalAgregarTipo" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Agregar Tipo</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="nuevoTipoDescripcion">Descripción:</label>
+                        <input type="text" id="nuevoTipoDescripcion" ng-model="nuevoTipo.descripcion" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" ng-click="AgregarTipo()" class="btn btn-primary-custom"><i class="fa fa-save"></i> Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal"><i class="fa fa-times"></i> Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Notificación -->
+    <div id="modalNotificacion" class="modal fade" role="dialog">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Notificación</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="mensajeNotificacion"></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary-custom" data-dismiss="modal"><i class="fa fa-check"></i> Aceptar</button>
+                </div>
+            </div>
         </div>
     </div>
 

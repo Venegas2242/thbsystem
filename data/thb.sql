@@ -144,7 +144,7 @@ CREATE TABLE invinventario (
 -- Insertar datos en la tabla entidad
 -- Insertar más entidades
 insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe,tipo)
-values('HERRAMIENTAS Y MATERIALES, S.A. DE C.V.','HERRAMIENTAS Y MATERIALES','AV. REVOLUCIÓN 123, COL. CENTRO','4','4','1','HYM123456789','5551234567','contacto@herramientas.com','www.herramientas.com','50000','10000','30','2','12345678','876543210987654321','Cliente');
+values('HERRAMIENTAS Y MATERIALES, S.A. DE C.V.','HERRAMIENTAS Y MATERIALES','AV. REVOLUCIÓN 123, COL. CENTRO','10','4','1','HYM123456789','5551234567','contacto@herramientas.com','www.herramientas.com','50000','10000','30','2','12345678','876543210987654321','Cliente');
 insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe)
 values('PLÁSTICOS DEL NORTE, S.A. DE C.V.','PLÁSTICOS DEL NORTE','CALLE INDUSTRIAL 456, ZONA INDUSTRIAL','15','15','1','PDN987654321','5557654321','ventas@plasticosnorte.com','www.plasticosnorte.com','30000','5000','45','3','87654321','123456789012345678');
 insert into cat_entidad(nombreFiscal,nombrecomun,direccion,idciudad,idestado,idpais,rfc,telefono,correo,web,credito,saldo,diascredito,idbanco,cuenta,clabe,tipo)
@@ -383,9 +383,39 @@ INSERT INTO cat_grupoproducto (descripcion, activo) VALUES ('Grupo 2', 1);
 INSERT INTO cat_grupoproducto (descripcion, activo) VALUES ('Grupo 3', 1);
 
 -- Datos de prueba para cat_unidades
-INSERT INTO cat_unidades (descripcion, activo) VALUES ('Unidad 1', 1);
-INSERT INTO cat_unidades (descripcion, activo) VALUES ('Unidad 2', 1);
-INSERT INTO cat_unidades (descripcion, activo) VALUES ('Unidad 3', 1);
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('mm', 1); -- milímetro
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('cm', 1); -- centímetro
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('m', 1); -- metro
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('km', 1); -- kilómetro
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('mg', 1); -- miligramo
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('g', 1); -- gramo
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('kg', 1); -- kilogramo
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('t', 1); -- tonelada
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('ml', 1); -- mililitro
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('cl', 1); -- centilitro
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('dl', 1); -- decilitro
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('l', 1); -- litro
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('m³', 1); -- metro cúbico
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('s', 1); -- segundo
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('min', 1); -- minuto
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('h', 1); -- hora
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('d', 1); -- día
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('°C', 1); -- grado Celsius
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('K', 1); -- kelvin
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('J', 1); -- julio
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('kJ', 1); -- kilojulio
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('N', 1); -- newton
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('Pa', 1); -- pascal
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('kPa', 1); -- kilopascal
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('bar', 1); -- bar
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('m/s', 1); -- metros por segundo
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('km/h', 1); -- kilómetros por hora
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('mm²', 1); -- milímetro cuadrado
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('cm²', 1); -- centímetro cuadrado
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('m²', 1); -- metro cuadrado
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('km²', 1); -- kilómetro cuadrado
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('cc', 1); -- centímetro cúbico
+INSERT INTO cat_unidades (descripcion, activo) VALUES ('gal', 1); -- galón
 
 -- Datos de prueba para cat_tipoproducto
 INSERT INTO cat_tipoproducto (descripcion) VALUES ('Producto');
@@ -566,13 +596,7 @@ CREATE PROCEDURE `proc_EntidadInfo` (
     IN id_entidad INT
 )
 BEGIN
-    SELECT nombrefiscal, nombrecomun, direccion, ci.idciudad, ci.nombre Ciudad, es.idestado, es.nombre Estado, pa.idpais, pa.nombre Pais, rfc, telefono, correo, web, credito, saldo, diascredito, b.idbanco, b.nombre, cuenta, clabe
-    FROM cat_entidad p
-    JOIN cat_pais pa ON p.idpais = pa.idpais
-    JOIN cat_estado es ON p.idestado = es.idestado
-    JOIN cat_ciudad ci ON p.idciudad = ci.idciudad
-    JOIN cat_bancos b ON p.idbanco = b.idbanco
-    WHERE p.identidad = id_entidad;
+    SSELECT nombrefiscal, nombrecomun, direccion, p.idciudad, ci.nombre AS Ciudad, es.idestado, es.nombre AS Estado, pa.idpais, pa.nombre AS Pais, rfc, telefono, correo, web, credito, saldo, diascredito, b.idbanco, b.nombre AS Banco, cuenta, clabe, tipo FROM cat_entidad p JOIN cat_pais pa ON p.idpais = pa.idpais JOIN cat_estado es ON p.idestado = es.idestado JOIN cat_ciudad ci ON p.idciudad = ci.idciudad JOIN cat_bancos b ON p.idbanco = b.idbanco WHERE p.identidad = id_entidad;
 END //
 
 -- Procedimientos para obtener listas de países, estados y ciudades

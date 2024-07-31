@@ -1,181 +1,180 @@
 /* Estilos generales */
-html,
-body {
-  height: 100%;
-  margin: 0;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-}
-
-.content-wrapper {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  padding-top: 5rem; /* Ajusta este valor según la altura de tu menú */
-}
-
-.main-content {
-  flex: 1;
-  width: 100%; /* Asegura que ocupe todo el ancho */
-  padding: 1rem; /* Añade padding para mejor visualización en móvil */
-  overflow: hidden; /* Ocultar el overflow para que el scroll solo esté en el contenedor de la tabla */
-}
-
-body {
-  font-size: 1rem;
-}
-
-.btn {
-  padding: 0.5rem 1rem;
-  font-size: 1rem;
-  width: auto;
-  margin-bottom: 0.5rem;
-}
-
-.form-control {
-  font-size: 1rem;
-}
-
-.modal-title {
-  font-size: 1.5rem;
-  flex-grow: 1;
-  text-align: center;
-}
-
-.modal-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.fade-in {
-  animation: fadeIn 1.5s;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+html, body {
+    height: 100%;
+    margin: 0;
   }
-  to {
-    opacity: 1;
+  
+  body {
+    display: flex;
+    flex-direction: column;
   }
-}
-
-.form-control {
-  transition: all 0.3s ease-in-out;
-}
-
-/* Estilos para la tabla */
-.table-responsive {
-  max-height: 400px; /* Ajusta este valor según sea necesario */
-  overflow-y: auto; /* Scroll vertical */
-  position: relative;
-}
-
-.table {
-  margin-top: 20px;
-  width: 100%; /* Asegura que ocupe todo el ancho */
-  display: block; /* Para que el scroll horizontal también funcione si es necesario */
-}
-
-.table th,
-.table td {
-  text-align: center;
-  vertical-align: middle;
-}
-
-.table thead th {
-  position: sticky;
-  top: 0;
-  background: #343a40; /* Mismo color de fondo que el thead */
-  color: white;
-  z-index: 2; /* Para asegurarse de que el encabezado esté por encima de las filas */
-}
-
-.table .btn {
-  padding: 0.3rem 0.6rem; /* Reducir tamaño de los botones */
-  font-size: 0.875rem; /* Reducir tamaño de la fuente */
-}
-
-/* Estilos para la scrollbar vertical */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #888;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-.btn-primary-custom {
-  background-color: rgb(253, 97, 17);
-  border-radius: 0.5em;
-  border-color: white;
-  transition: background-color 0.3s ease;
-  color: white;
-}
-
-.btn-primary-custom:hover {
-  background-color: rgb(197, 51, 9);
-  border-color: white;
-  color: white;
-}
-
-.btn-primary-custom:active {
-  background-color: rgb(126, 36, 16);
-}
-
-.btn-agregar {
-  width: 100%;
-}
-
-.card-cliente {
-  border-left: 5px solid #007bff; /* Azul para Cliente */
-  padding-left: 10px;
-}
-
-.card-proveedor {
-  border-left: 5px solid #a72828; /* Rojo para Proveedor */
-  padding-left: 10px;
-}
-
-.tipo-entidad {
-  font-size: 1.2em;
-  font-weight: bold;
-  color: #007bff; /* Azul para Cliente */
-}
-
-.card-proveedor .tipo-entidad {
-  color: #a72828; /* Rojo para Proveedor */
-}
-
-/* Estilos para los radio buttons */
-.radio-container {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 1rem;
-}
-
-.form-check {
-  margin-right: 2rem;
-}
-
-.form-check-input {
-  margin-right: 0.5rem;
-  transform: scale(1.5);
-}
-
-.form-check-label {
-  font-size: 1rem;
-  font-weight: 500;
-}
+  
+  .content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-top: 5rem; /* Ajusta este valor según la altura de tu menú */
+  }
+  
+  .main-content {
+    flex: 1;
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    padding: 1rem; /* Añade padding para mejor visualización en móvil */
+    overflow: hidden; /* Ocultar el overflow para que el scroll solo esté en el contenedor de la tabla */
+  }
+  
+  body {
+    font-size: 1rem;
+  }
+  
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    width: auto;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-control {
+    font-size: 1rem;
+  }
+  
+  .modal-title {
+    font-size: 1.5rem;
+    flex-grow: 1;
+    text-align: center;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .fade-in {
+    animation: fadeIn 1.5s;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  
+  .form-control {
+    transition: all 0.3s ease-in-out;
+  }
+  
+  /* Estilos para la tabla */
+  .table-responsive {
+    max-height: 400px; /* Ajusta este valor según sea necesario */
+    overflow-y: auto; /* Scroll vertical */
+    position: relative;
+  }
+  
+  .table {
+    margin-top: 20px;
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    display: block; /* Para que el scroll horizontal también funcione si es necesario */
+  }
+  
+  .table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+  }
+  
+  .table thead th {
+    position: sticky;
+    top: 0;
+    background: #343a40; /* Mismo color de fondo que el thead */
+    color: white;
+    z-index: 1; /* Ajusta el z-index para que no se sobreponga al menú */
+  }
+  
+  .table .btn {
+    padding: 0.3rem 0.6rem; /* Reducir tamaño de los botones */
+    font-size: 0.875rem; /* Reducir tamaño de la fuente */
+  }
+  
+  /* Estilos para la scrollbar vertical */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  .btn-primary-custom {
+    background-color: rgb(253, 97, 17);
+    border-radius: 0.5em;
+    border-color: white;
+    transition: background-color 0.3s ease;
+    color: white;
+  }
+  
+  .btn-primary-custom:hover {
+    background-color: rgb(197, 51, 9);
+    border-color: white;
+    color: white;
+  }
+  
+  .btn-primary-custom:active {
+    background-color: rgb(126, 36, 16);
+  }
+  
+  .btn-agregar {
+    width: 100%;
+  }
+  
+  .card-cliente {
+    border-left: 5px solid #007bff; /* Azul para Cliente */
+    padding-left: 10px;
+  }
+  
+  .card-proveedor {
+    border-left: 5px solid #a72828; /* Rojo para Proveedor */
+    padding-left: 10px;
+  }
+  
+  .tipo-entidad {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #007bff; /* Azul para Cliente */
+  }
+  
+  .card-proveedor .tipo-entidad {
+    color: #a72828; /* Rojo para Proveedor */
+  }
+  
+  /* Estilos para los radio buttons */
+  .radio-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+  
+  .form-check {
+    margin-right: 2rem;
+  }
+  
+  .form-check-input {
+    margin-right: 0.5rem;
+    transform: scale(1.5);
+  }
+  
+  .form-check-label {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  

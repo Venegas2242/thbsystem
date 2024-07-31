@@ -596,7 +596,11 @@ CREATE PROCEDURE `proc_EntidadInfo` (
     IN id_entidad INT
 )
 BEGIN
+<<<<<<< HEAD
     SELECT nombrefiscal, nombrecomun, direccion, p.idciudad, ci.nombre AS Ciudad, es.idestado, es.nombre AS Estado, pa.idpais, pa.nombre AS Pais, rfc, telefono, correo, web, credito, saldo, diascredito, b.idbanco, b.nombre AS Banco, cuenta, clabe, tipo FROM cat_entidad p JOIN cat_pais pa ON p.idpais = pa.idpais JOIN cat_estado es ON p.idestado = es.idestado JOIN cat_ciudad ci ON p.idciudad = ci.idciudad JOIN cat_bancos b ON p.idbanco = b.idbanco WHERE p.identidad = id_entidad;
+=======
+    SSELECT nombrefiscal, nombrecomun, direccion, p.idciudad, ci.nombre AS Ciudad, es.idestado, es.nombre AS Estado, pa.idpais, pa.nombre AS Pais, rfc, telefono, correo, web, credito, saldo, diascredito, b.idbanco, b.nombre AS Banco, cuenta, clabe, tipo FROM cat_entidad p JOIN cat_pais pa ON p.idpais = pa.idpais JOIN cat_estado es ON p.idestado = es.idestado JOIN cat_ciudad ci ON p.idciudad = ci.idciudad JOIN cat_bancos b ON p.idbanco = b.idbanco WHERE p.identidad = id_entidad;
+>>>>>>> 98e358246d0dc38c07cc036b299e97b46e3b31b5
 END //
 
 -- Procedimientos para obtener listas de países, estados y ciudades

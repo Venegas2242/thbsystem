@@ -46,15 +46,15 @@ $section_name = "Proveedores/Clientes";
             <div class="row mb-4">
                 <div class="col-12 radio-container">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="tipoEntidad" id="radioTodos" ng-model="tipoEntidad" value="" ng-change="FiltrarEntidad()" checked="checked">
+                        <input class="form-check-input" type="radio" name="tipoEntidad" id="radioTodos" ng-model="tipoEntidad" value="" checked="checked">
                         <label class="form-check-label" for="radioTodos">Todos</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="tipoEntidad" id="radioClientes" ng-model="tipoEntidad" value="Cliente" ng-change="FiltrarEntidad()">
+                        <input class="form-check-input" type="radio" name="tipoEntidad" id="radioClientes" ng-model="tipoEntidad" value="Cliente">
                         <label class="form-check-label" for="radioClientes">Clientes</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="tipoEntidad" id="radioProveedores" ng-model="tipoEntidad" value="Proveedor" ng-change="FiltrarEntidad()">
+                        <input class="form-check-input" type="radio" name="tipoEntidad" id="radioProveedores" ng-model="tipoEntidad" value="Proveedor">
                         <label class="form-check-label" for="radioProveedores">Proveedores</label>
                     </div>
                 </div>

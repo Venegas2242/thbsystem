@@ -4,11 +4,12 @@ error_reporting(E_ALL & ~E_DEPRECATED);
 ini_set("display_errors", "1");
 date_default_timezone_set("America/Mexico_City");
 
-spl_autoload_register(function($NombreClase) {
+spl_autoload_register(function ($NombreClase) {
     require_once '../' . $NombreClase . '.php';
 });
 
-class Entidades {
+class Entidades
+{
     public $identidad = 0;
     public $nombrecomercial = "";
     public $nombrecomun = "";
@@ -31,29 +32,31 @@ class Entidades {
     public $clabe = "";
     public $tipo = "";
 
-    function Grabar() {
+    function Grabar()
+    {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
 
         $query = $cnn->prepare("call proc_EntidadGrabar(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $query->bind_param("isssiiissssddissss", 
-            $this->identidad, 
-            $this->nombrecomercial, 
-            $this->nombrecomun, 
-            $this->direccion, 
-            $this->idciudad, 
-            $this->idestado, 
-            $this->idpais, 
-            $this->rfc, 
-            $this->telefono, 
-            $this->correo, 
-            $this->web, 
-            $this->credito, 
-            $this->saldo, 
-            $this->diascredito, 
-            $this->idbanco, 
-            $this->cuenta, 
+        $query->bind_param(
+            "isssiiissssddissss",
+            $this->identidad,
+            $this->nombrecomercial,
+            $this->nombrecomun,
+            $this->direccion,
+            $this->idciudad,
+            $this->idestado,
+            $this->idpais,
+            $this->rfc,
+            $this->telefono,
+            $this->correo,
+            $this->web,
+            $this->credito,
+            $this->saldo,
+            $this->diascredito,
+            $this->idbanco,
+            $this->cuenta,
             $this->clabe,
             $this->tipo
         );
@@ -78,11 +81,13 @@ class Entidades {
     }
 
     // Método para generar mensajes de respuesta
-    private function ArrayMessage($status, $message) {
+    private function ArrayMessage($status, $message)
+    {
         return array('status' => $status, 'message' => $message);
     }
 
-    function Buscar($textoBuscar) {
+    function Buscar($textoBuscar)
+    {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
@@ -105,26 +110,50 @@ class Entidades {
         return $retorno;
     }
 
-    function BuscarInfo($id_entidad) {
+    function BuscarInfo($id_entidad)
+    {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
         $query = $cnn->prepare("call proc_EntidadInfo(?)");
-        $query->bind_param("s", $id_entidad);
+        $query->bind_param("i", $id_entidad);
         $query->execute();
-        $query->bind_result($nombrefiscal, $nombrecomercial, $direccion, $idciudad, $nombreciudad, $idestado, $nombreestado, $idpais, $nombrepais, $rfc, $telefono, $correo, $web, $credito, $saldo, $diascredito, $idbanco, $nombrebanco, $cuenta, $clabe);
+        $query->bind_result(
+            $nombrefiscal,
+            $nombrecomercial,
+            $direccion,
+            $idciudad,
+            $nombreciudad,
+            $idestado,
+            $nombreestado,
+            $idpais,
+            $nombrepais,
+            $rfc,
+            $telefono,
+            $correo,
+            $web,
+            $credito,
+            $saldo,
+            $diascredito,
+            $idbanco,
+            $nombrebanco,
+            $cuenta,
+            $clabe,
+            $tipo
+        );
+
         while ($query->fetch()) {
             $entidad = array(
                 "identidad" => $id_entidad,
                 "nombrecomercial" => $nombrefiscal,
                 "nombrecomun" => $nombrecomercial,
                 "direccion" => $direccion,
-                "idciudad" => $idciudad,
-                "nombreciudad" => $nombreciudad,
-                "idestado" => $idestado,
-                "nombreestado" => $nombreestado,
                 "idpais" => $idpais,
+                "idestado" => 4, // Asegúrate de que esto es un entero
+                "idciudad" => $idciudad,
                 "nombrepais" => $nombrepais,
+                "nombreestado" => $nombreestado,
+                "nombreciudad" => $nombreciudad,
                 "rfc" => $rfc,
                 "telefono" => $telefono,
                 "correo" => $correo,
@@ -135,19 +164,21 @@ class Entidades {
                 "idbanco" => $idbanco,
                 "nombrebanco" => $nombrebanco,
                 "cuenta" => $cuenta,
-                "clabe" => $clabe
+                "clabe" => $clabe,
+                "tipo" => $tipo
             );
             array_push($retorno, $entidad);
         }
+
         $query->close();
         $cnn->close();
-        return $retorno;
+        return $entidad;
     }
 
-    
 
 
-    function Eliminar($idEntidad) {
+    function Eliminar($idEntidad)
+    {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
@@ -173,7 +204,8 @@ class Entidades {
         return $retorno;
     }
 
-    function ObtenerPaises() {
+    function ObtenerPaises()
+    {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
@@ -189,7 +221,8 @@ class Entidades {
         return $retorno;
     }
 
-    function ObtenerEstados($idpais) {
+    function ObtenerEstados($idpais)
+    {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
@@ -206,7 +239,8 @@ class Entidades {
         return $retorno;
     }
 
-    function ObtenerCiudades($idestado) {
+    function ObtenerCiudades($idestado)
+    {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
@@ -223,7 +257,8 @@ class Entidades {
         return $retorno;
     }
 
-    function ObtenerBancos() {
+    function ObtenerBancos()
+    {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
@@ -241,7 +276,8 @@ class Entidades {
     }
 }
 
-class Contactos {
+class Contactos
+{
     public $idcontacto = 0;
     public $contacto = "";
     public $telefono = "";
@@ -249,11 +285,13 @@ class Contactos {
     public $email = "";
     public $comentarios = "";
 
-    function ArrayMessage($status, $message) {
+    function ArrayMessage($status, $message)
+    {
         return array("status" => $status, "message" => $message, "date" => date("Y-m-d H:i:s"));
     }
 
-    function BuscarContactos($id_entidad) {
+    function BuscarContactos($id_entidad)
+    {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
@@ -270,18 +308,21 @@ class Contactos {
         return $retorno;
     }
 
-    function AgregarContacto($id_entidad) {
+    function AgregarContacto($id_entidad)
+    {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
         $query = $cnn->prepare("CALL proc_AgregarContactoEntidad(?,?,?,?,?,?)");
-        $query->bind_param("isssss", 
-            $id_entidad, 
+        $query->bind_param(
+            "isssss",
+            $id_entidad,
             $this->contacto,
             $this->telefono,
             $this->celular,
             $this->email,
-            $this->comentarios);
+            $this->comentarios
+        );
 
         $query->execute();
         $query->store_result();
@@ -295,7 +336,8 @@ class Contactos {
         return $retorno;
     }
 
-    function EliminarContacto($identidadcontactos) {
+    function EliminarContacto($identidadcontactos)
+    {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
@@ -312,20 +354,23 @@ class Contactos {
         $cnn->close();
         return $retorno;
     }
-    
-    
-    function EditarContacto($idcontacto, $contacto, $telefono, $celular, $email, $comentarios) {
+
+
+    function EditarContacto($idcontacto, $contacto, $telefono, $celular, $email, $comentarios)
+    {
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = array();
         $query = $cnn->prepare("CALL proc_EditarContactoEntidad(?, ?, ?, ?, ?, ?)");
-        $query->bind_param("isssss", 
+        $query->bind_param(
+            "isssss",
             $idcontacto,
             $contacto,
             $telefono,
             $celular,
             $email,
-            $comentarios);
+            $comentarios
+        );
         $query->execute();
         $query->store_result();
         if (mysqli_stmt_error($query) != "") {
@@ -336,14 +381,13 @@ class Contactos {
         $query->close();
         $cnn->close();
         return $retorno;
-    }    
+    }
 }
 
-class Bancos {
+class Bancos
+{
     public $idbanco = "";
     public $banco = "";
-
-    
 }
 
 if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
@@ -388,7 +432,7 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
             $entidad = new Entidades();
             echo json_encode($ntidad->Eliminar($json_data->identidad));
             break;
-        
+
         case "contactos_entidad":
             $contacto = new Contactos();
             echo json_encode($contacto->BuscarContactos($json_data->id_entidad));
@@ -407,7 +451,7 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
 
         case "editar_contacto":
             $contacto = new Contactos();
-    
+
 
             echo json_encode($contacto->EditarContacto(
                 $json_data->identidadcontactos,
@@ -445,6 +489,5 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
             $entidad = new Entidades();
             echo json_encode($entidad->ObtenerBancos());
             break;
-
     }
 }

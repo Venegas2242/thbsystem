@@ -9,6 +9,15 @@
             <div class="modal-body">
                 <div class="form-row">
                     <div class="form-group col-md-4">
+                        <label for="tipoEntidad">Tipo:</label>
+                        <select id="tipoEntidad" ng-model="detalles_entidad.tipo" class="form-control">
+                            <option value="">Proveedor</option>
+                            <option value="Cliente">Cliente</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
                         <label>RFC:</label>
                         <input type="text" id="txtRFC" ng-model="detalles_entidad.rfc" class="form-control" />
                     </div>
@@ -23,22 +32,22 @@
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <label>Direccion:</label>
+                        <label>Dirección:</label>
                         <input type="text" id="txtDireccion" ng-model="detalles_entidad.direccion" class="form-control" />
                     </div>
                 </div>
                 <div class="form-row align-items-end">
                     <div class="form-group col-md-4">
                         <label>País:</label>
-                        <input type="text" id="txtPais" value="detalles_entidad.idpais" ng-model="detalles_entidad.nombrepais" class="form-control" disabled/>
+                        <select id="txtPais" ng-model="detalles_entidad.idpais" ng-change="cambiarPais()" class="form-control" ng-options="pais.idpais as pais.nombre for pais in listaPaises"></select>
                     </div>
                     <div class="form-group col-md-4">
                         <label>Estado:</label>
-                        <input type="text" id="txtEstado" value="detalles_entidad.idestado" ng-value="detalles_entidad.nombreestado" class="form-control" disabled/>
+                        <select id="txtEstado" ng-model="detalles_entidad.idestado" ng-change="cambiarEstado()" class="form-control" ng-options="estado.idestado as estado.nombre for estado in listaEstados"></select>
                     </div>
                     <div class="form-group col-md-4">
                         <label>Ciudad:</label>
-                        <input type="text" id="txtCiudad" value="detalles_entidad.idciudad" ng-value="detalles_entidad.nombreciudad" class="form-control" disabled/>
+                        <select id="txtCiudad" ng-model="detalles_entidad.idciudad" class="form-control" ng-options="ciudad.idciudad as ciudad.nombre for ciudad in listaCiudades"></select>
                     </div>
                 </div>
                 <div class="form-row">
@@ -72,7 +81,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label>Banco:</label>
-                        <input type="text" id="txtBanco" value="detalles_entidad.idbanco" ng-value="detalles_entidad.nombrebanco" class="form-control" disabled/>
+                        <select id="txtBanco" ng-model="detalles_entidad.idbanco" class="form-control" ng-options="banco.idbanco as banco.banco for banco in listaBancos"></select>
                     </div>
                     <div class="form-group col-md-4">
                         <label>Cuenta:</label>

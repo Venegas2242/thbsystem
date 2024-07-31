@@ -2,22 +2,22 @@ body {
     font-family: "Lato", sans-serif;
     margin: 0;
     padding: 0;
-}
-
-.sidenav {
+  }
+  
+  .sidenav {
     height: 100%;
     width: 0;
     position: fixed;
-    z-index: 2;
+    z-index: 3; /* Asegúrate de que el z-index sea mayor que el del thead */
     top: 0;
     left: 0;
     background-color: #111;
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
-}
-
-.sidenav a {
+  }
+  
+  .sidenav a {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
@@ -26,24 +26,24 @@ body {
     align-items: center;
     transition: 0.3s;
     user-select: none;
-}
-
-.sidenav a i {
+  }
+  
+  .sidenav a i {
     margin-right: 10px;
-}
-
-.sidenav a:hover {
+  }
+  
+  .sidenav a:hover {
     color: #f1f1f1;
     background-color: #575757; /* Cambia el fondo al pasar el mouse */
-}
-
-.dropdown-container {
+  }
+  
+  .dropdown-container {
     display: none;
     background-color: #262626;
     padding-left: 8px;
-}
-
-.dropdown-btn {
+  }
+  
+  .dropdown-btn {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
@@ -52,18 +52,18 @@ body {
     align-items: center;
     cursor: pointer;
     transition: 0.3s;
-}
-
-.dropdown-btn i.fa-caret-down {
+  }
+  
+  .dropdown-btn i.fa-caret-down {
     margin-left: auto; /* Alinea el ícono a la derecha del texto */
-}
-
-.dropdown-btn:hover {
+  }
+  
+  .dropdown-btn:hover {
     color: #f1f1f1;
     background-color: #575757; /* Cambia el fondo al pasar el mouse */
-}
-
-.menu-btn {
+  }
+  
+  .menu-btn {
     font-size: 25px;
     cursor: pointer;
     background-color: #111;
@@ -74,11 +74,11 @@ body {
     height: 3rem;
     top: 0;
     left: 0;
-    z-index: 3;
+    z-index: 4; /* Asegúrate de que el z-index sea mayor que el del thead */
     user-select: none;
-}
-
-.menu-bg {
+  }
+  
+  .menu-bg {
     height: 4rem;
     width: 100%;
     background-color: #111;
@@ -86,9 +86,9 @@ body {
     top: 0;
     left: 0;
     z-index: 2;
-}
-
-.section-name {
+  }
+  
+  .section-name {
     margin: 0;
     position: absolute;
     color: white;
@@ -96,12 +96,13 @@ body {
     right: 20px;
     transform: translateY(-50%);
     font-size: 1.5em;
-}
-
-.search-bar {
+  }
+  
+  .search-bar {
     z-index: 1;
-}
-
-::-webkit-scrollbar {
+  }
+  
+  ::-webkit-scrollbar {
     width: 0px;
-}
+  }
+  

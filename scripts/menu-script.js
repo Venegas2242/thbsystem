@@ -16,20 +16,17 @@ function toggleNav() {
 
 function toggleCatalogosDropdown() {
     const catalogosDropdown = document.getElementById("catalogosDropdown");
-    if (catalogosDropdown.style.display === "block") {
-        catalogosDropdown.style.display = "none";
-    } else {
-        catalogosDropdown.style.display = "block";
-    }
+    catalogosDropdown.style.display = catalogosDropdown.style.display === "block" ? "none" : "block";
 }
 
 function toggleReportesDropdown() {
     const reportesDropdown = document.getElementById("reportesDropdown");
-    if (reportesDropdown.style.display === "block") {
-        reportesDropdown.style.display = "none";
-    } else {
-        reportesDropdown.style.display = "block";
-    }
+    reportesDropdown.style.display = reportesDropdown.style.display === "block" ? "none" : "block";
+}
+
+function toggleRequisicionesDropdown() {
+    const requisicionesDropdown = document.getElementById("requisicionesDropdown");
+    requisicionesDropdown.style.display = requisicionesDropdown.style.display === "block" ? "none" : "block";
 }
 
 function updateMenuButton() {

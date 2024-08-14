@@ -1,7 +1,9 @@
 body {
-    font-family: "Lato", sans-serif;
-    margin: 0;
-    padding: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+  color: #333;
   }
   
   .sidenav {
@@ -11,20 +13,23 @@ body {
     z-index: 3; /* Asegúrate de que el z-index sea mayor que el del thead */
     top: 0;
     left: 0;
-    background-color: #111;
+    background-color: #343a40;
     overflow-x: hidden;
     transition: 0.5s;
     padding-top: 60px;
+    box-shadow: 3px 0 15px rgba(0, 0, 0, 0.5);
   }
   
   .sidenav a {
-    padding: 8px 8px 8px 32px;
+    padding: 12px 24px;
     text-decoration: none;
-    font-size: 25px;
-    color: #818181;
+    font-size: 1rem;
+    color: #d4d4d4;
     display: flex;
     align-items: center;
     transition: 0.3s;
+    border-bottom: 1px solid #4b4b4b;
+
     user-select: none;
   }
   
@@ -33,18 +38,18 @@ body {
   }
   
   .sidenav a:hover {
-    color: #f1f1f1;
-    background-color: #575757; /* Cambia el fondo al pasar el mouse */
+    color: #ffffff;
+    background-color: #007bff; /* Cambia el fondo al pasar el mouse */
   }
   
   .dropdown-container {
     display: none;
-    background-color: #262626;
-    padding-left: 8px;
+    background-color: #495057;
+    padding-left: 15px;
   }
   
   .dropdown-btn {
-    padding: 8px 8px 8px 32px;
+    padding: 8px 8px 8px 16px;
     text-decoration: none;
     font-size: 25px;
     color: #818181;
@@ -64,24 +69,26 @@ body {
   }
   
   .menu-btn {
-    font-size: 25px;
-    cursor: pointer;
-    background-color: #111;
+    background-color: #343a40;
     color: white;
-    padding: 10px 15px;
+    padding: 4px 20px;
+    font-size: 1rem;
+    cursor: pointer;
     position: fixed;
-    width: 15%;
-    height: 3rem;
     top: 0;
     left: 0;
+
+    height: 2rem;
+    width: 17%;
+    
     z-index: 4; /* Asegúrate de que el z-index sea mayor que el del thead */
     user-select: none;
   }
   
   .menu-bg {
-    height: 4rem;
+    background-color: #343a40;
+    height: 2rem;
     width: 100%;
-    background-color: #111;
     position: fixed;
     top: 0;
     left: 0;
@@ -89,13 +96,15 @@ body {
   }
   
   .section-name {
+    font-size: 1em;
+    font-weight: 700;
     margin: 0;
     position: absolute;
     color: white;
     top: 50%;
     right: 20px;
     transform: translateY(-50%);
-    font-size: 1.5em;
+    
   }
   
   .search-bar {

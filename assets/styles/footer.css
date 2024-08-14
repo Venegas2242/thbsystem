@@ -12,6 +12,7 @@
     color: #f8f9fa;
     text-decoration: none;
     transition: color 0.3s ease, text-shadow 0.3s ease;
+    padding-bottom: 30px;
 }
 
 .footer a:hover {

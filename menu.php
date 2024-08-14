@@ -25,11 +25,7 @@
             <i class="fa-solid fa-chart-pie"></i> Reportes <i class="fa fa-caret-down"></i>
         </a>
         <div class="dropdown-container" id="reportesDropdown">
-            <!-- <a class="dropdown-item" href="#"><i class="fa-solid fa-user-plus"></i> Usuarios</a> -->
-            <!-- <a class="dropdown-item" href="#"><i class="fa-solid fa-building"></i> Ciudades</a> -->
-            <!-- <a class="dropdown-item" href="#"><i class="fa-solid fa-money-check-dollar"></i> Bancos</a> -->
             <a class="dropdown-item" href="../reportes/reportes-entidades.php"><i class="fas fa-truck me-2"></i> Prov/Clien</a>
-            <!-- <a class="dropdown-item" href="#"><i class="fas fa-box me-2"></i> Productos</a> -->
         </div>
 
         <a class="dropdown-btn" onclick="toggleCatalogosDropdown()">
@@ -43,7 +39,13 @@
             <a class="dropdown-item" href="../catalogos/productos.php"><i class="fas fa-box me-2"></i> Productos</a>
         </div>
 
-        <a href="../requisiciones/requisicion.php"><i class="fa-regular fa-pen-to-square"></i> Requisiciones</a>
+        <a class="dropdown-btn" onclick="toggleRequisicionesDropdown()">
+            <i class="fa-regular fa-pen-to-square"></i> Requisiciones <i class="fa fa-caret-down"></i>
+        </a>
+        <div class="dropdown-container" id="requisicionesDropdown">
+            <a class="dropdown-item" href="../requisiciones/requisicion.php"><i class="fa-solid fa-plus"></i> Alta Requisición</a>
+            <a class="dropdown-item" href="../requisiciones/ver_requisiciones.php"><i class="fa-solid fa-eye"></i> Ver Requisiciones</a>
+        </div>
 
         <a href="../logout.php"><i class="fas fa-sign-out-alt me-2"></i> Salir</a>
     </div>

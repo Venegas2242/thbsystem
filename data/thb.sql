@@ -139,6 +139,42 @@ CREATE TABLE invinventario (
 );
 
 
+CREATE TABLE cat_series (
+  idserie int NOT NULL AUTO_INCREMENT COMMENT 'Id de serie',
+  idusuario int unsigned DEFAULT NULL NULL COMMENT 'usuario de la serie',
+  tipodocumento int unsigned DEFAULT NULL COMMENT 'definida en clase tipodocumento',
+  prefijo varchar(5) DEFAULT NULL COMMENT 'Prefijo de la serie',
+  numeroinicial int NOT NULL COMMENT 'Numero inicial de serie',
+  numerofinal int NOT NULL COMMENT 'Numero final de serie',
+  numeroactual int NOT NULL COMMENT 'Numero actual de requisicion',
+  fecha date DEFAULT NULL COMMENT 'Fecha creacion de serie',
+  activo BOOLEAN NOT NULL DEFAULT 1 COMMENT 'True para series activas y false para inactivas.',
+  PRIMARY KEY (idserie)
+);
+
+CREATE TABLE inv_requisicion (
+    idrequisicion BINARY(16) PRIMARY KEY,
+    idusuario INT(10) UNSIGNED,
+    numerorequisicion VARCHAR(100),
+    fechacaptura DATE,
+    estado INT,  -- 0: Cancelado, 1: Pendiente, 2: En Proceso, 3: Cotizado
+    observaciones VARCHAR(200)
+);
+
+CREATE TABLE inv_requisiciondetalle (
+    iddetalle INT AUTO_INCREMENT PRIMARY KEY,
+    idrequisicion BINARY(16),  -- Foreign key linking to inv_requisicion
+    idproducto INT,
+    idunidad VARCHAR(50),  -- Assumed VARCHAR, adjust as needed
+    cantidad DECIMAL(10, 2),
+    almacen VARCHAR(100),  -- Assumed VARCHAR, adjust as needed
+    uso VARCHAR(100),  -- Assumed VARCHAR, adjust as needed
+    fecha_cumplir DATE,
+    FOREIGN KEY (idrequisicion) REFERENCES inv_requisicion(idrequisicion)
+);
+
+
+
 -- SECCIÓN 2: Inserción de datos de prueba
 
 -- Insertar datos en la tabla entidad
@@ -596,11 +632,7 @@ CREATE PROCEDURE `proc_EntidadInfo` (
     IN id_entidad INT
 )
 BEGIN
-<<<<<<< HEAD
     SELECT nombrefiscal, nombrecomun, direccion, p.idciudad, ci.nombre AS Ciudad, es.idestado, es.nombre AS Estado, pa.idpais, pa.nombre AS Pais, rfc, telefono, correo, web, credito, saldo, diascredito, b.idbanco, b.nombre AS Banco, cuenta, clabe, tipo FROM cat_entidad p JOIN cat_pais pa ON p.idpais = pa.idpais JOIN cat_estado es ON p.idestado = es.idestado JOIN cat_ciudad ci ON p.idciudad = ci.idciudad JOIN cat_bancos b ON p.idbanco = b.idbanco WHERE p.identidad = id_entidad;
-=======
-    SSELECT nombrefiscal, nombrecomun, direccion, p.idciudad, ci.nombre AS Ciudad, es.idestado, es.nombre AS Estado, pa.idpais, pa.nombre AS Pais, rfc, telefono, correo, web, credito, saldo, diascredito, b.idbanco, b.nombre AS Banco, cuenta, clabe, tipo FROM cat_entidad p JOIN cat_pais pa ON p.idpais = pa.idpais JOIN cat_estado es ON p.idestado = es.idestado JOIN cat_ciudad ci ON p.idciudad = ci.idciudad JOIN cat_bancos b ON p.idbanco = b.idbanco WHERE p.identidad = id_entidad;
->>>>>>> 98e358246d0dc38c07cc036b299e97b46e3b31b5
 END //
 
 -- Procedimientos para obtener listas de países, estados y ciudades
@@ -1042,6 +1074,129 @@ CREATE PROCEDURE agregar_tipo(
 BEGIN
     INSERT INTO cat_tipoproducto (descripcion, activo)
     VALUES (descripcion, 1);
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+-- Procedimiento para insertar una nueva requisición
+CREATE PROCEDURE sp_insertar_requisicion(
+    IN p_idusuario INT,
+    IN p_numerorequisicion VARCHAR(100),
+    IN p_fechacaptura DATE,
+    IN p_estado INT,
+    IN p_observaciones VARCHAR(200),
+    OUT p_idrequisicion BINARY(16)
+)
+BEGIN
+    SET p_idrequisicion = UUID();
+
+    INSERT INTO inv_requisicion(idrequisicion, idusuario, numerorequisicion, fechacaptura, estado, observaciones)
+    VALUES(p_idrequisicion, p_idusuario, p_numerorequisicion, p_fechacaptura, p_estado, p_observaciones);
+END //
+
+-- Procedimiento para insertar los detalles de una requisición
+CREATE PROCEDURE sp_insertar_requisicion_detalle(
+    IN p_idrequisicion BINARY(16),
+    IN p_idproducto INT,
+    IN p_cantidad DECIMAL(10, 2),
+    IN p_idunidad INT,
+    IN p_almacen INT,
+    IN p_fecha_cumplir DATE,
+    IN p_uso INT
+)
+BEGIN
+    INSERT INTO inv_requisiciondetalle(idrequisicion, idproducto, cantidad, idunidad, almacen, fecha_cumplir, uso)
+    VALUES(p_idrequisicion, p_idproducto, p_cantidad, p_idunidad, p_almacen, p_fecha_cumplir, p_uso);
+END //
+
+-- Procedimiento para mostrar requisiciones, filtrando según el usuario
+CREATE PROCEDURE mostrarRequisiciones(
+    IN mostrarTodo BOOL,
+    IN p_idusuario INT
+)
+BEGIN
+    IF mostrarTodo THEN
+        SELECT 
+            r.numerorequisicion, 
+            r.estado, 
+            r.idusuario, 
+            cu.usuario, 
+            rd.idproducto, 
+            cp.descripcion AS producto_descripcion, 
+            rd.idunidad, 
+            cuu.descripcion AS unidad_descripcion, 
+            rd.cantidad, 
+            rd.almacen, 
+            rd.uso, 
+            r.fechacaptura, 
+            rd.fecha_cumplir, 
+            r.observaciones 
+        FROM 
+            inv_requisicion r
+        JOIN 
+            inv_requisiciondetalle rd ON r.idrequisicion = rd.idrequisicion
+        JOIN 
+            cat_usuario cu ON cu.idusuario = r.idusuario
+        JOIN 
+            cat_producto cp ON rd.idproducto = cp.idproducto
+        JOIN 
+            cat_unidades cuu ON rd.idunidad = cuu.idunidad
+        ORDER BY r.numerorequisicion;
+    ELSE
+        SELECT 
+            r.numerorequisicion, 
+            r.estado, 
+            r.idusuario, 
+            cu.usuario, 
+            rd.idproducto, 
+            cp.descripcion AS producto_descripcion, 
+            rd.idunidad, 
+            cuu.descripcion AS unidad_descripcion, 
+            rd.cantidad, 
+            rd.almacen, 
+            rd.uso, 
+            r.fechacaptura, 
+            rd.fecha_cumplir, 
+            r.observaciones 
+        FROM 
+            inv_requisicion r
+        JOIN 
+            inv_requisiciondetalle rd ON r.idrequisicion = rd.idrequisicion
+        JOIN 
+            cat_usuario cu ON cu.idusuario = r.idusuario
+        JOIN 
+            cat_producto cp ON rd.idproducto = cp.idproducto
+        JOIN 
+            cat_unidad cuu ON rd.idunidad = cuu.idunidad
+        WHERE 
+            r.idusuario = p_idusuario
+        ORDER BY r.numerorequisicion;
+    END IF;
+END //
+
+-- Procedimiento para obtener las unidades de medida
+CREATE PROCEDURE sp_obtener_unidades(
+    IN p_idUnidad INT
+)
+BEGIN
+    IF p_idUnidad IS NULL THEN
+        SELECT idunidad, descripcion FROM unidades;
+    ELSE
+        SELECT idunidad, descripcion FROM unidades WHERE idunidad = p_idUnidad;
+    END IF;
+END //
+
+-- Procedimiento para buscar productos por descripción o código
+CREATE PROCEDURE sp_buscar_productos(
+    IN p_textoBuscar VARCHAR(100)
+)
+BEGIN
+    SELECT idproducto, codigo, descripcion
+    FROM productos
+    WHERE descripcion LIKE CONCAT('%', p_textoBuscar, '%')
+       OR codigo LIKE CONCAT('%', p_textoBuscar, '%');
 END //
 
 DELIMITER ;

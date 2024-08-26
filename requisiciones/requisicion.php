@@ -34,21 +34,6 @@ $section_name = "Requisición";
         <form name="requisicionForm" ng-submit="AgregarDatos(requisicionForm)">
             <div class="row">
                 <div class="col-md-6 form-group">
-                    <label for="almacen">Selecciona Almacen:</label>
-                    <select class="form-control" id="almacen" name="almacen" ng-model="requisicion.almacen" required>
-                        <option value="" selected disabled>Selecciona...</option>
-                        <option value="1">Opción 1</option>
-                        <option value="2">Opción 2</option>
-                        <option value="3">Opción 3</option>
-                    </select>
-                </div>
-                <div class="col-md-6 form-group">
-                    <label for="fecha">Selecciona Fecha a Cumplir Necesidad:</label>
-                    <input type="text" class="form-control datepicker" id="fecha" name="fecha" placeholder="Selecciona una fecha" ng-model="requisicion.fecha" required>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6 form-group">
                     <label for="articulo">Selecciona Artículo:</label>
                     <input type="text" class="form-control" id="articulo" name="articulo" placeholder="Tecla el artículo y selecciona" ng-model="textoBuscar" ng-change="BuscarProducto()" autocomplete="off" required>
                     <div class="autocomplete-suggestions" ng-show="sugerencias.length > 0">
@@ -69,17 +54,7 @@ $section_name = "Requisición";
                     <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Cantidad" ng-model="requisicion.cantidad" step="0.01" required>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label for="uso">Selecciona Uso:</label>
-                    <select class="form-control" id="uso" name="uso" ng-model="requisicion.uso" required>
-                        <option value="" selected disabled>Selecciona...</option>
-                        <option value="1">Uso 1</option>
-                        <option value="2">Uso 2</option>
-                        <option value="3">Uso 3</option>
-                    </select>
-                </div>
-            </div>
+
             <button type="submit" class="btn btn-custom btn-block mt-4">Agregar Datos</button>
         </form>
 
@@ -89,23 +64,17 @@ $section_name = "Requisición";
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th>Almacen</th>
                             <th>Artículo</th>
                             <th>UM</th>
                             <th>Cantidad</th>
-                            <th>Uso</th>
-                            <th>Fecha Cumplir</th>
                             <th>Quitar</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr ng-repeat="articulo in articulosSeleccionados">
-                            <td>{{articulo.almacen}}</td>
                             <td>{{articulo.producto}}</td>
                             <td>{{articulo.unidad}}</td>
                             <td>{{articulo.cantidad}}</td>
-                            <td>{{articulo.uso}}</td>
-                            <td>{{articulo.fecha}}</td>
                             <td><button class="btn btn-danger btn-sm" ng-click="QuitarArticulo($index)">X</button></td>
                         </tr>
                     </tbody>
@@ -114,13 +83,19 @@ $section_name = "Requisición";
         </div>
 
         <div class="row">
+            <div class="col-md-6 form-group">
+                <label for="fecha">Selecciona Fecha a Cumplir Necesidad:</label>
+                <input type="text" class="form-control datepicker" id="fecha" name="fecha" placeholder="Selecciona una fecha" ng-model="requisicion.fecha" required>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-md-12 form-group">
                 <label for="comentarios">Comentarios:</label>
                 <textarea id="comentarios" rows="4" class="form-control" cols="50"></textarea>
             </div>
         </div>
 
-        <button style="margin-bottom: 10px;" type="button" class="btn btn-primary btn-block mt-4" ng-click="EnviarSolicitud(<?php echo $idusuario; ?>)">Enviar Solicitud</button>
+        <!-- <button style="margin-bottom: 10px;" type="button" class="btn btn-primary btn-block mt-4" ng-click="EnviarSolicitud(<?php echo $idusuario; ?>)">Enviar Solicitud</button> -->
     </div>
 
     <div class="footer">

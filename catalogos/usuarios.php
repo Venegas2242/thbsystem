@@ -170,13 +170,15 @@ $section_name = "Usuarios";
                     <table class="table table-striped">
                         <thead>
                             <tr>
-                                <th>Nombre de Usuario</th>
+                                <th>Nombre</th>
+                                <th>Usuario</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="usuario in usuarios">
-                                <td>{{usuario.nombre}}</td>
+                                <td>{{usuario.nombre_completo}}</td>
+                                <td>{{usuario.nombre_usuario}}</td>
                                 <td>
                                     <button class="btn btn-warning btn-sm" ng-click="editarUsuario(usuario)">Editar Contraseña</button>
                                     <button class="btn btn-danger btn-sm" ng-click="eliminarUsuario(usuario.id)">Eliminar</button>
@@ -204,8 +206,20 @@ $section_name = "Usuarios";
                 <div class="modal-body">
                     <form ng-submit="registrarUsuario()">
                         <div class="form-group">
+                            <label for="nombre">Nombre:</label>
+                            <input type="text" class="form-control" id="nombre" ng-model="nuevoUsuario.nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="apellido_paterno">Apellido Paterno:</label>
+                            <input type="text" class="form-control" id="apellido_paterno" ng-model="nuevoUsuario.apellido_paterno" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="apellido_materno">Apellido Materno:</label>
+                            <input type="text" class="form-control" id="apellido_materno" ng-model="nuevoUsuario.apellido_materno" required>
+                        </div>
+                        <div class="form-group">
                             <label for="usuario">Nombre de Usuario:</label>
-                            <input type="text" class="form-control" id="usuario" ng-model="nuevoUsuario.usuario" required>
+                            <input type="text" class="form-control" id="nombre_usuario" ng-model="nuevoUsuario.nombre_usuario" required>
                         </div>
                         <div class="form-group">
                             <label for="contrasena">Contraseña:</label>
@@ -217,6 +231,7 @@ $section_name = "Usuarios";
             </div>
         </div>
     </div>
+
 
     <!-- Modal para editar usuario -->
     <div class="modal fade" id="editarModal" tabindex="-1" role="dialog" aria-labelledby="editarModalLabel" aria-hidden="true">

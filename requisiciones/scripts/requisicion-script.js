@@ -54,10 +54,11 @@ appRequisicion.controller("cRequisicion", function ($scope, $http) {
     };
 
     $scope.AgregarDatos = function (form) {
-        console.log("La cantidad es:", parseFloat(form.cantidad.$viewValue));
+        console.log("Formulario: ", form);
+
         // Verifica si el artículo es válido, tiene un idproducto y si el formulario es válido
         if (
-            !form.articulo.$valid ||
+            
             !$scope.articuloValido ||
             !$scope.requisicion.articulo
         ) {
@@ -66,8 +67,6 @@ appRequisicion.controller("cRequisicion", function ($scope, $http) {
                 "Selecciona un artículo válido de la lista.",
                 false
             );
-        } else if (!form.fecha.$valid) {
-            $scope.MostrarNotificacion("Error", "Selecciona una fecha.", false);
         } else if (parseFloat(form.cantidad.$viewValue) <= 0) {
             $scope.MostrarNotificacion(
                 "Error",
@@ -75,16 +74,6 @@ appRequisicion.controller("cRequisicion", function ($scope, $http) {
                 false
             );
         } else {
-            var almacenSeleccionado =
-                document.getElementById("almacen").options[
-                    document.getElementById("almacen").selectedIndex
-                ].text;
-            var idalmacenSeleccionado = parseInt(
-                document.getElementById("almacen").options[
-                    document.getElementById("almacen").selectedIndex
-                ].value,
-                10
-            );
             var unidadSeleccionada =
                 document.getElementById("unidad").options[
                     document.getElementById("unidad").selectedIndex
@@ -95,35 +84,20 @@ appRequisicion.controller("cRequisicion", function ($scope, $http) {
                 ].value,
                 10
             );
-            var usoSeleccionado =
-                document.getElementById("uso").options[
-                    document.getElementById("uso").selectedIndex
-                ].text;
-            var idusoSeleccionado = parseInt(
-                document.getElementById("uso").options[
-                    document.getElementById("uso").selectedIndex
-                ].value,
-                10
-            );
 
             // Convertir la fecha al formato 'YYYY-MM-DD'
-            var fechaCumplir = new Date(
-                $scope.requisicion.fecha.split("/").reverse().join("-")
-            )
-                .toISOString()
-                .split("T")[0];
+            // var fechaCumplir = new Date(
+            //     $scope.requisicion.fecha.split("/").reverse().join("-")
+            // )
+            //     .toISOString()
+            //     .split("T")[0];
 
             $scope.articulosSeleccionados.push({
-                idalmacen: idalmacenSeleccionado,
-                almacen: almacenSeleccionado,
                 idproducto: $scope.requisicion.articulo, // Asegúrate de que el idproducto esté aquí
                 producto: $scope.textoBuscar,
                 idunidad: idunidadSeleccionada,
                 unidad: unidadSeleccionada,
                 cantidad: $scope.requisicion.cantidad,
-                iduso: idusoSeleccionado,
-                uso: usoSeleccionado,
-                fecha: fechaCumplir, // Usar la fecha convertida
             });
 
             // Reiniciar los campos después de agregar
@@ -140,59 +114,57 @@ appRequisicion.controller("cRequisicion", function ($scope, $http) {
     $scope.EnviarSolicitud = function (idusuario) {
         console.log("ID de usuario: ", idusuario);
 
-        if ($scope.articulosSeleccionados.length === 0) {
-            // Mostrar notificación si no hay artículos en la tabla
-            $scope.MostrarNotificacion(
-                "Error",
-                "Debes agregar al menos un artículo a la requisición antes de enviar.",
-                false
-            );
-            return; // Salir de la función para evitar el envío
-        }
+        // if ($scope.articulosSeleccionados.length === 0) {
+        //     // Mostrar notificación si no hay artículos en la tabla
+        //     $scope.MostrarNotificacion(
+        //         "Error",
+        //         "Debes agregar al menos un artículo a la requisición antes de enviar.",
+        //         false
+        //     );
+        //     return; // Salir de la función para evitar el envío
+        // }
 
-        var requisicion = {
-            idusuario: idusuario, // Utiliza el ID de usuario cargado desde una fuente válida.
-            numerorequisicion: "REQ" + new Date().getTime(),
-            fechacaptura: new Date().toISOString().split("T")[0],
-            estado: 1,
-            observaciones: document.getElementById("comentarios").value,
-            detalles: $scope.articulosSeleccionados.map(function (articulo) {
-                return {
-                    idproducto: articulo.idproducto, // Aquí se envía el idproducto
-                    cantidad: articulo.cantidad,
-                    idunidad: articulo.idunidad,
-                    almacen: articulo.idalmacen,
-                    fecha_cumplir: articulo.fecha,
-                    uso: articulo.iduso,
-                };
-            }),
-        };
+        // var requisicion = {
+        //     idusuario: idusuario, // Utiliza el ID de usuario cargado desde una fuente válida.
+        //     numerorequisicion: "REQ" + new Date().getTime(),
+        //     fechacaptura: new Date().toISOString().split("T")[0],
+        //     estado: 1,
+        //     observaciones: document.getElementById("comentarios").value,
+        //     fecha_cumplir: document.getElementById("fecha").value,
+        //     detalles: $scope.articulosSeleccionados.map(function (articulo) {
+        //         return {
+        //             idproducto: articulo.idproducto, // Aquí se envía el idproducto
+        //             cantidad: articulo.cantidad,
+        //             idunidad: articulo.idunidad,
+        //         };
+        //     }),
+        // };
 
-        console.log("Requisición a enviar: ", requisicion);
+        // console.log("Requisición a enviar: ", requisicion);
 
-        $http({
-            method: "POST",
-            url: "cod-requisicion.php?functionToCall=alta_requisicion",
-            data: requisicion,
-        }).then(
-            function (response) {
-                console.log("Respuesta del servidor: ", response);
-                //     $scope.MostrarNotificacion("response.data.message");
-                // Recargar la página después de enviar con éxito
-                $scope.MostrarNotificacion(
-                    "Solicitud enviada",
-                    "Número de requisición: " + requisicion.numerorequisicion,
-                    true
-                );
-            },
-            function (error) {
-                console.error("Error al enviar la solicitud: ", error);
-                $scope.MostrarNotificacion(
-                    "Ocurrió un error al enviar la solicitud.",
-                    false
-                );
-            }
-        );
+        // $http({
+        //     method: "POST",
+        //     url: "cod-requisicion.php?functionToCall=alta_requisicion",
+        //     data: requisicion,
+        // }).then(
+        //     function (response) {
+        //         console.log("Respuesta del servidor: ", response);
+        //         //     $scope.MostrarNotificacion("response.data.message");
+        //         // Recargar la página después de enviar con éxito
+        //         $scope.MostrarNotificacion(
+        //             "Solicitud enviada",
+        //             "Número de requisición: " + requisicion.numerorequisicion,
+        //             true
+        //         );
+        //     },
+        //     function (error) {
+        //         console.error("Error al enviar la solicitud: ", error);
+        //         $scope.MostrarNotificacion(
+        //             "Ocurrió un error al enviar la solicitud.",
+        //             false
+        //         );
+        //     }
+        // );
     };
 
     $scope.MostrarNotificacion = function (encabezado, mensaje, b_recargar) {

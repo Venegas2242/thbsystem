@@ -77,11 +77,14 @@ CREATE TABLE IF NOT EXISTS `cat_bancos` (
 
 -- Tabla Usuario
 CREATE TABLE IF NOT EXISTS `cat_usuario` (
-  `idusuario` int NOT NULL AUTO_INCREMENT,
+  `idusuario` BINARY(16) PRIMARY KEY,
+  `nombre` varchar(100) NOT NULL,
+  `apellido_paterno` varchar(100) NOT NULL,
+  `apellido_materno` varchar(100) NOT NULL,
   `usuario` varchar(15) NOT NULL,
   `contrasenia` varchar(100) NOT NULL,
-  `Activo` tinyint(1) DEFAULT '1',
-  CONSTRAINT pk_usuario PRIMARY KEY (idusuario)
+
+  `Activo` tinyint(1) DEFAULT '1'
 );
 
 -- Definición de la tabla cat_producto
@@ -410,8 +413,8 @@ insert into cat_bancos (nombre) values ('Inbursa');
 insert into cat_bancos (nombre) values ('Scotiabank');
 
 -- Insertar datos en la tabla Usuario
-insert into `cat_usuario` (`usuario`, `contrasenia`) values ('AVENEGAS', SHA2('admin', 256));
-insert into `cat_usuario` (`usuario`, `contrasenia`) values ('DVENEGAS', SHA2('admin', 256));
+insert into `cat_usuario` (`idusuario`, `nombre`, `apellido_paterno`, `apellido_materno`, `usuario`, `contrasenia`) values (UUID(), 'Diego', 'Venegas', 'Granados', 'DVENEGAS', SHA2('admin', 256));
+insert into `cat_usuario` (`idusuario`, `nombre`, `apellido_paterno`, `apellido_materno`, `usuario`, `contrasenia`) values (UUID(), 'Alfredo', 'Venegas', 'Rodriguez', 'AVENEGAS', SHA2('admin', 256));
 
 -- Datos de prueba para cat_grupoproducto
 INSERT INTO cat_grupoproducto (descripcion, activo) VALUES ('Grupo 1', 1);
@@ -736,20 +739,23 @@ DELIMITER //
 -- Procedimiento para obtener todos los usuarios
 CREATE PROCEDURE proc_getUsuarios()
 BEGIN
-    SELECT idusuario, usuario FROM cat_usuario WHERE Activo = 1;
+    SELECT idusuario, nombre, apellido_paterno, apellido_materno, usuario FROM cat_usuario WHERE Activo = 1;
 END //
 
 -- Procedimiento para insertar o actualizar un usuario
 CREATE PROCEDURE proc_UsuarioGrabar(
     IN p_idusuario INT,
+    IN p_nombre VARCHAR(100),
+    IN p_apellido_paterno VARCHAR(100),
+    IN p_apellido_materno VARCHAR(100),
     IN p_usuario VARCHAR(15),
     IN p_contrasena VARCHAR(100)
 )
 BEGIN
     IF p_idusuario = 0 THEN
-        INSERT INTO cat_usuario (usuario, contrasenia) VALUES (p_usuario, SHA2(p_contrasena, 256));
+        INSERT INTO cat_usuario (IDUSUARIO, nombre, apellido_paterno, apellido_materno, usuario, contrasenia) VALUES (UUID(), p_nombre, p_apellido_paterno, p_apellido_materno, p_usuario, SHA2(p_contrasena, 256));
     ELSE
-        UPDATE cat_usuario SET usuario = p_usuario, contrasenia = SHA2(p_contrasena, 256) WHERE idusuario = p_idusuario;
+        UPDATE cat_usuario SET usuario = p_usuario, nombre = p_nombre, apellido_paterno = p_apellido_paterno, apellido_materno = p_apellido_materno, contrasenia = SHA2(p_contrasena, 256) WHERE idusuario = p_idusuario;
     END IF;
 END //
 
@@ -761,7 +767,7 @@ END //
 
 -- Procedimiento para actualizar la contraseña de un usuario
 CREATE PROCEDURE proc_ActualizarContrasena(
-    IN p_idusuario INT,
+    IN p_idusuario VARCHAR(100),
     IN p_contrasena VARCHAR(100)
 )
 BEGIN

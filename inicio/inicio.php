@@ -5,6 +5,8 @@ if (!isset($_SESSION['idusuario'])) {
     exit();
 }
 
+$usuario = $_SESSION['usuario'];
+$idusuario = $_SESSION['idusuario'];
 $section_name = "Inicio";
 ?>
 
@@ -17,9 +19,16 @@ $section_name = "Inicio";
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" type="text/css"/>
 </head>
-<body>
+<body style="padding-top: 4rem;">
 
     <?php include '../menu.php'; ?>
+
+    <div class="container content-wrapper">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center">Bienvenido <?php echo $usuario; ?> con id <?php echo $idusuario; ?></h1>
+            </div>
+        </div>
 
     <!-- Referencias Javascript -->
     <script src="https://code.jquery.com/jquery-3.5.1.min.js" type="text/javascript"></script>

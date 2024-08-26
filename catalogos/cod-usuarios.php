@@ -11,17 +11,24 @@ spl_autoload_register(function($NombreClase) {
 class Usuarios {
     public $idusuario = 0;
     public $nombre = "";
+    public $apellido_paterno = "";
+    public $apellido_materno = "";
+    public $usuario = "";
     public $contrasena = "";
 
     function Grabar() {
+        // return $this->idusuario . " " . $this->nombre . " " . $this->apellido_paterno . " " . $this->apellido_materno . " " . $this->usuario . " " . $this->contrasena;
         $mysql = new Connection();
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
 
-        $query = $cnn->prepare("CALL proc_UsuarioGrabar(?, ?, ?)");
-        $query->bind_param("iss", 
+        $query = $cnn->prepare("CALL proc_UsuarioGrabar(?, ?, ?, ?, ?, ?)");
+        $query->bind_param("isssss", 
             $this->idusuario, 
             $this->nombre, 
+            $this->apellido_paterno,
+            $this->apellido_materno,
+            $this->usuario,
             $this->contrasena
         );
         $query->execute();
@@ -45,11 +52,12 @@ class Usuarios {
         $retorno = array();
         $query = $cnn->prepare("CALL proc_getUsuarios()");
         $query->execute();
-        $query->bind_result($idusuario, $nombre);
+        $query->bind_result($idusuario, $nombre, $apellido_paterno, $apellido_materno, $nombre_usuario);
         while ($query->fetch()) {
             $usuario = array(
                 "id" => $idusuario,
-                "nombre" => $nombre
+                "nombre_completo" => $nombre . " " . $apellido_paterno . " " . $apellido_materno,
+                "nombre_usuario" => $nombre_usuario
             );
             array_push($retorno, $usuario);
         }
@@ -80,8 +88,8 @@ class Usuarios {
         $cnn = $mysql->getConnection();
         $retorno = $this->ArrayMessage("0", "No se ha realizado ninguna acción.");
 
-        $query = $cnn->prepare("CALL proc_ActualizarContrasena(?, SHA2(?, 256))");
-        $query->bind_param("is", $idUsuario, $contrasena);
+        $query = $cnn->prepare("CALL proc_ActualizarContrasena(?, ?)");
+        $query->bind_param("ss", $idUsuario, $contrasena);
         $query->execute();
         if ($query->errno) {
             $retorno = $this->ArrayMessage("0", $query->error);
@@ -106,7 +114,10 @@ if (isset($_GET["functionToCall"]) && !empty($_GET["functionToCall"])) {
 
         case "registrarUsuario":
             $usuario->idusuario = $json_data['idusuario'] ?? 0;
-            $usuario->nombre = $json_data['usuario'];
+            $usuario->nombre = $json_data['nombre'];
+            $usuario->apellido_paterno = $json_data['apellido_paterno'];
+            $usuario->apellido_materno = $json_data['apellido_materno'];
+            $usuario->usuario = $json_data['nombre_usuario'];
             $usuario->contrasena = $json_data['contrasena'];
             echo json_encode($usuario->Grabar());
             break;
